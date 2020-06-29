@@ -3912,6 +3912,7 @@
     <Content Include="Kanban\缓冲区看板\今日来料.ashx" />
     <Content Include="Kanban\缓冲区看板\今日出料.ashx" />
     <Content Include="Kanban\缓冲区看板\上下料今日概况.ashx" />
+    <Content Include="libman.json" />
     <None Include="packages.config" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />
