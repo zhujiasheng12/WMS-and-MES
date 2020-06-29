@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CNCINFOModelStoreContainer" CdmEntityContainer="CNCINFOEntities">
+    <EntitySetMapping Name="CncType">
+      <EntityTypeMapping TypeName="CNCINFOModel.CncType">
+        <MappingFragment StoreEntitySet="CncType">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cnc1Set">
+      <EntityTypeMapping TypeName="CNCINFOModel.Cnc1">
+        <MappingFragment StoreEntitySet="Cnc">
+          <ScalarProperty Name="MachType" ColumnName="MachType" />
+          <ScalarProperty Name="MachState" ColumnName="MachState" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="MachNum" ColumnName="MachNum" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CncBrand">
+      <EntityTypeMapping TypeName="CNCINFOModel.CncBrand">
+        <MappingFragment StoreEntitySet="CncBrand">
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

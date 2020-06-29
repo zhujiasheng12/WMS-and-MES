@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <pages validateRequest="false" />
+    <script src="../../jquery-3.3.1.js"></script>
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.min.js"></script>
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+
+
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body style="background-color:darkslategray">
+    <div class="layui-row">
+       
+        <div class="layui-col-md12" style="text-align:left;padding-left:10px">
+            <input style="width:150px;height:30px;" id="father" class="easyui-combotreegrid" data-options="
+					method:'get',
+					width:'100%',
+					panelWidth:300,
+
+					labelPosition:'top',
+					url:'../../工厂管理/PositionHandler.ashx',
+					idField:'id',
+					treeField:'name',
+					columns:[[
+				   {field:'name',title:'车间',width:300},
+                   {field:'id',title:'id',width:300,hidden:'true'},
+
+					]]">
+          
+            <button class="layui-btn" onclick="fun()" style="margin:10px">保存布局</button>
+            <button class="layui-btn layui-btn-danger" onclick="del()" style="margin-left:0">删除布局</button>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div id="container" class="layui-col-md12">
+            <test style="zoom:1;margin:10px">
+
+            </test>
+        </div>
+      
+    </div>
+
+
+    <script>
+        layui.use("layer", function () {
+            layer = layui.layer;
+        })
+
+        $('#father').combotreegrid({
+            onLoadSuccess: function (d) {
+                $('.tree-icon.tree-file').remove()
+                $('td').css('border', 'none')
+                $('.tree-folder').removeClass('tree-folder')
+
+                workId = localStorage.getItem("workId")
+                if (workId != null) {
+                    $('#father').combotreegrid('setValue', { id: workId });
+                }
+            },
+            onChange: function (newValue, oldValue) {
+                $("test").empty()
+                localStorage.setItem("workId", newValue)
+                workId = newValue
+                $.ajax({
+                    url: '读svg.ashx?workId=' + workId,
+                    success: function (d) {
+                        try {
+                            var obj = JSON.parse(d)
+                            x = -100
+                            y = 50
+                            xmax = 0
+                            ymax = 0
+                            text = ""
+                            var width = $("#container").width()
+                            for (var i = 0; i < obj.length; i++) {
+                                if (x > width-220) {
+                                    if (x > xmax) {
+                                        xmax = x
+                                    }
+                                    x = 50
+                                    y += 150
+                                    text += ` <g> <image xlink:href="gray.png" id="` + obj[i].ID + `" height="100" width="100" y="` + (y) + `" x="` + x + `"></image>
+         <text xml:space="preserve" fill="white" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="" y="`+ (y + 120) + `" x="` + x + `" stroke-width="0" stroke="#000" fill="#000000">` + obj[i].MachNum + `</text></g>`
+                                } else {
+                                    x += 150
+                                    if (x > xmax) {
+                                        xmax = x
+                                    }
+                                    text += ` <g> <image xlink:href="gray.png" id="` + obj[i].ID + `" height="100" width="100" y="` + (y) + `" x="` + x + `"></image>
+         <text xml:space="preserve" fill="white" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="" y="`+ (y + 120) + `" x="` + x + `" stroke-width="0" stroke="#000" fill="#000000">` + obj[i].MachNum + `</text></g>`
+
+                                }
+                            }
+
+                            $("test").append(`
+<svg id="svg" style="background-color:black" width="`+ (xmax + 150) + `" height="` + (y + 200) + `" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
+                                + text +
+                                `</svg>`)
+
+                            for (var i = 0; i < obj.length; i++) {
+
+                                drap($("#" + obj[i].ID)[0]);
+                                $($("#" + obj[i].ID)[0]).on('mousewheel DOMMouseScroll', cncZoom);
+                            }
+
+                        } catch
+                        {
+                            $("test").append(d)
+                            $.ajax({
+                                url: '获取机床Id.ashx?workId=' + workId,
+                                success: function (d) {
+                                    var obj = JSON.parse(d)
+                                    for (var i = 0; i < obj.length; i++) {
+                                        drap($("#" + obj[i].ID)[0]);
+                                        $($("#" + obj[i].ID)[0]).on('mousewheel DOMMouseScroll', cncZoom);
+                                    }
+                                }
+                            })
+
+                        }
+
+
+
+                    }
+                })
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function onMouseScroll(e) {
+
+            e.preventDefault();
+            var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+            var delta = Math.max(-1, Math.min(1, wheel));
+            if (delta < 0) {//向下滚动
+                $("test").css("zoom", Number($("test").css("zoom")) - 0.05)
+
+            } else {//向上滚动
+                $("test").css("zoom", Number($("test").css("zoom")) + 0.05)
+            }
+        }
+        function cncZoom(e) {
+            var id = this.id
+            e.preventDefault();
+            var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+            var delta = Math.max(-1, Math.min(1, wheel));
+            if (delta < 0) {//向下滚动
+
+                $("#" + id).attr("height", Number($("#" + id).attr("height")) - 10).attr("width", Number($("#" + id).attr("width")) - 10)
+                $("#" + id).siblings("text").attr("y", Number($("#" + id).siblings("text").attr("y")) - 10)
+                $("#" + id).siblings("text").attr("x", Number($("#" + id).siblings("text").attr("x")))
+
+            } else {//向上滚动
+                $("#" + id).attr("height", Number($("#" + id).attr("height")) + 10).attr("width", Number($("#" + id).attr("width")) + 10)
+                $("#" + id).siblings("text").attr("y", Number($("#" + id).siblings("text").attr("y")) + 10)
+                $("#" + id).siblings("text").attr("x", Number($("#" + id).siblings("text").attr("x")))
+            }
+        }
+        //dom（obj）可拖拽
+        function drap(obj) {
+            obj.addEventListener('mousedown', start);
+
+            function start(event) {
+                //p=  Number($("test").css("zoom"))
+                // 鼠标左键
+                if (event.button == 0) {
+                    // getComputedStyle(obj)['margin-left'] return XXpx需要转成整型
+                    // 如果有obj有margin值而不加这个数组拖拽会出现位置偏移
+
+
+                    offsetX = event.pageX - $(obj).attr("x") + parseInt(getComputedStyle(obj)['margin-left']);
+                    offsetY = event.pageY - $(obj).attr("y") + parseInt(getComputedStyle(obj)['margin-top']);
+
+                    textX = event.pageX - $(obj).siblings("text").attr("x") + parseInt(getComputedStyle(obj)['margin-left']);
+                    textY = event.pageY - $(obj).siblings("text").attr("y") + parseInt(getComputedStyle(obj)['margin-top']);
+                    // 绑定事件，同样unbind解绑定，此效果的实现最后必须要解绑定，否则鼠标松开后拖拽效果依然存在
+                    //movemove事件必须绑定到$(document)上，鼠标移动是在整个屏幕上的
+                    document.addEventListener('mousemove', move);
+                    //此处的$(document)可以改为obj
+                    document.addEventListener('mouseup', stop);
+                }
+                return false;//阻止默认事件或冒泡
+            }
+
+            function move(event) {
+
+
+                if ((event.pageY - offsetY) > 0 & (event.pageX - offsetX) > 0) {
+
+                    $(obj).attr("x", (event.pageX - offsetX))
+                    $(obj).attr("y", (event.pageY - offsetY))
+                    $(obj).siblings("text").attr("x", (event.pageX - textX)).attr("y", (event.pageY - textY))
+                }
+
+                var arr = $('image');
+                maxHeight = 0;
+                maxWidth = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    var height = Number($(arr[i]).attr('y'))
+                    var width = Number($(arr[i]).attr('x'))
+                    if (height > maxHeight) {
+                        maxHeight = height
+                    }
+                    if (width > maxWidth) {
+                        maxWidth = width
+                    }
+                }
+                $("svg").attr("height", Number(maxHeight) + 200)
+                $("svg").attr("width", Number(maxWidth) + 150)
+
+                return false;//阻止默认事件或冒泡
+            }
+
+            function stop(envet) {
+                document.removeEventListener('mousemove', move);
+                document.removeEventListener('mouseup', stop);
+            }
+        }
+
+    </script>
+    <script>
+        function fun() {
+
+            if (typeof (maxHeight) == "undefined" | typeof (maxHeight) == "undefined") {
+                var arr = $('image');
+                maxHeight = 0;
+                maxWidth = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    var height = Number($(arr[i]).attr('y'))
+                    var width = Number($(arr[i]).attr('x'))
+                    if (height > maxHeight) {
+                        maxHeight = height
+                    }
+                    if (width > maxWidth) {
+                        maxWidth = width
+                    }
+                }
+            }
+            var dd = $("#svg")[0].innerHTML
+            var width = $("svg").attr("width")
+            var height = $("svg").attr("height")
+            var svg = `
+<svg id="svg"  style="background-color:black;zoom:1" width="`+ (maxWidth + 150) + `" height="` + (maxHeight + 200) + `" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
+                + dd +
+                `</svg>`
+            var form = new FormData();
+            form.append('form', svg)
+
+            $.ajax({
+                url: '保存布局.ashx?workId=' + workId,
+                type: 'post',
+                data: form,
+                contentType: false,
+                processData: false,
+                success: function (d) {
+                    if (d == "ok") {
+                        layer.alert("保存成功")
+                    } else {
+                        layer.alert(d)
+                    }
+                }, error: function (d) {
+                    layer.alert(d)
+                }
+            })
+
+            //download("data.svg",svg);
+        }
+        function del() {
+            layer.confirm("是否删除", function (index) {
+                $.ajax({
+                    url: '删除布局图.ashx',
+                    data: { "workId": workId },
+                    success: function (d) {
+                        if (d == "ok") {
+                            layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                location.reload();
+                                //layer.close(index)
+                            });
+
+                        } else {
+                            layer.alert(d)
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+
+</body>
+</html>

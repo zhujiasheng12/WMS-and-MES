@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CNCINFOModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cnc">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachNum" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IP" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="MachState" Type="varchar" MaxLength="50" />
+    <Property Name="MachType" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CncBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Brand" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CncType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BrandID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MachTimesData">
+    <Key>
+      <PropertyRef Name="IDNum" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="OpenTime" Type="float" />
+    <Property Name="AllRunTime" Type="float" />
+    <Property Name="NowRunTime" Type="float" />
+    <Property Name="IDNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Cnc__MachType__239E4DCF">
+    <End Role="CncType" Type="Self.CncType" Multiplicity="1" />
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CncType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Cnc">
+        <PropertyRef Name="MachType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CncType__BrandID__24927208">
+    <End Role="CncBrand" Type="Self.CncBrand" Multiplicity="1" />
+    <End Role="CncType" Type="Self.CncType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CncBrand">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CncType">
+        <PropertyRef Name="BrandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MachTimesDat__ID__29572725">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="1" />
+    <End Role="MachTimesData" Type="Self.MachTimesData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MachTimesData">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CNCINFOModel1StoreContainer">
+    <EntitySet Name="Cnc" EntityType="Self.Cnc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CncBrand" EntityType="Self.CncBrand" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CncType" EntityType="Self.CncType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MachTimesData" EntityType="Self.MachTimesData" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Cnc__MachType__239E4DCF" Association="Self.FK__Cnc__MachType__239E4DCF">
+      <End Role="CncType" EntitySet="CncType" />
+      <End Role="Cnc" EntitySet="Cnc" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CncType__BrandID__24927208" Association="Self.FK__CncType__BrandID__24927208">
+      <End Role="CncBrand" EntitySet="CncBrand" />
+      <End Role="CncType" EntitySet="CncType" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MachTimesDat__ID__29572725" Association="Self.FK__MachTimesDat__ID__29572725">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="MachTimesData" EntitySet="MachTimesData" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

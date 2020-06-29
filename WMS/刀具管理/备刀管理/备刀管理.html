@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body style="height:100%">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height:100%">
+        <ul class="layui-tab-title">
+            <li class="layui-this">刀具室备刀</li>
+            <li>机台处上刀</li>
+
+        </ul>
+        <div class="layui-tab-content" style="height:100%">
+            <div class="layui-tab-item layui-show">
+
+                <table id="demo" lay-filter="test"></table>
+            </div>
+            <div class="layui-tab-item" style="height:100%">
+                <iframe src="装刀.html" style="width:100%;height:100%" frameborder="0"></iframe>
+           </div> 
+
+        </div>
+    </div>
+    <script>
+        //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+        layui.use('element', function () {
+            var element = layui.element;
+
+            //…
+        });
+    </script>
+    <script>
+        fun()
+        function fun() {
+            layui.use(['table', 'layer'], function () {
+                table = layui.table, layer = layui.layer, $ = layui.$;
+                $.ajax({
+
+                    url: '刀具室弹窗提醒.ashx',
+                    success: function (d) {
+                        if (d != "") {
+                            var arr = d.split(",")
+                            var str = ""
+                            for (var i = 0; i < arr.length; i++) {
+                                str += arr[i] + "</br>"
+                            }
+                            layer.open({
+                                type: 0,
+                                area: ['30%', '30%'],
+                                offset: 'rb',
+                                skin: 'layui-layer-lan',
+                                anim: 0,
+                                shade: 0,//不显示遮罩
+                                cancel: function (index) {
+                                    reload.reload()
+                                },
+                                yes: function (index, layero) {
+                                    reload.reload()
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                },
+                                content: str //这里content是一个普通的String
+                            });
+
+                        }
+                        setTimeout('fun()', 60000)
+                    }
+                })
+            })
+        }
+
+        /**/</script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+
+
+            reload = table.render({
+                elem: '#demo',
+                toolbar: true,
+                url: '备刀管理读数据.ashx',
+                cols: [
+                    [
+                        { field: 'order', width: 120, title: '订单号', rowspan: 2 },//
+                         { field: 'orderName', width: 120, title: '产品名称', rowspan: 2 },
+                        { field: 'process', width: 60, title: '工序', rowspan: 2 },
+                        { width: 120, align: 'center', title: '特殊刀具', colspan: 6 },
+                        { field: 'mach', width: 90, title: '对应机台', rowspan: 2 },
+                          { field: 'time', title: '延期时间', width: 120, rowspan: 2, },
+                        { field: 'toolPreparation', width: 90, title: '备刀提醒', rowspan: 2,hide:true },
+                        { field: 'toolPreparationText', width: 90, title: '备刀提醒', rowspan: 2, },
+                        { field: 'processId', title: '操作', rowspan: 2, toolbar: '#barDemo', width: 160, },
+
+                        //{ field: 'processId', width: 150, title: 'id', rowspan: 2 }
+                    ],
+                    [
+                        { field: 'toolNum', width: 60, title: '刀号' },
+                        { field: 'toolName', width: 160, title: '刀具名称' },
+                        { field: 'toolSpecification', width: 160, title: '刀具规格' },
+                        { field: 'hiltSpecification', width: 160, title: '刀柄规格' },
+                        { field: 'toolLength', width: 100, title: '装刀长度' },
+                        { field: 'toolNumber', width: 60, title: '数量' },
+                    ]
+                ]
+
+
+                , done: function (dd) {
+                  
+                    var toolPreparation = $('td[data-field="toolPreparation"]')
+                    for (var i = 0; i < toolPreparation.length; i++) {
+                        if (toolPreparation[i].children[0].innerText == 0) {
+                            $(toolPreparation[i]).siblings('td[data-field="toolPreparationText"]')[0].children[0].innerText = "无需备刀"
+                            if (Number($(toolPreparation[i]).siblings('td[data-field="toolNumber"]')[0].children[0].innerText) > 0) {
+                                 $(toolPreparation[i]).siblings('td[data-field="toolPreparationText"]').children('div').attr('flag', true)
+                                $(toolPreparation[i]).siblings('td[data-field="processId"]').find('button').removeClass('layui-btn-disabled').removeAttr('disabled')
+                                 $(toolPreparation[i]).siblings('td[data-field="toolPreparationText"]')[0].children[0].innerText = "需备刀"
+                            }
+                        } else if (toolPreparation[i].children[0].innerText == 1) {
+                            $(toolPreparation[i]).siblings('td[data-field="toolPreparationText"]')[0].children[0].innerText = "已备刀"
+                        }else if (toolPreparation[i].children[0].innerText == -1) {
+                            $(toolPreparation[i]).siblings('td[data-field="toolPreparationText"]')[0].children[0].innerText = "待下发请求"
+                        }
+
+                    }
+
+                    $.ajax({
+                        url: 'orderRead.ashx',
+
+                        success: function (d) {
+                            var colorCount=0
+                            var obj = JSON.parse(d)
+                          
+                            for (var j = 0; j < obj.length; j++) {
+                                var ss = fun(obj[j].Order_ID)
+                                var a = JSON.parse(ss)//
+                                for (var k = 0; k < a.length; k++) {
+                                    {
+
+
+                                        var count = 0;
+                                        var dd = $('td[data-field="order"]')
+                                        for (var i = 0; i < dd.length; i++) {
+
+                                            if (dd[i].children[0].innerText == obj[j].Order_Number) {
+
+                                                if ($(dd[i]).siblings('td[data-field="process"]')[0].children[0].innerText == a[k].ProcessID) {
+                                               
+                                                  
+                                                    count++;
+                                                    if (count == 1) {
+                                                        colorCount++
+                                                        var start = dd[i]
+                                                    }
+                                                    if (colorCount % 2 == 0) {
+
+                                                        $(dd[i]).parent('tr').css('background-color', 'white')
+                                                        debugger
+                                                    } else {
+                                                        $(dd[i]).parent('tr').css('background-color', 'lightgray')
+                                                        debugger
+                                                    }
+                                                    if (count > 1) {
+                                                        $(dd[i]).hide()//
+                                                        $(dd[i]).siblings('td[data-field="orderName"]').hide()
+                                                        $(dd[i]).siblings('td[data-field="process"]').hide()
+                                                        $(dd[i]).siblings('td[data-field="toolNumber"]').hide()
+                                                        $(dd[i]).siblings('td[data-field="remind"]').hide()
+                                                        $(dd[i]).siblings('td[data-field="processId"]').hide()
+                                                        $(dd[i]).siblings('td[data-field="toolPreparation"]').remove()
+                                                        $(dd[i]).siblings('td[data-field="time"]').remove()
+                                                        //
+                                                    }
+                                                }
+
+
+
+                                            }
+
+                                        }
+
+                                        $(start).attr('rowspan', count);
+                                        $(start).siblings('td[data-field="orderName"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="process"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="toolNumber"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="remind"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="processId"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="toolPreparation"]').attr('rowspan', count);
+                                        $(start).siblings('td[data-field="time"]').attr('rowspan', count);
+                                        //
+                                    }
+                                }
+
+
+                            }
+                        }
+                    })//
+                    ff()
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'complete') {
+                    layer.confirm("是否提交", function (index) {
+                        $.ajax({
+                            url: 'completeToolPreparation.ashx',
+                            data: { "processId": data.processId, 'toolNumber': data.toolNumber },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("完成备刀", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index)
+                                        reload.reload({})
+                                    })
+
+                                }
+                            }
+                        })
+
+                    })
+                }
+                if (obj.event === 'delay') {
+                    layer.open({
+                        type: 2,
+                        area: ['50%', '60%'],
+                        content: '刀具延期弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#processId').val(data.processId);
+
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+    <script>
+        var flag = 0;
+        var timeid;
+        function ff() {
+            window.clearInterval(timeid);
+            timeid = setInterval("method()", 500);
+
+        }
+        function method() {
+
+            var d = '[flag]';
+            if (!flag) {
+                $(d).css('background-color', 'red')
+                flag = 1;
+            } else {
+                $(d).css('background-color', 'white')
+                flag = 0
+            }
+
+
+        }
+        function fun(d) {
+            var a = "";
+            $.ajax({
+                url: 'processRead.ashx',
+                async: false,
+                data: { "orderId": d },
+                success: function (json) {
+
+                    a = json;
+                }
+            });
+            return a;
+        }
+    </script>
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="complete" disabled="disabled">备刀完成</button>
+        <button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="delay" disabled="disabled">延期</button>
+    </script>
+</body>
+</html>

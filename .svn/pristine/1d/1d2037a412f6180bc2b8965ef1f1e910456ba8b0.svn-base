@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+
+
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.min.js"></script>
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../Resources/js/echarts.js"></script>
+
+    <title></title>
+</head>
+<body style="height:100%">
+
+
+    <div class="layui-layout layui-layout-admin" style="height:100%">
+       
+
+        <div class="layui-side layui-bg-black" style="background-color:white;top:0">
+            <div class="layui-side-scroll" style="">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <table id="tt" style="width:100%;height:100%;"></table>
+            </div>
+        </div>
+
+        <div class="layui-body" style="bottom:0;height:100%;top:0">
+            <!-- 内容主体区域 -->
+            <div style="height:50px;width:100%;">
+                <div style="float:left;width:20%;height:100%"></div>
+
+                <div style="float:left;width:40%"><font size="6" style="float:left">良品数:</font><font id="good" size="8" style="float:left;color:green">0</font></div>
+                <div style="float:left;width:40%"><font size="6" style="float:left">总数:</font><font id="all" size="8"  style="float:left">0</font></div>
+            </div>
+            <div style="">
+                <table id="demo" lay-filter="test"></table>
+            </div>
+            
+        </div>
+
+
+    </div>
+
+
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+           
+
+        });
+</script>
+   
+    <script>
+        fun()
+
+
+        function fun() {
+            $('#tt').treegrid({
+                url: '读订单工件.ashx',
+                idField: 'id',
+                animate: true,
+                treeField: 'name',
+                method: 'get',
+                rownumbers: true,
+
+                columns: [[
+                    { field: 'name', title: '订单工件', width: '120%' },
+
+                    { field: 'id', title: 'id', width: 80, hidden: true },
+                  
+                ]],
+
+            });
+        }
+
+
+        $('#tt').treegrid({
+
+            onLoadSuccess: function (data) {
+                $('td').css('border', 'none')
+                $('.tree-folder').removeClass('tree-folder')
+                $('.tree-icon').removeClass('tree-icon tree-file')
+
+                $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' });
+
+                $('tr').click(function () {
+                     var id = $(this)[0].children[1].children[0].innerText
+                    var childrens = $(this).siblings('.treegrid-tr-tree')
+                    if (childrens.length > 0) {//点击订单
+                        $.ajax({
+                            url: '良品数总数.ashx?id=' + id,
+                            success: function (d) {
+                                var obj = JSON.parse(d)
+                                $("#good").text(obj.GoodNum)
+                                $("#all").text( obj.AllNum)
+                               
+                              
+                            }
+                        })
+                        return;
+                    }
+                   
+                    $("#cncId").val(id)
+                    layui.use(['table', 'laypage'], function () {
+                        var table = layui.table, $ = layui.$, laypage = layui.laypage;
+
+                  table.render({
+                elem: '#demo'
+                    
+                      , url: '在机测量表格读数据.ashx?id=' + id //数据接口
+            
+              , cols: [[ //表头
+              
+                  { field: 'ProcessNum', title: '工序' },
+                  { field: 'SizeName', title: '尺寸名称' },
+                  { field: 'StandardValue', title: '理论值' },
+                  { field: 'Measurements', title: '实测值' },
+                  { field: 'Max', title: '最大值' },
+                  { field: 'Min', title: '最小值' },
+                        { field: 'Result', title: '结果' },
+            
+              ]]
+            });
+
+
+                    });
+                })
+                $('tr')[1].click();
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+
+            }
+        });
+
+    </script>
+</body>
+</html>

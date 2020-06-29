@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title style="text-align:center;font-size:200%">WMS车间生产管理系统 装刀表</title>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <table id="toolInstallation" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#toolInstallation',
+                toolbar: '#toolbar',
+                url: '装刀管理读数据.ashx',
+                cols: [
+                    [
+                        { field: 'machNum', width: 100, title: '机台号', rowspan: 2 },
+                        { field: 'currentOrderTask', width: 120, title: '当前订单任务', rowspan: 2 },
+                        { width: 90, align: 'center', title: '刀具需求', colspan: 3 },
+                        { field: 'currentTaskCompletionDegree', width: 135, title: '当前任务完成度', rowspan: 2 },
+                        { field: 'nextOrderTask', width: 120, title: '下个订单任务', rowspan: 2 },
+                        { width: 90, align: 'center', title: '刀具需求', colspan: 3 },
+                        { field: 'remind', width: 90, title: '装刀提醒', rowspan: 2 },
+                        //{ field: 'nextRemind',  title: '装刀提醒', rowspan: 2 },
+
+                    ],
+                    [
+                        { field: 'toolNum', width: 60, title: '刀号' },
+                        { field: 'toolName', width: 120, title: '刀具名称' },
+                        { field: 'toolSpecification', width: 120, title: '刀具规格' },
+                        { field: 'nextToolNum', width: 120, title: '刀号' },
+                        { field: 'nextToolName', width: 120, title: '刀具名称' },
+                        { field: 'nextToolSpecification', width: 120, title: '刀具规格' },
+                    ]
+                ]
+
+
+                , done: function (d) {
+                    $.ajax({
+                        url: 'cncRead.ashx',
+                        success: function (d) {
+                            var obj = JSON.parse(d)
+                            for (var j = 0; j < obj.length; j++) {
+
+                                {
+                                    var count = 0;
+                                    var dd = $('td[data-field="machNum"]')
+                                    for (var i = 0; i < dd.length; i++) {
+
+                                        if (dd[i].children[0].innerText == obj[j].MachNum) {
+                                            count++;
+                                            if (count == 1) {
+                                                var start = dd[i]
+                                            }
+                                            if (count > 1) {
+                                                $(dd[i]).hide()
+                                                $(dd[i]).siblings('td[data-field="currentOrderTask"]').hide()
+                                                $(dd[i]).siblings('td[data-field="currentTaskCompletionDegree"]').hide()
+                                                $(dd[i]).siblings('td[data-field="nextOrderTask"]').hide();
+                                                $(dd[i]).siblings('td[data-field="remind"]').hide();
+                                                $(dd[i]).siblings('td[data-field="nextRemind"]').hide();
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                    if (count != 0) {
+                                      $(start).attr('rowspan', count);
+                                    $(start).siblings('td[data-field="currentOrderTask"]').attr('rowspan', count);
+                                    $(start).siblings('td[data-field="currentTaskCompletionDegree"]').attr('rowspan', count);
+                                    $(start).siblings('td[data-field="nextOrderTask"]').attr('rowspan', count);
+                                    $(start).siblings('td[data-field="remind"]').attr('rowspan', count);
+                                    $(start).siblings('td[data-field="nextRemind"]').attr('rowspan', count);
+                                    }
+                                }
+                            }
+                        }
+                    })
+
+
+
+                }
+            });
+        });
+
+     </script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn" onclick="printFun()">打印</button>
+    </script>
+   
+    <script>
+    function printFun(d) {
+      
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#printTable',
+              toolbar: '#toolbar',
+                url: '打印信息.ashx',
+                cols: [[
+                      { field: 'cncNum',  title: '机台号' ,},
+                    { field: 'LoadType',  title: '装刀类型', },
+                        { field: 'ToolNo',  title: '刀号' ,},
+                    { field: 'ToolName', title: '刀具名称' ,},
+                    { field: 'ToolSpecification', title: '刀具规格' ,},
+                    { field: 'ToolLength', title: '装刀长度', },
+                           { field: 'stack',  title: '刀柄规格',},
+                ]]  
+                , done: function (d) {
+                    //$(".layui-table-header").remove()
+           //var oldHtml = window.document.body.innerHTML;
+           // var newHtml = document.getElementById('printDiv').innerHTML;
+           // window.document.body.innerHTML = newHtml;
+           // print();
+                    // window.document.body.innerHTML = oldHtml;
+                    $($('.layui-icon-print')[1]).click()
+                }
+            });
+           
+        });
+    }
+    </script>
+    <div id="printDiv" hidden >
+    
+        <!--<h3 style="text-align:center">WMS车间生产管理系统 装刀表</h3>-->
+        <table id="printTable" lay-filter="test"></table>
+    </div>
+</body>
+</html>

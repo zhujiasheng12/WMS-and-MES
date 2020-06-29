@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CNCINFOModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Table_1">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Cnc">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="MachNum" />
+      <PropertyRef Name="IP" />
+      <PropertyRef Name="MachType" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="MachNum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MachState" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MachType" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MachBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Brand" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="CNCINFOEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Table_1" EntityType="Self.Table_1" />
+    <EntitySet Name="Cnc" EntityType="Self.Cnc" />
+    <EntitySet Name="MachBrand" EntityType="Self.MachBrand" />
+    <EntitySet Name="CncType" EntityType="CNCINFOModel.CncType" />
+    <EntitySet Name="Cnc1Set" EntityType="CNCINFOModel.Cnc1" />
+    <EntitySet Name="CncBrand" EntityType="CNCINFOModel.CncBrand" />
+  </EntityContainer>
+  <EntityType Name="CncType">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Type" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="MachType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BrandID" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Cnc1">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="MachNum" />
+      <PropertyRef Name="IP" />
+      <PropertyRef Name="MachType" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachNum" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MachState" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MachType" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CncBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Brand" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Brand" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

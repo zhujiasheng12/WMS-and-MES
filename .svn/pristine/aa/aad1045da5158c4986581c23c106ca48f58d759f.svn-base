@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title>看板管理</title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../Resources/js/vue.min.js"></script>
+     <meta name="viewport" content="width=1600 ,initial-scale=0.5">
+</head>
+<body style="height:100%;overflow:hidden">
+    <div style="width:100%;background-color:black;text-align:center">
+           <div style="color:white;display:inline">苏州精雕精密机械工程有限公司</div> 
+     <div id="app" style="float:right;color:white">{{time}}</div> 
+    </div>
+ 
+    <div class="layui-carousel" id="test1" lay-filter="test1" style="height:95%">
+        <div id="iframes" carousel-item style="height:100%">
+           
+        </div>
+       
+    </div>
+   
+    <script>
+        var vue=new Vue({
+            el:'#app',
+            data:{
+            time:""
+            },
+            methods:{
+                getTime:function(){
+                    var t=new Date();
+                    var year=t.getFullYear().toString();
+                    var month=(t.getMonth()+1).toString();
+                    var day=t.getDate().toString();
+                    var hours=(Array(2).join(0) + t.getHours()).slice(-2).toString()
+                    var minutes=(Array(2).join(0) + t.getMinutes()).slice(-2).toString();
+                    var seconds=(Array(2).join(0) + t.getSeconds()).slice(-2).toString() 
+                    this.time=year+'/'+month+'/'+day+" "+hours+':'+minutes+':'+seconds
+                   
+                }
+            },
+            created:function(){
+                var _this=this
+                setInterval(function(){_this.getTime()},100)
+            }
+        })
+        for (var i = 0; i < 20; i++) {
+    sessionStorage.setItem(i,0)
+        }
+
+        layui.use('layer', function () {
+            layer.open({
+                type: 2,
+                area:['40%','80%'],
+                content: '轮播参数.html',
+                success: function (layero, index) {
+         
+                }
+            });
+        })
+     
+        function fun(time,json) 
+        {
+
+            var iframes =
+               ` <iframe name="刀具" src="刀具.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+            <iframe name="品质" src="品质.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+           <iframe name="报修" src="报修.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+            <iframe name="资材" src="资材.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+            <iframe name="订单" src="订单.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+           <iframe name="报警维修_车间" src="现场/报修维修.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+            <iframe name="刀具_车间" src="现场/刀具.html" style=" width:100%;height:100%;" frameborder="0"></iframe>
+            <iframe name="机床布局图" src="现场/机床布局图.html" style=" width:100%;height:100%;" frameborder="0"></iframe>`
+
+
+            $("#iframes").append(iframes)
+            var obj = JSON.parse(json);
+            var count = 0;
+            for (var i = 0; i < obj.length; i++) {
+                if ($("[name="+obj[i]+"]").length > 0) {
+                    $("[name="+obj[i]+"]").remove()
+                }
+
+
+            }
+            layui.use('carousel', function () {
+                var carousel = layui.carousel;
+                    carousel.render({
+                        elem: '#test1'
+                        , width: '100%' //设置容器宽度
+                        , height: '100%'
+                        , arrow: 'always' //始终显示箭头
+                        //, anim: 'updown' //切换动画方式
+                        //, full: true
+                        , autoplay: true//自动切换
+                        , interval: time//自动切换的时间间隔，单位：ms（毫秒），不能低于800
+                        ,trigger:'hover' 
+                    });
+                carousel.on('change(test1)', function (obj) { //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+                    var dd = sessionStorage.getItem(obj.index)
+               
+                    if (dd == 0) {
+                         sessionStorage.setItem(obj.index,1)
+                          $('iframe')[obj.index].contentWindow.location.reload(true);
+                    }
+            
+                    });
+                   $('iframe')[0].contentWindow.location.reload(true);
+            });
+      
+        }
+    </script>
+   
+</body>
+</html>

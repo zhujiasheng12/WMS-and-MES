@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../layer-v3.1.1/layer/layer.js"></script>
+    <script src="../layui-v2.4.5/layui/layui.js"></script>
+
+    
+    
+</head>
+<body style="background-color:#F0F0F0;padding:0.8%">
+    
+    <div class="layui-row " style="background-color:white;padding:0.6%;margin-top:0.7%">
+        <div class="layui-col-md12">
+            <div>
+                <table class="layui-hide" id="test" lay-filter="test"></table>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">创建</button>
+           
+          
+           
+        </div>
+    </script>
+    <script>
+        layui.use(['table', 'element', 'layer', 'jquery'], function () {
+            var table = layui.table, $ = layui.$, element = layui.element, layer = layui.layer;
+            element.render();
+            element.progress('demo', '50%');
+            table.render({
+                elem: '#test'
+                , url: 'BrandReadHandler1.ashx'
+
+                , toolbar: '#toolbarDemo'
+                , title: '用户数据表'
+                , id:'idTest'
+                , cols: [[
+                    { type: 'checkbox', fixed: 'left' }
+                   
+                    , { field: 'Brand', title: '机床品牌', }
+                    , {
+                        field: 'MachState', title: '状态',
+                    }, {
+                        field: 'ID', title: 'ID', hide:'true'
+                    }
+                    , {
+                        field: 'cz', title: '操作', width: 200, templet: function (d) {
+                            return '<div ><img title="删除" data-id="' + d.ID + '"  border="0" src="../Resources/icon/delete_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create">'
+                                + '<img title="详情" data-ip="' + d.IP + '" data-number="' + d.MachNum + '"data-brand="' + d.Brand + '" data-model="' + d.Type + '" class="details" border="0" src="../Resources/icon/detail_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create">'
+                                + '<img title="修改" data1-ip="' + d.IP + '" data1-number="' + d.MachNum + '"data1-brand="' + d.Brand + '" data1-model="' + d.Type + '" data1-id="' + d.ID + '"  border="0" src="../Resources/icon/edit_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create"></div>'
+
+                        }
+                    }                    
+                ]]
+
+                ,
+                page: true
+
+                , done: function () {
+                    $('[data-id]').click(function () {
+                        var id= $(this).attr("data-id");
+                        layer.confirm("是否删除", function (index) {
+                            $.ajax({
+                                url: "BrandDeleteHandler1.ashx", data: { "id": id }, success: function (res) {
+                                    if (res == 'ok') {
+                                        layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                            layer.close(index);
+                                            location.reload();
+                                            parent.location.close(index);
+                                        });
+                                    } else {
+                                        layer.alert(res);
+                                    }
+                                   
+                                }
+                            })
+                        });
+                    });
+                    $('[data-ip]').click(function () {
+                     
+                      
+                        var brand = $(this).attr("data-brand");
+                        var model = $(this).attr("data-model");
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '85%'],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '机床品牌详情弹窗.html',
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                console.log(body.html()) //得到iframe页的body内容
+                                //body.find('input').val('Hi，我是从父页来的')
+                                body.find('#brand').val(brand)
+                              
+                               
+                            }
+                        });
+                    });
+                    $('[data1-ip]').click(function () {
+                        var ip = $(this).attr("data1-ip");
+                        var number = $(this).attr("data1-number");
+                        var brand = $(this).attr("data1-brand");
+                        var model = $(this).attr("data1-model");
+                        var id = $(this).attr('data1-id');
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '85%'],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '机床品牌修改弹窗.html',
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                console.log(body.html()) //得到iframe页的body内容
+                               
+                                body.find('#brand').val(brand)
+                              
+                                body.find('#id').val(id);
+                               
+                            }
+                        });
+                    });
+                }
+            });
+
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'getCheckData':
+
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '85%']
+
+                            , cancel: function () {
+                                //右上角关闭回调
+
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            },
+                            content: '机床品牌创建弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        });
+                        break;
+                    case 'getCheckLength':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                        break;
+                };
+            });
+            //监听行单击事件
+            table.on('row(test)', function (obj) {
+                obj.tr.css("background-color", "#AAAAAA"); //得到当前行元素对象
+           $(obj.tr).siblings().css("background-color","white");
+            });
+            //表格重载
+            $(function () {
+                $('#chaxun').click(function () {
+                    table.reload('idTest', {
+                        where: {
+                          
+                                jcbh: $('#demoReload').val()
+                            
+                        }
+                        , page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    });
+                });
+            });
+            
+           
+        });
+    </script>
+    <script type="text/html" id="zizeng">
+        {{d.LAY_TABLE_INDEX+1}}
+    </script>
+</body>
+</html>

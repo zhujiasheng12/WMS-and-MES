@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.品质
+{
+    /// <summary>
+    /// order_orderId 的摘要说明
+    /// </summary>
+    public class order_orderId : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+           
+          using (JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
+            {
+                var rows = entities.JDJS_WMS_Order_Entry_Table;
+                List<order__orderId> orders = new List<order__orderId>();
+                foreach (var item in rows)
+                {
+                    orders.Add(new order__orderId
+                    {
+                        order = item.Order_Number,
+                        orderId = item.Order_ID.ToString()
+                    });
+                   
+                }
+                System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                var json = serializer.Serialize(orders);
+                context.Response.Write(json);
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    class order__orderId
+    {
+        public string order;
+        public string orderId;
+    }
+}

@@ -1,0 +1,191 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.Kanban.缓冲区看板
+{
+    /// <summary>
+    /// 料池状态 的摘要说明
+    /// </summary>
+    public class 料池状态 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            List<VATStatus> statuses = new List<VATStatus>();
+            using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+            {
+                var orders = wms.JDJS_WMS_Order_Entry_Table.Where(r => (r.Intention == 2 || r.Intention == 3) && r.ProofingORProduct == -1);
+                foreach (var order in orders)
+                {
+                    var processes = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == order.Order_ID && r.sign != 0).OrderBy(r => r.ProcessID);
+                    for (int i = 0; i < processes.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            int blankCount = 0;
+                            var blank = wms.JDJS_WMS_Blank_Additional_History_Table.Where(r => r.OrderID == order.Order_ID);
+                            foreach (var item in blank)
+                            {
+                                blankCount += Convert.ToInt32(item.BlankAddNum);//入了多少
+                            }
+                            int outNum = 0;
+                            var processBlank = wms.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == processes.ToList()[i].ID).FirstOrDefault();
+                            if (processBlank != null)
+                            {
+                                outNum = Convert.ToInt32(processBlank.OutNum);
+                            }
+                            if (outNum < blankCount)
+                            {
+                                VATStatus status = new VATStatus();
+                                status.materialCount = blankCount;
+                                status.materialType = "毛坯料";
+                                status.noOutNum = blankCount - outNum;
+                                status.orderNum = order.Order_Number;
+                                status.outNum = outNum;
+                                status.productName = order.Product_Name;
+                                status.projectName = order.ProjectName;
+                                statuses.Add(status);
+                            }
+                        }
+                        if (i == processes.Count() - 1)
+                        {//这一个是成品料
+                            int blankCount = 0;
+                            var blank = wms.JDJS_WMS_Blank_Additional_History_Table.Where(r => r.OrderID == order.Order_ID);
+                            foreach (var item in blank)
+                            {
+                                blankCount += Convert.ToInt32(item.BlankAddNum);//入了多少
+                            }
+                            foreach (var item in processes)
+                            {
+                                blankCount = blankCount * (Convert.ToInt32(item.Modulus));
+                            }
+                            int InNum = 0;
+                            int outNum = 0;
+                            var processBlank = wms.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == processes.ToList()[i].ID).FirstOrDefault();
+                            if (processBlank != null)
+                            {
+                                InNum = Convert.ToInt32(Math.Ceiling (Convert.ToDouble ( processBlank.InNum)));
+                            }
+                            var qualtity  =wms.JDJS_WMS_Quality_Confirmation_Table .Where (r=>r.OrderID ==order.Order_ID).FirstOrDefault ();
+                            if(qualtity !=null)
+                            {
+                            outNum =Convert.ToInt32 (qualtity .DetectionNumber );
+                            }
+                            if (outNum < InNum)
+                            {
+                                VATStatus status = new VATStatus();
+                                status.materialCount = InNum;
+                                status.materialType = "成品料";
+                                status.noOutNum = InNum - outNum;
+                                status.orderNum = order.Order_Number;
+                                status.outNum = outNum;
+                                status.productName = order.Product_Name;
+                                status.projectName = order.ProjectName;
+                                statuses.Add(status);
+                            }
+                        }
+                        else
+                        {
+                            var processLast = processes.ToList ()[i+1];
+                            int inNum = 0;
+                            int outNum = 0;
+                            var blank = wms.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == processes.ToList()[i].ID).FirstOrDefault();
+                            if (blank != null)
+                            {
+                                inNum = Convert.ToInt32(blank.InNum);
+                            }
+                            var blankLast = wms.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == processLast.ID).FirstOrDefault();
+                            if (blankLast != null)
+                            {
+                                outNum  = Convert.ToInt32(blank.OutNum);
+                            }
+                            if (outNum < inNum)
+                            {
+                                VATStatus status = new VATStatus();
+                                status.materialCount = inNum;
+                                switch (processes.ToList()[i].ProcessID)
+                                { 
+                                    case 1:
+                                        status.materialType = "一序完成料";
+                                        break;
+                                    case 2:
+                                        status.materialType = "二序完成料";
+                                        break;
+                                    case 3:
+                                        status.materialType = "三序完成料";
+                                        break;
+                                    case 4:
+                                        status.materialType = "四序完成料";
+                                        break;
+                                    case 5:
+                                        status.materialType = "五序完成料";
+                                        break;
+                                    case 6:
+                                        status.materialType = "六序完成料";
+                                        break;
+
+                                }
+                                
+                                status.noOutNum = inNum - outNum;
+                                status.orderNum = order.Order_Number;
+                                status.outNum = outNum;
+                                status.productName = order.Product_Name;
+                                status.projectName = order.ProjectName;
+                                statuses.Add(status);
+                            }
+
+                        }
+                    }
+                }
+            }
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var json = serializer.Serialize(statuses);
+            context.Response.Write(json);
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    /// <summary>
+    /// 料池状态
+    /// </summary>
+    public class VATStatus
+    {
+        /// <summary>
+        /// 项目名称
+        /// </summary>
+        public string projectName;
+        /// <summary>
+        /// 产品名称
+        /// </summary>
+        public string productName;
+        /// <summary>
+        /// 订单号
+        /// </summary>
+        public string orderNum;
+        /// <summary>
+        /// 物料状态
+        /// </summary>
+        public string materialType;
+        /// <summary>
+        /// 物料总量
+        /// </summary>
+        public double materialCount;
+        /// <summary>
+        /// 已出料数
+        /// </summary>
+        public double outNum;
+        /// <summary>
+        /// 未出料数
+        /// </summary>
+        public double noOutNum;
+
+    }
+}

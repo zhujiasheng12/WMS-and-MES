@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using WebApplication2.Model.生产管理.生产部;
+
+namespace WebApplication2.生产管理.生产部.产能计数
+{
+    /// <summary>
+    /// 读取订单信息 的摘要说明
+    /// </summary>
+    public class 读取订单信息 : IHttpHandler
+    {
+        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var limit = int.Parse(context.Request["limit"]);
+            var page = int.Parse(context.Request["page"]);
+            using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
+            {
+                var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => (r.Intention == 3 | r.Intention == 2 | r.Intention == 4&&r.ProofingORProduct ==-1));
+                List<Order> orders = new List<Order>();
+
+                if (rows.Count() > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        var shchedu = entities.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == item.Order_ID && r.isFlag != 0);
+                        if (shchedu.Count() < 1)
+                        {
+                            continue;
+                        }
+                        int orderID = item.Order_ID;
+                        string time = "";
+                        var guide = entities.JDJS_WMS_Order_Guide_Schedu_Table.Where(r => r.OrderID == orderID).FirstOrDefault();
+                        if (guide != null)
+                        {
+                            if (guide.ExpectEndTime != null)
+                            {
+                                time = guide.ExpectEndTime.ToString();
+                            }
+                        }
+
+                        orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, orderName = item.Product_Name, projectName = item.ProjectName == null ? "" : item.ProjectName });
+
+
+
+                    }
+                    var sort = orders.OrderByDescending(r => r.flag);
+                    var layPage = sort.Skip((page - 1) * limit).Take(limit);
+                    var model = new { code = 0, msg = "", count = orders.Count(), data = layPage };
+                    var json = serializer.Serialize(model);
+                    context.Response.Write(json);
+                }
+                else
+                {
+                    context.Response.Write("{\"code\":0,\"msg\":\"\",\"count\":1,\"data\":[]}");
+                    return;
+                }
+
+
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

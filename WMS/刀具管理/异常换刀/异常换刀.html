@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="/easyui/jquery.min.js"></script>
+    <script src="/easyui/jquery.easyui.min.js"></script>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+
+    
+</head>
+<body class="layui-layout-body">
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-xs" lay-event="accept" >受理</button>
+       
+    </script>
+
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+           tableReload= table.render({
+                elem: '#demo'
+                //, height: 312
+                , url: '异常换刀读数据.ashx' //数据接口
+               , page: true //开启分页
+               , toolbar:true
+                , cols: [[ //表头
+                    { field: '', type: 'numbers', title: '编号',  }
+                    , { field: 'position', title: '车间', }
+                    , { field: 'cncNum', title: '机床', }
+                    , { field: 'toolNum', title: '刀位', }
+                    , { field: 'reason', title: '原因', }
+                    , { field: 'time', title: '请求时间', }
+                    //, { field: 'completeTime', title: '完成时间', }
+                 
+                    , { field: 'state', title: '状态', }
+                    , { field: 'Id', title: '主键ID',hide:true }
+                    , { field: 'flag', title: 'flag', hide: true }
+
+                   //,{fixed: 'right',field:'do', title:'操作', toolbar: '#barDemo', width:150}
+                ]]
+             
+                , done: function () {
+                    //var arr = $('[data-field="flag"]')
+                    //for (var i = 0; i < arr.length; i++) {
+                    //    var flag = $(arr[i]).children('div').text();
+                    //    if (flag == "1") {
+                    //        $(arr[i]).siblings('[data-field="do"]').find('button').removeClass('layui-btn-disabled').removeAttr('disabled')
+                    //    }
+                    //}
+                    var arr = $('[data-field="state"]')
+                    for (var i = 0; i < arr.length; i++) {
+                        if ($(arr[i]).children('div').text() == "受理中") {
+                            $(arr[i]).css({ "background-color":"green",color:"white"})
+                        }
+                    }
+
+                }
+            });
+             //监听行工具事件
+            table.on('tool(test)', function (obj) {
+
+                //console.log(obj)
+                if (obj.event === 'accept') {
+                    layer.confirm('是否受理', function (index) {
+
+                        $.ajax({
+                            url: '受理.ashx',
+                            type: 'post',
+                            data: { Id: obj.data.Id },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("受理成功", { icon: 1, time: 1000 }, function () {
+                                        tableReload.reload({})
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                             
+                            }
+                        })
+
+                    });
+                }
+
+            });
+        });
+    </script>
+</body>
+</html>

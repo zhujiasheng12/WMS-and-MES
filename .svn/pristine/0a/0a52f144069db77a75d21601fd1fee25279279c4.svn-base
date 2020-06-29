@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+
+
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            reload = table.render({
+                elem: '#demo'
+                , toolbar:'#toolbar'
+                , url: '毛坯管理读数据.ashx' //数据接口
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'order', title: '订单号', width: 100, fixed: 'left' }
+                    , { field: 'blankType', title: '毛坯种类', width: 90 }
+                    , { field: 'blankSpecification', title: '毛坯规格', width: 90, }
+                    , { field: 'blankDemandNumber', title: '毛坯需求数量', width: 120 }
+                    , { field: 'orderUsedNumber', title: '订单已使用量', width: 120 }
+                    , { field: 'orderFinishedProductNumber', title: '订单成品量', width: 100, }
+                    , { field: 'orderWasteNumber', title: '订单废品量', width: 100, }
+                    , { field: 'orderGoodProductRate', title: '订单良品率', width: 100 }
+                    , { field: 'blankSparePartsState', title: '毛坯备料状态', width: 135, }
+                    , { field: 'blankPreparedNumber', title: '毛坯已准备总量', width: 135, }
+                    , { field: 'blankBolusNumber', title: '毛坯追加量', width: 135, }
+                    , { field: 'orderId', title: '操作',  toolbar: '#barDemo' }
+                ]]
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'add') {
+                    layer.open({
+                        type: 2,
+                        area: ['50%', '50%'],
+                        content: '追加弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#orderId').val(data.orderId);
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.blankBolusNumber);
+                        }
+                    });
+                } else if (obj.event === 'spareParts') {
+                    layer.open({
+                        type: 2,
+                        area: ['50%', '50%'],
+                        content: '备料弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#orderId').val(data.orderId);
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.blankPreparedNumber);
+                        }
+                    });
+                }
+            });
+
+        });
+
+/**/</script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="spareParts">备料</a>
+        <a class="layui-btn layui-btn-xs" lay-event="add">追加</a>
+    </script>
+   
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+    </script>
+</body>
+</html>

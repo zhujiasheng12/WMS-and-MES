@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CNCINFOModel1StoreContainer" CdmEntityContainer="CNCINFOEntities1">
+    <EntitySetMapping Name="BorrowInfo">
+      <EntityTypeMapping TypeName="CNCINFOModel1.BorrowInfo">
+        <MappingFragment StoreEntitySet="BorrowInfo">
+          <ScalarProperty Name="MachID" ColumnName="MachID" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cnc">
+      <EntityTypeMapping TypeName="CNCINFOModel1.Cnc">
+        <MappingFragment StoreEntitySet="Cnc">
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="MachType" ColumnName="MachType" />
+          <ScalarProperty Name="MachState" ColumnName="MachState" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="MachNum" ColumnName="MachNum" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CncBrand">
+      <EntityTypeMapping TypeName="CNCINFOModel1.CncBrand">
+        <MappingFragment StoreEntitySet="CncBrand">
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CncType">
+      <EntityTypeMapping TypeName="CNCINFOModel1.CncType">
+        <MappingFragment StoreEntitySet="CncType">
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDMachRealTimeData">
+      <EntityTypeMapping TypeName="CNCINFOModel1.JDMachRealTimeData">
+        <MappingFragment StoreEntitySet="JDMachRealTimeData">
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="Time_zone" ColumnName="Time_zone" />
+          <ScalarProperty Name="Time_S" ColumnName="Time_S" />
+          <ScalarProperty Name="Time_MIT" ColumnName="Time_MIT" />
+          <ScalarProperty Name="Time_H" ColumnName="Time_H" />
+          <ScalarProperty Name="Time_D" ColumnName="Time_D" />
+          <ScalarProperty Name="Time_M" ColumnName="Time_M" />
+          <ScalarProperty Name="Time_Y" ColumnName="Time_Y" />
+          <ScalarProperty Name="CurLineText" ColumnName="CurLineText" />
+          <ScalarProperty Name="CurLineNo" ColumnName="CurLineNo" />
+          <ScalarProperty Name="SInfo_W" ColumnName="SInfo_W" />
+          <ScalarProperty Name="SInfo_NM" ColumnName="SInfo_NM" />
+          <ScalarProperty Name="SInfo_A" ColumnName="SInfo_A" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="SpindleRate" ColumnName="SpindleRate" />
+          <ScalarProperty Name="CountNum" ColumnName="CountNum" />
+          <ScalarProperty Name="CurrOMainO" ColumnName="CurrOMainO" />
+          <ScalarProperty Name="CurrO" ColumnName="CurrO" />
+          <ScalarProperty Name="MachTime" ColumnName="MachTime" />
+          <ScalarProperty Name="ToolNo" ColumnName="ToolNo" />
+          <ScalarProperty Name="SpindleSpeed" ColumnName="SpindleSpeed" />
+          <ScalarProperty Name="FeedRate" ColumnName="FeedRate" />
+          <ScalarProperty Name="CurrWCoord" ColumnName="CurrWCoord" />
+          <ScalarProperty Name="ProgState" ColumnName="ProgState" />
+          <ScalarProperty Name="RelCoord_C" ColumnName="RelCoord_C" />
+          <ScalarProperty Name="RelCoord_B" ColumnName="RelCoord_B" />
+          <ScalarProperty Name="RelCoord_A" ColumnName="RelCoord_A" />
+          <ScalarProperty Name="RelCoord_Z" ColumnName="RelCoord_Z" />
+          <ScalarProperty Name="RelCoord_Y" ColumnName="RelCoord_Y" />
+          <ScalarProperty Name="RelCoord_X" ColumnName="RelCoord_X" />
+          <ScalarProperty Name="AbsCoord_C" ColumnName="AbsCoord_C" />
+          <ScalarProperty Name="AbsCoord_B" ColumnName="AbsCoord_B" />
+          <ScalarProperty Name="AbsCoord_A" ColumnName="AbsCoord_A" />
+          <ScalarProperty Name="AbsCoord_Z" ColumnName="AbsCoord_Z" />
+          <ScalarProperty Name="AbsCoord_Y" ColumnName="AbsCoord_Y" />
+          <ScalarProperty Name="AbsCoord_X" ColumnName="AbsCoord_X" />
+          <ScalarProperty Name="MachCoord_C" ColumnName="MachCoord_C" />
+          <ScalarProperty Name="MachCoord_B" ColumnName="MachCoord_B" />
+          <ScalarProperty Name="MachCoord_A" ColumnName="MachCoord_A" />
+          <ScalarProperty Name="MachCoord_Z" ColumnName="MachCoord_Z" />
+          <ScalarProperty Name="MachCoord_Y" ColumnName="MachCoord_Y" />
+          <ScalarProperty Name="MachCoord_X" ColumnName="MachCoord_X" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MachProgStateInfo">
+      <EntityTypeMapping TypeName="CNCINFOModel1.MachProgStateInfo">
+        <MappingFragment StoreEntitySet="MachProgStateInfo">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ProgState" ColumnName="ProgState" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MachStartEndRunTime">
+      <EntityTypeMapping TypeName="CNCINFOModel1.MachStartEndRunTime">
+        <MappingFragment StoreEntitySet="MachStartEndRunTime">
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="RunTime" ColumnName="RunTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="TimeID" ColumnName="TimeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderInfo">
+      <EntityTypeMapping TypeName="CNCINFOModel1.OrderInfo">
+        <MappingFragment StoreEntitySet="OrderInfo">
+          <ScalarProperty Name="MachId" ColumnName="MachId" />
+          <ScalarProperty Name="NowTime" ColumnName="NowTime" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReturnInfo">
+      <EntityTypeMapping TypeName="CNCINFOModel1.ReturnInfo">
+        <MappingFragment StoreEntitySet="ReturnInfo">
+          <ScalarProperty Name="MachId" ColumnName="MachId" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MachNumber" ColumnName="MachNumber" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Staff">
+      <EntityTypeMapping TypeName="CNCINFOModel1.Staff">
+        <MappingFragment StoreEntitySet="Staff">
+          <ScalarProperty Name="mailbox" ColumnName="mailbox" />
+          <ScalarProperty Name="remark" ColumnName="remark" />
+          <ScalarProperty Name="limit" ColumnName="limit" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="users" ColumnName="users" />
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="tel" ColumnName="tel" />
+          <ScalarProperty Name="position" ColumnName="position" />
+          <ScalarProperty Name="staff1" ColumnName="staff" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestWEIZHIXINXI">
+      <EntityTypeMapping TypeName="CNCINFOModel1.TestWEIZHIXINXI">
+        <MappingFragment StoreEntitySet="TestWEIZHIXINXI">
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="size" ColumnName="size" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MachTimesData">
+      <EntityTypeMapping TypeName="CNCINFOModel1.MachTimesData">
+        <MappingFragment StoreEntitySet="MachTimesData">
+          <ScalarProperty Name="NowRunTime" ColumnName="NowRunTime" />
+          <ScalarProperty Name="AllRunTime" ColumnName="AllRunTime" />
+          <ScalarProperty Name="OpenTime" ColumnName="OpenTime" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="IDNum" ColumnName="IDNum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserPassWord1Set">
+      <EntityTypeMapping TypeName="CNCINFOModel1.UserPassWord1">
+        <MappingFragment StoreEntitySet="UserPassWord">
+          <ScalarProperty Name="Limit" ColumnName="Limit" />
+          <ScalarProperty Name="PassWords" ColumnName="PassWords" />
+          <ScalarProperty Name="Users" ColumnName="Users" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

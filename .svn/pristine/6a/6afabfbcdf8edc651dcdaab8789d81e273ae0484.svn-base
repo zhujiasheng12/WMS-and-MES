@@ -1,0 +1,987 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WMS.Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="JDJS_WMS_Chuck_Borrow_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Chuck_Scrap_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Chuck_Stock_Info">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Chuck_Storage_History">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Alarm_Description">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AlarmID" Type="int" />
+    <Property Name="Description" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Alarm_Repair">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="RepairTime" Type="datetime" />
+    <Property Name="Receptiontime" Type="datetime" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="EndTime" Type="datetime" />
+    <Property Name="CncNum" Type="varchar(max)" />
+    <Property Name="AlarmDescID" Type="int" />
+    <Property Name="AlarmStateID" Type="int" />
+    <Property Name="MaintenanceStaff" Type="varchar(max)" />
+    <Property Name="MaintenanceDesc" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Borrow_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="MachID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Brand_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Brand" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachNum" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IP" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="MachState" Type="varchar" MaxLength="50" />
+    <Property Name="MachType" Type="int" Nullable="false" />
+    <Property Name="Position" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Maintenance_Status">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="DescID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_ProgState_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="ProgState" Type="int" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="EndTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_RealTime_Data">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachCoord_X" Type="float" />
+    <Property Name="MachCoord_Y" Type="float" />
+    <Property Name="MachCoord_Z" Type="float" />
+    <Property Name="MachCoord_A" Type="float" />
+    <Property Name="MachCoord_B" Type="float" />
+    <Property Name="MachCoord_C" Type="float" />
+    <Property Name="AbsCoord_X" Type="float" />
+    <Property Name="AbsCoord_Y" Type="float" />
+    <Property Name="AbsCoord_Z" Type="float" />
+    <Property Name="AbsCoord_A" Type="float" />
+    <Property Name="AbsCoord_B" Type="float" />
+    <Property Name="AbsCoord_C" Type="float" />
+    <Property Name="RelCoord_X" Type="float" />
+    <Property Name="RelCoord_Y" Type="float" />
+    <Property Name="RelCoord_Z" Type="float" />
+    <Property Name="RelCoord_A" Type="float" />
+    <Property Name="RelCoord_B" Type="float" />
+    <Property Name="RelCoord_C" Type="float" />
+    <Property Name="ProgState" Type="int" />
+    <Property Name="CurrWCoord" Type="int" />
+    <Property Name="FeedRate" Type="float" />
+    <Property Name="SpindleSpeed" Type="int" />
+    <Property Name="ToolNo" Type="int" />
+    <Property Name="MachTime" Type="float" />
+    <Property Name="CurrO" Type="int" />
+    <Property Name="CurrOMainO" Type="int" />
+    <Property Name="CountNum" Type="int" />
+    <Property Name="SpindleRate" Type="int" />
+    <Property Name="Rate" Type="int" />
+    <Property Name="SInfo_A" Type="float" />
+    <Property Name="SInfo_NM" Type="float" />
+    <Property Name="SInfo_W" Type="float" />
+    <Property Name="CurLineNo" Type="int" />
+    <Property Name="CurLineText" Type="text" />
+    <Property Name="Time_Y" Type="int" />
+    <Property Name="Time_M" Type="int" />
+    <Property Name="Time_D" Type="int" />
+    <Property Name="Time_H" Type="int" />
+    <Property Name="Time_MIT" Type="int" />
+    <Property Name="Time_S" Type="int" />
+    <Property Name="Time_zone" Type="int" />
+    <Property Name="Mode" Type="int" />
+    <Property Name="CncID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Reserve_Info">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="NowTime" Type="datetime" />
+    <Property Name="MachId" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Return_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="datetime" Nullable="false" />
+    <Property Name="MachNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="MachId" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_RunTime_Data">
+    <Key>
+      <PropertyRef Name="TimeID" />
+    </Key>
+    <Property Name="TimeID" Type="datetime" Nullable="false" />
+    <Property Name="StartTime" Type="float" />
+    <Property Name="EndTime" Type="datetime" />
+    <Property Name="RunTime" Type="float" />
+    <Property Name="CncID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Status_Table">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Status" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Times_Data">
+    <Key>
+      <PropertyRef Name="IDNum" />
+    </Key>
+    <Property Name="IDNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ID" Type="int" />
+    <Property Name="OpenTime" Type="float" />
+    <Property Name="AllRunTime" Type="float" />
+    <Property Name="NowRunTime" Type="float" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_Type_Info">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BrandID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Device_UtilizationRate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DayID" Type="datetime" Nullable="false" />
+    <Property Name="UtilizationRate" Type="float" />
+    <Property Name="CncID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Fixture_Borrow_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Fixture_Scrap_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Fixture_Stock_Info">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Fixture_Storage_History">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Hilt_Borrow_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Hilt_Scrap_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Hilt_Stock_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Hilt_Storage_History">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Location_Info">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="size" Type="varchar" MaxLength="50" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EndDate" Type="varchar" MaxLength="50" />
+    <Property Name="parentId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Order_Entry_Table">
+    <Key>
+      <PropertyRef Name="Order_ID" />
+    </Key>
+    <Property Name="Order_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Order_Number" Type="varchar(max)" Nullable="false" />
+    <Property Name="Order_Leader" Type="varchar(max)" Nullable="false" />
+    <Property Name="Product_Name" Type="varchar(max)" Nullable="false" />
+    <Property Name="Product_Material" Type="varchar(max)" Nullable="false" />
+    <Property Name="Product_Output" Type="int" Nullable="false" />
+    <Property Name="Order_Plan_Start_Time" Type="datetime" />
+    <Property Name="Order_Actual_Start_Time" Type="datetime" />
+    <Property Name="Order_Plan_End_Time" Type="datetime" />
+    <Property Name="Order_Actual_End_Time" Type="datetime" />
+    <Property Name="Engine_Program_Manager" Type="varchar(max)" />
+    <Property Name="Engine_Technology_Manager" Type="varchar(max)" />
+    <Property Name="Engine_Status" Type="varchar(max)" />
+    <Property Name="Order_State" Type="varchar" MaxLength="50" />
+    <Property Name="Engine_Program_ManagerId" Type="int" />
+    <Property Name="Engine_Technology_ManagerId" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Order_Process_Info_Table">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderID" Type="int" />
+    <Property Name="ProcessID" Type="int" />
+    <Property Name="ProcessTime" Type="float" />
+    <Property Name="DeviceType" Type="int" />
+    <Property Name="BlankType" Type="int" />
+    <Property Name="BlankSpecification" Type="varchar(max)" />
+    <Property Name="BlankNumber" Type="int" />
+    <Property Name="JigSpecification" Type="varchar(max)" />
+    <Property Name="programName" Type="varchar(max)" />
+    <Property Name="toolChartName" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Order_Process_Scheduling_Table">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="OrderID" Type="int" />
+    <Property Name="ProcessID" Type="int" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="EndTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Order_Queue_Table">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderID" Type="int" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="PlanEndTime" Type="datetime" />
+    <Property Name="isFlag" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Order_Schedule_Table">
+    <Key>
+      <PropertyRef Name="Schedule_ID" />
+    </Key>
+    <Property Name="Schedule_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cuee_Total_Processing" Type="int" />
+    <Property Name="Cuee_Total_GoodProducts" Type="int" />
+    <Property Name="Order_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Quality_Onmachine_Measurement_Data">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="OrderID" Type="int" />
+    <Property Name="SerialNumber" Type="int" />
+    <Property Name="SizeName" Type="varchar(max)" />
+    <Property Name="StandardValue" Type="float" />
+    <Property Name="ToleranceRangeMin" Type="float" />
+    <Property Name="ToleranceRangeMax" Type="float" />
+    <Property Name="Measurements" Type="float" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Staff_Info">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="staff" Type="varchar" MaxLength="50" />
+    <Property Name="position" Type="varchar" MaxLength="50" />
+    <Property Name="tel" Type="varchar" MaxLength="50" />
+    <Property Name="parentId" Type="int" />
+    <Property Name="users" Type="varchar" MaxLength="50" />
+    <Property Name="password" Type="varchar" MaxLength="50" />
+    <Property Name="limit" Type="varchar" MaxLength="500" />
+    <Property Name="remark" Type="varchar" MaxLength="50" />
+    <Property Name="mailbox" Type="varchar" MaxLength="50" />
+    <Property Name="orderNumberId" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Borrow_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_LifeTime_Management">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="ToolID" Type="int" />
+    <Property Name="ToolL" Type="float" />
+    <Property Name="ToolH" Type="float" />
+    <Property Name="ToolR" Type="float" />
+    <Property Name="ToolD" Type="float" />
+    <Property Name="ToolMaxTime" Type="float" />
+    <Property Name="ToolCurrTime" Type="float" />
+    <Property Name="ToolMaxNum" Type="float" />
+    <Property Name="ToolCurrNum" Type="float" />
+    <Property Name="ToolMaxDistance" Type="float" />
+    <Property Name="ToolCurrDistance" Type="float" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Scrap_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Standard_Table">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ToolID" Type="varchar(max)" />
+    <Property Name="Sort" Type="varchar(max)" />
+    <Property Name="Name" Type="varchar(max)" />
+    <Property Name="Specification" Type="varchar(max)" />
+    <Property Name="ProcessStage" Type="varchar(max)" />
+    <Property Name="RazorDiameter" Type="float" />
+    <Property Name="ToolDiameter" Type="float" />
+    <Property Name="ToolLength" Type="float" />
+    <Property Name="RotatingSpeed" Type="float" />
+    <Property Name="Feed" Type="float" />
+    <Property Name="Knife" Type="float" />
+    <Property Name="Shank" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Stock_History">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Storage_History">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Tool_Users_Login_Info">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Limit" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="JDJS_WMS_Users_Login_Info">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Users" Type="varchar" MaxLength="50" />
+    <Property Name="PassWords" Type="varchar" MaxLength="50" />
+    <Property Name="Limit" Type="int" />
+  </EntityType>
+  <Association Name="FK__JDJS_WMS___CncID__1CBC4616">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Quality_Onmachine_Measurement_Data" Type="Self.JDJS_WMS_Quality_Onmachine_Measurement_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Quality_Onmachine_Measurement_Data">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__JDJS_WMS___Order__1DB06A4F">
+    <End Role="JDJS_WMS_Order_Entry_Table" Type="Self.JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Quality_Onmachine_Measurement_Data" Type="Self.JDJS_WMS_Quality_Onmachine_Measurement_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Order_Entry_Table">
+        <PropertyRef Name="Order_ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Quality_Onmachine_Measurement_Data">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__JDJS_WMS___Order__4B7734FF">
+    <End Role="JDJS_WMS_Order_Entry_Table" Type="Self.JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Order_Process_Scheduling_Table" Type="Self.JDJS_WMS_Order_Process_Scheduling_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Order_Entry_Table">
+        <PropertyRef Name="Order_ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Order_Process_Scheduling_Table">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__JDJS_WMS___Order__607251E5">
+    <End Role="JDJS_WMS_Order_Entry_Table" Type="Self.JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Order_Queue_Table" Type="Self.JDJS_WMS_Order_Queue_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Order_Entry_Table">
+        <PropertyRef Name="Order_ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Order_Queue_Table">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Description">
+    <End Role="JDJS_WMS_Device_Alarm_Description" Type="Self.JDJS_WMS_Device_Alarm_Description" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Alarm_Repair" Type="Self.JDJS_WMS_Device_Alarm_Repair" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Alarm_Description">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Alarm_Repair">
+        <PropertyRef Name="AlarmDescID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Repair">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Alarm_Repair" Type="Self.JDJS_WMS_Device_Alarm_Repair" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Alarm_Repair">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Maintenance_Status" Type="Self.JDJS_WMS_Device_Maintenance_Status" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Alarm_Repair" Type="Self.JDJS_WMS_Device_Alarm_Repair" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Maintenance_Status">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Alarm_Repair">
+        <PropertyRef Name="AlarmStateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Borrow_Info_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Borrow_Info" Type="Self.JDJS_WMS_Device_Borrow_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Borrow_Info">
+        <PropertyRef Name="MachID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Brand_Info_JDJS_WMS_Device_Brand_Info">
+    <End Role="JDJS_WMS_Device_Brand_Info" Type="Self.JDJS_WMS_Device_Brand_Info" Multiplicity="1" />
+    <End Role="JDJS_WMS_Device_Brand_Info1" Type="Self.JDJS_WMS_Device_Brand_Info" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Brand_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Brand_Info1">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Info_JDJS_WMS_Location_Info">
+    <End Role="JDJS_WMS_Location_Info" Type="Self.JDJS_WMS_Location_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Location_Info">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="Position" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_ProgState_Info_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_ProgState_Info" Type="Self.JDJS_WMS_Device_ProgState_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_ProgState_Info">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_RealTime_Data_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_RealTime_Data" Type="Self.JDJS_WMS_Device_RealTime_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_RealTime_Data">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Reserve_Info_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Reserve_Info" Type="Self.JDJS_WMS_Device_Reserve_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Reserve_Info">
+        <PropertyRef Name="MachId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Return_Info_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Return_Info" Type="Self.JDJS_WMS_Device_Return_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Return_Info">
+        <PropertyRef Name="MachId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_RunTime_Data_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_RunTime_Data" Type="Self.JDJS_WMS_Device_RunTime_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_RunTime_Data">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Times_Data_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_Times_Data" Type="Self.JDJS_WMS_Device_Times_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Times_Data">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_Type_Info_JDJS_WMS_Device_Brand_Info">
+    <End Role="JDJS_WMS_Device_Brand_Info" Type="Self.JDJS_WMS_Device_Brand_Info" Multiplicity="1" />
+    <End Role="JDJS_WMS_Device_Type_Info" Type="Self.JDJS_WMS_Device_Type_Info" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Brand_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_Type_Info">
+        <PropertyRef Name="BrandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Device_UtilizationRate_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Device_UtilizationRate" Type="Self.JDJS_WMS_Device_UtilizationRate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Device_UtilizationRate">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Order_Process_Info_Table_JDJS_WMS_Order_Entry_Table">
+    <End Role="JDJS_WMS_Order_Entry_Table" Type="Self.JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JDJS_WMS_Order_Process_Info_Table" Type="Self.JDJS_WMS_Order_Process_Info_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Order_Entry_Table">
+        <PropertyRef Name="Order_ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Order_Process_Info_Table">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JDJS_WMS_Order_Process_Scheduling_Table_JDJS_WMS_Device_Info">
+    <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="0..1" />
+    <End Role="JDJS_WMS_Order_Process_Scheduling_Table" Type="Self.JDJS_WMS_Order_Process_Scheduling_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JDJS_WMS_Device_Info">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDJS_WMS_Order_Process_Scheduling_Table">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WMSModelStoreContainer">
+    <EntitySet Name="JDJS_WMS_Chuck_Borrow_History" EntityType="Self.JDJS_WMS_Chuck_Borrow_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Chuck_Scrap_History" EntityType="Self.JDJS_WMS_Chuck_Scrap_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Chuck_Stock_Info" EntityType="Self.JDJS_WMS_Chuck_Stock_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Chuck_Storage_History" EntityType="Self.JDJS_WMS_Chuck_Storage_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Alarm_Description" EntityType="Self.JDJS_WMS_Device_Alarm_Description" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Alarm_Repair" EntityType="Self.JDJS_WMS_Device_Alarm_Repair" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Borrow_Info" EntityType="Self.JDJS_WMS_Device_Borrow_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Brand_Info" EntityType="Self.JDJS_WMS_Device_Brand_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Info" EntityType="Self.JDJS_WMS_Device_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Maintenance_Status" EntityType="Self.JDJS_WMS_Device_Maintenance_Status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_ProgState_Info" EntityType="Self.JDJS_WMS_Device_ProgState_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_RealTime_Data" EntityType="Self.JDJS_WMS_Device_RealTime_Data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Reserve_Info" EntityType="Self.JDJS_WMS_Device_Reserve_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Return_Info" EntityType="Self.JDJS_WMS_Device_Return_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_RunTime_Data" EntityType="Self.JDJS_WMS_Device_RunTime_Data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Status_Table" EntityType="Self.JDJS_WMS_Device_Status_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Times_Data" EntityType="Self.JDJS_WMS_Device_Times_Data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_Type_Info" EntityType="Self.JDJS_WMS_Device_Type_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Device_UtilizationRate" EntityType="Self.JDJS_WMS_Device_UtilizationRate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Fixture_Borrow_History" EntityType="Self.JDJS_WMS_Fixture_Borrow_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Fixture_Scrap_History" EntityType="Self.JDJS_WMS_Fixture_Scrap_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Fixture_Stock_Info" EntityType="Self.JDJS_WMS_Fixture_Stock_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Fixture_Storage_History" EntityType="Self.JDJS_WMS_Fixture_Storage_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Hilt_Borrow_History" EntityType="Self.JDJS_WMS_Hilt_Borrow_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Hilt_Scrap_History" EntityType="Self.JDJS_WMS_Hilt_Scrap_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Hilt_Stock_History" EntityType="Self.JDJS_WMS_Hilt_Stock_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Hilt_Storage_History" EntityType="Self.JDJS_WMS_Hilt_Storage_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Location_Info" EntityType="Self.JDJS_WMS_Location_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Order_Entry_Table" EntityType="Self.JDJS_WMS_Order_Entry_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Order_Process_Info_Table" EntityType="Self.JDJS_WMS_Order_Process_Info_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Order_Process_Scheduling_Table" EntityType="Self.JDJS_WMS_Order_Process_Scheduling_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Order_Queue_Table" EntityType="Self.JDJS_WMS_Order_Queue_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Order_Schedule_Table" EntityType="Self.JDJS_WMS_Order_Schedule_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Quality_Onmachine_Measurement_Data" EntityType="Self.JDJS_WMS_Quality_Onmachine_Measurement_Data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Staff_Info" EntityType="Self.JDJS_WMS_Staff_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Borrow_History" EntityType="Self.JDJS_WMS_Tool_Borrow_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_LifeTime_Management" EntityType="Self.JDJS_WMS_Tool_LifeTime_Management" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Scrap_History" EntityType="Self.JDJS_WMS_Tool_Scrap_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Standard_Table" EntityType="Self.JDJS_WMS_Tool_Standard_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Stock_History" EntityType="Self.JDJS_WMS_Tool_Stock_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Storage_History" EntityType="Self.JDJS_WMS_Tool_Storage_History" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Tool_Users_Login_Info" EntityType="Self.JDJS_WMS_Tool_Users_Login_Info" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDJS_WMS_Users_Login_Info" EntityType="Self.JDJS_WMS_Users_Login_Info" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__JDJS_WMS___CncID__1CBC4616" Association="Self.FK__JDJS_WMS___CncID__1CBC4616">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Quality_Onmachine_Measurement_Data" EntitySet="JDJS_WMS_Quality_Onmachine_Measurement_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK__JDJS_WMS___Order__1DB06A4F" Association="Self.FK__JDJS_WMS___Order__1DB06A4F">
+      <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+      <End Role="JDJS_WMS_Quality_Onmachine_Measurement_Data" EntitySet="JDJS_WMS_Quality_Onmachine_Measurement_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK__JDJS_WMS___Order__4B7734FF" Association="Self.FK__JDJS_WMS___Order__4B7734FF">
+      <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+      <End Role="JDJS_WMS_Order_Process_Scheduling_Table" EntitySet="JDJS_WMS_Order_Process_Scheduling_Table" />
+    </AssociationSet>
+    <AssociationSet Name="FK__JDJS_WMS___Order__607251E5" Association="Self.FK__JDJS_WMS___Order__607251E5">
+      <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+      <End Role="JDJS_WMS_Order_Queue_Table" EntitySet="JDJS_WMS_Order_Queue_Table" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Description" Association="Self.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Description">
+      <End Role="JDJS_WMS_Device_Alarm_Description" EntitySet="JDJS_WMS_Device_Alarm_Description" />
+      <End Role="JDJS_WMS_Device_Alarm_Repair" EntitySet="JDJS_WMS_Device_Alarm_Repair" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Repair" Association="Self.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Repair">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_Alarm_Repair" EntitySet="JDJS_WMS_Device_Alarm_Repair" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Maintenance_Status" EntitySet="JDJS_WMS_Device_Maintenance_Status" />
+      <End Role="JDJS_WMS_Device_Alarm_Repair" EntitySet="JDJS_WMS_Device_Alarm_Repair" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Borrow_Info_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_Borrow_Info_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_Borrow_Info" EntitySet="JDJS_WMS_Device_Borrow_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Brand_Info_JDJS_WMS_Device_Brand_Info" Association="Self.FK_JDJS_WMS_Device_Brand_Info_JDJS_WMS_Device_Brand_Info">
+      <End Role="JDJS_WMS_Device_Brand_Info" EntitySet="JDJS_WMS_Device_Brand_Info" />
+      <End Role="JDJS_WMS_Device_Brand_Info1" EntitySet="JDJS_WMS_Device_Brand_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Info_JDJS_WMS_Location_Info" Association="Self.FK_JDJS_WMS_Device_Info_JDJS_WMS_Location_Info">
+      <End Role="JDJS_WMS_Location_Info" EntitySet="JDJS_WMS_Location_Info" />
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_ProgState_Info_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_ProgState_Info_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_ProgState_Info" EntitySet="JDJS_WMS_Device_ProgState_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_RealTime_Data_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_RealTime_Data_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_RealTime_Data" EntitySet="JDJS_WMS_Device_RealTime_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Reserve_Info_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_Reserve_Info_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_Reserve_Info" EntitySet="JDJS_WMS_Device_Reserve_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Return_Info_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_Return_Info_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_Return_Info" EntitySet="JDJS_WMS_Device_Return_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_RunTime_Data_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_RunTime_Data_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_RunTime_Data" EntitySet="JDJS_WMS_Device_RunTime_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Times_Data_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_Times_Data_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_Times_Data" EntitySet="JDJS_WMS_Device_Times_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_Type_Info_JDJS_WMS_Device_Brand_Info" Association="Self.FK_JDJS_WMS_Device_Type_Info_JDJS_WMS_Device_Brand_Info">
+      <End Role="JDJS_WMS_Device_Brand_Info" EntitySet="JDJS_WMS_Device_Brand_Info" />
+      <End Role="JDJS_WMS_Device_Type_Info" EntitySet="JDJS_WMS_Device_Type_Info" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Device_UtilizationRate_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Device_UtilizationRate_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Device_UtilizationRate" EntitySet="JDJS_WMS_Device_UtilizationRate" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Order_Process_Info_Table_JDJS_WMS_Order_Entry_Table" Association="Self.FK_JDJS_WMS_Order_Process_Info_Table_JDJS_WMS_Order_Entry_Table">
+      <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+      <End Role="JDJS_WMS_Order_Process_Info_Table" EntitySet="JDJS_WMS_Order_Process_Info_Table" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JDJS_WMS_Order_Process_Scheduling_Table_JDJS_WMS_Device_Info" Association="Self.FK_JDJS_WMS_Order_Process_Scheduling_Table_JDJS_WMS_Device_Info">
+      <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
+      <End Role="JDJS_WMS_Order_Process_Scheduling_Table" EntitySet="JDJS_WMS_Order_Process_Scheduling_Table" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

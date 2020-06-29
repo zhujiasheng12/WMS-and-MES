@@ -1,0 +1,204 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.SessionState;
+
+namespace WebApplication2.生产管理.品质
+{
+    /// <summary>
+    /// qualityEditSubmit 的摘要说明
+    /// </summary>
+    public class qualityEditSubmit : IHttpHandler,IRequiresSessionState
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var data = context.Request["data"];
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var obj = serializer.Deserialize<QualityEditSubmitList>(data);
+            using(JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
+            {
+                using (System.Data.Entity.DbContextTransaction mytran = entities.Database.BeginTransaction())
+                {
+
+                    try
+                    {
+                        var id = int.Parse(obj.id);
+                        var row = entities.JDJS_WMS_Quality_Confirmation_Table.Where(r => r.ID == id);
+                        int OrderID = Convert.ToInt32(row.FirstOrDefault().OrderID);
+
+                        var Process = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == OrderID);
+                        var lastProcess = Process.OrderByDescending(r => r.ProcessID).First().ProcessID;
+                        var lastProcessId = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == OrderID & r.ProcessID == lastProcess).First().ID;
+                        var modulus = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == OrderID & r.ProcessID == lastProcess).First().Modulus;
+                        var works = entities.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.ProcessID == lastProcessId);
+                        int count = 0;
+                        foreach (var work in works)
+                        {
+                            count += (work.WorkCount == null ? 0 : Convert.ToInt32(work.WorkCount));
+                        }
+
+
+                        int QualifiedProductNumber = 0;
+                        int PefectiveProductNumber = 0;
+                        int DetectionNumber = 0;
+                        if (row.First().QualifiedProductNumber != null)
+                        {
+                            QualifiedProductNumber = Convert.ToInt32(row.First().QualifiedProductNumber);
+                        }
+                        if (row.First().PefectiveProductNumber != null)
+                        {
+                            PefectiveProductNumber = Convert.ToInt32(row.First().PefectiveProductNumber);
+
+                        }
+                        if (row.First().DetectionNumber != null)
+                        {
+                            DetectionNumber = Convert.ToInt32(row.First().DetectionNumber);
+                        }
+
+                        if (DetectionNumber + int.Parse(obj.PefectiveProductNumber) + int.Parse(obj.QualifiedProductNumber) > count)
+                        {
+                            context.Response.Write("当前入库数量超出成品数，请确认后再试！");
+                            return;
+                        }
+                        double fenmu = Convert.ToDouble(int.Parse(obj.PefectiveProductNumber) + PefectiveProductNumber + int.Parse(obj.QualifiedProductNumber) + QualifiedProductNumber);
+                        if (fenmu == 0)
+                        {
+                            row.First().PassRate = 0;
+                        }
+                        else
+                        {
+                            var passrate =Convert.ToDouble(Convert.ToDouble(obj.QualifiedProductNumber) + QualifiedProductNumber) / (Convert.ToDouble(int.Parse(obj.PefectiveProductNumber) + PefectiveProductNumber + int.Parse(obj.QualifiedProductNumber) + QualifiedProductNumber));
+                            if (passrate > 1)
+                            {
+                                passrate = 1;
+                            }
+                            row.First().PassRate = passrate;
+                        }
+                        row.First().PefectiveProductNumber = PefectiveProductNumber+ int.Parse(obj.PefectiveProductNumber);
+                        row.First().QualifiedProductNumber = QualifiedProductNumber + int.Parse(obj.QualifiedProductNumber);
+                        //row.First().PendingNumber = row.First().CurrFinishedProductNumber - int.Parse(obj.PefectiveProductNumber) -int.Parse(obj.QualifiedProductNumber);
+                        row.First().DetectionNumber = DetectionNumber+ int.Parse(obj.PefectiveProductNumber) + int.Parse(obj.QualifiedProductNumber);
+                        
+
+
+
+                        int orderID =Convert.ToInt32( row.FirstOrDefault().OrderID);
+                        var product = entities.JDJS_WMS_Finished_Product_Manager.Where(r => r.OrderID == orderID);
+                        if (product.Count() > 0)
+                        {
+                            int wait = 0;
+                            if (product.FirstOrDefault().waitForWarehousing != null)
+                            {
+                                wait = Convert.ToInt32(product.FirstOrDefault().waitForWarehousing);
+                            }
+
+                            product.FirstOrDefault().waitForWarehousing = wait + int.Parse(obj.QualifiedProductNumber) + int.Parse(obj.PefectiveProductNumber);
+                            entities.SaveChanges();
+                        }
+                        
+                       double allNum = int.Parse(obj.QualifiedProductNumber)+int.Parse(obj.PefectiveProductNumber);
+                       var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderID && r.sign != 0).OrderByDescending(r => r.ProcessID);
+                       Dictionary<int, int> infos = new Dictionary<int, int>();
+                       foreach (var item in processes)
+                       {
+                           infos.Add(item.ID,item.Modulus == null?1: Convert.ToInt32( item.Modulus));
+                       }
+                       double allNums= allNum + DetectionNumber;
+                       bool flag = true;
+                       foreach (var item in infos)
+                       {
+                           if (flag)
+                           {
+                               var processInfo = entities.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == item.Key).FirstOrDefault();
+                               if (processInfo == null)
+                               {
+                                   JDJS_WMS_Warehouse_InOut_History_Table jd1 = new JDJS_WMS_Warehouse_InOut_History_Table()
+                                   {
+                                       ProcessId = item.Key,
+                                       InNum = allNums,
+                                       OutNum = (allNums * 1.0) / (item.Value)
+
+                                   };
+                                   entities.JDJS_WMS_Warehouse_InOut_History_Table.Add(jd1);
+                               }
+                               else
+                               {
+                                   if (allNums > processInfo.InNum)
+                                   {
+                                       allNum = allNums - Convert.ToInt32(processInfo.InNum);
+                                       processInfo.InNum += allNum;
+                                       processInfo.OutNum += (allNum * 1.0 / item.Value);
+                                   }
+                               }
+                               allNums = allNums * 1.0 / item.Value;
+                               flag = false;
+                           }
+                           else
+                           {
+                               var processInfo = entities.JDJS_WMS_Warehouse_InOut_History_Table.Where(r => r.ProcessId == item.Key).FirstOrDefault();
+                               if (processInfo == null)
+                               {
+                                   JDJS_WMS_Warehouse_InOut_History_Table jd1 = new JDJS_WMS_Warehouse_InOut_History_Table()
+                                   {
+                                       ProcessId = item.Key,
+                                       InNum = allNums,
+                                       OutNum = (allNums * 1.0) / (item.Value)
+
+                                   };
+                                   entities.JDJS_WMS_Warehouse_InOut_History_Table.Add(jd1);
+                               }
+                               else
+                               {
+                                   if (allNums > processInfo.InNum)
+                                   {
+                                       allNum = allNums - Convert.ToInt32(processInfo.InNum);
+                                       processInfo.InNum += allNum;
+                                       processInfo.OutNum += (allNum * 1.0 / item.Value);
+                                   }
+                               }
+                               allNums = allNums * 1.0 / item.Value;
+                           }
+                       }
+
+
+
+                        JDJS_WMS_Quality_Confirmation_History_Table qualtity = new JDJS_WMS_Quality_Confirmation_History_Table()
+                        {
+                            OrderID = orderID,
+                            GoodNum = int.Parse(obj.QualifiedProductNumber),
+                            PoolNum = int.Parse(obj.PefectiveProductNumber),
+                            OperateTime = DateTime.Now,
+                            StaffID = Convert.ToInt32(context.Session["id"]),
+                        };
+                        entities.JDJS_WMS_Quality_Confirmation_History_Table.Add(qualtity);
+                        entities.SaveChanges();
+                        mytran.Commit ();
+                        context.Response.Write("ok");
+                    }
+                    catch (Exception ex)
+                    {
+                        mytran.Rollback ();
+                        context.Response.Write(ex.Message);
+                    }
+                }
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    class QualityEditSubmitList
+    {
+        public string order;
+        public string PefectiveProductNumber;
+        public string QualifiedProductNumber;
+        public string  id;
+    }
+}

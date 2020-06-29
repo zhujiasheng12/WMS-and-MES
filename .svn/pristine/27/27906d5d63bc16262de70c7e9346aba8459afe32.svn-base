@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <link href="../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <link href="../font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body style="height:100%">
+    <script>
+        function method(id) {
+            $.ajax({
+                url: 'modify.ashx', data: { "id": id }, success: function (d) {
+                    var obj = JSON.parse(d)
+                    $('[name="father"]').val(obj.parent)
+                    $('[name="staffName"]').val(obj.staff)
+                    $('[name="position"]').val(obj.position)
+                    $('[name="tel"]').val(obj.tel)
+                    $('[name="user"]').val(obj.user)
+                    $('[name="password"]').val(obj.password)
+                    $('[name="remark"]').val(obj.remark)
+                    $('[name="mailbox"]').val(obj.mailbox)
+
+                    var div = $('[field="id"]')//div[6].children[0].innerText
+                    if (obj.user == null) {
+                        for (var i = 0; i < div.length; i++) {
+                            $(div[i]).siblings('[field="text"]').childrens('.tree-checkbox').removeClass('tree-checkbox1').addClass('tree-checkbox0')
+                        }
+                    } else {
+
+
+                        var limit = obj.limit
+                        for (var i = 0; i < div.length; i++) {
+                            var text = div[i].children[0].innerText
+                            for (var j = 0; j < limit.length; j++) {
+                                if (text == limit[j]) {
+                                   $(div[i]).siblings('[field="text"]').find('.tree-checkbox').removeClass('tree-checkbox1').addClass('tree-checkbox0')
+                                   
+                                  
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+    <div class="layui-row layui-col-space30" style="height:100%">
+        <div class="layui-col-md6">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>人员</legend>
+            </fieldset>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="father" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="staffName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职位</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="position" required lay-verify="required"placeholder="选填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tel" required placeholder="选填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mailbox" required placeholder="选填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+               
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录账户</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="user" required placeholder="选填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="password" required placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="remark" required placeholder="选填项" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-md6" style="height:100%">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>权限</legend>
+            </fieldset>
+            <ul id="tree" style="width:100%;height:100%" ></ul>
+        </div>
+    </div>
+    <script>
+        $('#tree').treegrid({
+            url: 'limitEdit.json',
+             idField:'id',
+            treeField:'text',
+            method: 'get',
+            checkbox: true,
+            animate: true,
+                columns:[[
+                    { title: '功能', field: 'text', width: '100%' },
+                    { title: 'id', field: 'id', width: 180, hidden: true },
+    ]],
+            onLoadSuccess: function () {
+                $('td').css('border', 'none')
+                $('.panel-body').css('border-color','white')
+                $('.tree-icon ').remove()
+
+                //$('#tree').tree('select', $('#_easyui_tree_2'))
+            }
+        })
+    </script>
+
+    <p id="id" hidden></p>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form, layer = layui.layer;
+            form.on('submit(*)', function (data) {
+                var formDate = new FormData();
+                var nodes = $('.tree-checkbox0').parent('div').parent('[field="text"]').siblings('[field="id"]')
+                if (nodes.length == 0) {
+                    formDate.append("arr", "")
+                }
+                else {
+                    for (var i = 0; i < nodes.length; i++) {
+                        formDate.append("arr", nodes[i].children[0].innerText)
+                    }
+                }
+            
+                formDate.append('form', JSON.stringify(data.field))
+                formDate.append('id', $("#id").text())
+
+
+                layer.confirm("是否提交", function (index) {
+                    $.ajax({
+                        url: 'modifySubmit.ashx',
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: formDate,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg('修改成功', { icon: 1, time: 1000 }, function () {
+                                    layer.close(index)
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index);
+                                    parent.location.reload()
+                                })
+                               
+                 
+                            }
+                            else {
+                                layer.alert(d)
+                            }
+                        }
+
+                    })
+                    layer.close(index)
+                })
+                 return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        })
+
+    </script>
+</body>
+</html>

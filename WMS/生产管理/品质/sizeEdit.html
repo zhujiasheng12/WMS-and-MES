@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+   
+    <script>
+        function method(d) {
+            $.ajax({
+                url: 'sizeEditRead.ashx',
+                data: { "id": d },
+                success: function (d) {
+                    var obj = JSON.parse(d)[0]
+                    $("[name='SizeNumber']").val(obj.SizeNumber)
+                    $("[name='SizeName']").val(obj.SizeName)
+                    $("[name='StandardValue']").val(obj.StandardValue)
+                    $("[name='ToleranceRangeMin']").val(obj.ToleranceRangeMin)
+                    $("[name='ToleranceRangeMax']").val(obj.ToleranceRangeMax)
+                    $("[name='Measurements']").val(obj.Measurements)
+                    $("[name='ID']").val(obj.ID)
+                }
+            })
+        }
+
+    </script>
+    <form class="layui-form">
+        <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="SizeNumber" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="SizeName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸理论值</label>
+            <div class="layui-input-block">
+                <input type="text" name="StandardValue" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸最小值</label>
+            <div class="layui-input-block">
+                <input type="text" name="ToleranceRangeMin" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸最大值</label>
+            <div class="layui-input-block">
+                <input type="text" name="ToleranceRangeMax" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">尺寸实测值</label>
+            <div class="layui-input-block">
+                <input type="text" name="Measurements" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">id</label>
+            <div class="layui-input-block">
+                <input type="text" name="ID" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+               
+            </div>
+        </div>
+    </form>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form, layer = layui.layer;
+            form.on('submit(*)', function (data) {
+
+                layer.confirm("是否提交", function (index) {
+                
+                    $.ajax({
+                        url: 'sizeEditSubmit.ashx',
+                        data: { "data": JSON.stringify(data.field) },
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("修改成功", { icon: 1, time: 1000 }, function () {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index);
+                                parent.reload.reload({})
+                                })
+                         
+                            }
+                        }
+                    })
+                })
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        })
+    </script>
+</body>
+</html>

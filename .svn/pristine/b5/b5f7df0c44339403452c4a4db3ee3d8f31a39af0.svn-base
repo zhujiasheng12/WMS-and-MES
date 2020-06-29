@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var count = 0;
+            var table = layui.table;
+
+            $.ajax({
+                url: '读工序数量.ashx',
+                success: function (d) {
+                    var obj = JSON.parse(d)
+
+
+                    var arr1 = ['订单队列', '订单总量'];
+                    var json = '["工序一","工序二"]';//只要给这个就行
+                    // var obj = JSON.parse(json);
+                    for (var i = 0; i < obj.length; i++) {
+                        arr1.push(obj[i])
+                    }
+                    arr1.push('合格品数');
+                    arr1.push('不良品数');
+                    arr1.push('良率');
+                    for (var i = 0; i < arr1.length; i++) {
+                        if (arr1[i].indexOf("工序") != -1) {
+                            count++
+                        }
+                    }
+                    var arr2 = [];
+                    for (var i = 0; i < count; i++) {
+                        var j = i + 1;
+                        arr2.push('待上机数' + j + '');
+                        arr2.push('正在加工数' + j + '');
+                        arr2.push('已加工数' + j + '');
+                    }
+
+                    var col1 = [];
+                    var col2 = [];
+                    var cols = [];
+                    for (var i = 0; i < arr1.length; i++) {
+                        if (arr1[i].indexOf("工序") != -1) {
+
+                            col1.push({ field: arr1[i], title: arr1[i], width: 180, colspan: 3, align: 'center' })
+                        } else {
+                            col1.push({ field: arr1[i], title: arr1[i], width: 140, rowspan: 2 })
+                        }
+
+                    };
+
+                    for (var i = 0; i < arr2.length; i++) {
+
+                        col2.push({ field: arr2[i], title: arr2[i], width: 140, })
+                    };
+
+                    cols.push(col1);
+                    cols.push(col2);
+
+                    //第一个实例
+                    table.render({
+                        elem: '#demo'
+                        , toolbar: '#toolbar'
+                        , url: '生产流程读数据.ashx' //数据接口
+                        , page: true //开启分页
+                        , cols: cols
+                        , done: function (d) {
+
+                        }
+                    });
+
+
+                }
+            });
+
+
+
+        });
+
+</script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()">刷新</button>
+    </script>
+</body>
+</html>

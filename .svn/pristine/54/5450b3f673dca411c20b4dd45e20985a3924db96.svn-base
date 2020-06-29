@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" style="height:100%;width:100%">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <title>EZOPEN播放协议</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .hint {
+      font-size: 14px;
+      line-height: 3em;
+      color: gray;
+    }
+    #url,
+    #url2,
+    #accessToken {
+      width: 100%;
+    }
+
+    .btn-container {
+      margin: 10px;
+    }
+    .normal {
+      color: green;
+      margin: 5px;
+    }
+    .error {
+      color: red;
+      margin: 5px;
+    }
+  </style>
+</head>
+<script>
+</script>
+
+<body style="height:95%;width:100%;background-color:black">
+    <script src="/Resources/js/ezuikit.js"></script>
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+      <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+
+  <!--<textarea id="url" placeholder="这里输入ezopen地址"></textarea>
+  <textarea id="accessToken" placeholder="这里输入accessToken"></textarea>-->
+  <div class="btn-container">
+   <!-- <button id="init">初始化播放</button>
+    <button id="stop">结束</button>
+    <button id="getOSDTime">获取OSD时间</button>
+    <button id="openSound">打开声音（默认已经开启）</button>
+    <button id="closeSound">关闭声音</button>
+    <button id="capturePicture">视频截图</button>
+    <button id="startSave">开始录像</button>
+    <button id="stopSave">停止录像</button>
+    <button id="enableZoom">开启电子放大</button>
+    <button id="closeZoom">关闭电子放大</button>-->
+<!--    <span>录制功能不支持加密视频，且录制的文件需要<a href="https://service.ys7.com/downloadInfoSite/admin" target="_blank">下载海康播放器播放</a></span>-->
+
+  </div>
+   
+  <div  style="width:100%; height: 100%;padding-left:10px">
+      <div class="layui-row" style="width:100%;height:50%">
+          <div  class="layui-col-md6" >
+              <a style="color:white;font-size:200%;font-weight:bold;background-color:green;padding:4px">设备编号:2-21#</a>
+              <div id="playWind" style="width:100%; height: 100%;z-index:-1;position:fixed;top:0;margin-top:10px"></div>
+          </div>
+          <div class="layui-col-md6">
+
+          </div>
+      </div>
+       <div class="layui-row">
+          <div class="layui-col-md6">
+
+          </div>
+          <div class="layui-col-md6">
+
+          </div>
+      </div>
+  </div>
+  <script>
+      layui.use('layer', function () { layer=layui.layer})
+    $(function () {
+      function handleError(e){
+          console.log('捕获到错误',e)
+         // log(JSON.stringify(e),'error');
+          //alert(e)
+      }
+      function handleSuccess(){
+        console.log("播放成功回调函数，此处可执行播放成功后续动作");
+      }
+      //var url = $('#url').val().trim();
+        //var accessToken = $('#accessToken').val().trim();
+
+      $.ajax({
+          url: '设备监控/getAccessToken.ashx',
+          success: function (res) {
+              var obj = JSON.parse(res)
+             
+              if (obj.msg == "操作成功!") {
+                  var decoder = new EZUIKit.EZUIPlayer({
+                      id: 'playWind',
+                      autoplay: true,
+                      // url:url,
+                      url: 'ezopen://open.ys7.com/D50416808/1.hd.live',
+                      accessToken: obj.data.accessToken,
+                      decoderPath: '/Resources/js/',
+                      width: 800,
+                      height: 400,
+                      splitBasis: 1, //设置窗口切割参数
+                      handleError: handleError,
+                      handleSuccess: handleSuccess,
+                  });
+              } else {
+                  layer.alert(obj.msg)
+              }
+          }
+
+      })
+ 
+      // 这里是打印日志，本例抛出到播放页面
+      //decoder.on('log', log);
+      function log(str,className) {
+        var div = document.createElement('DIV');
+        div.className=className || 'normal';
+        div.innerHTML = (new Date()).Format('yyyy-MM-dd hh:mm:ss.S') + JSON.stringify(str);
+        document.body.appendChild(div);
+      }
+      $("#start").click(function () {
+        function handleError(e){
+          console.log('handleError',e)
+        }
+        function handleSuccess(){
+          console.log('handleSuccess')
+        }
+        decoder.play({
+          handleError: handleError,
+        });
+      })
+      $("#stop").click(function () {
+        /*停止播放方法1*/
+        // decoder.stop();
+        /*停止播放方法2 - promise模式*/
+        var stopPromise = decoder.stop();
+        stopPromise.then(function(){
+          console.log("关闭成功，用户执行关闭成功后的操作");
+        })
+      })
+      $("#getOSDTime").click(function () {
+        var getOSDTimePromise = decoder.getOSDTime();
+        getOSDTimePromise.then(function(data){
+          console.log("getOSDTime success",data)
+        })
+      })
+      $("#openSound").click(function () {
+        decoder.openSound();
+      })
+      $("#closeSound").click(function () {
+        decoder.closeSound();
+      })
+      $("#capturePicture").click(function () {
+        /*截图方法1*/
+        // decoder.capturePicture(0,'default');
+         /*截图方法2*/
+        var capturePicturePromise = decoder.capturePicture(0,'default');
+        capturePicturePromise.then(function(data){
+          console.log("截图成功，用户执行关闭成功后的操作",data);
+        })
+      })
+      $("#startSave").click(function () {
+        // decoder.startSave(0, (new Date().getTime() + 'video'));
+        /*开始录制方法2*/
+        var startSavePromise = decoder.startSave(0, (new Date().getTime() + 'video'));
+        startSavePromise.then(function(data){
+          console.log("start save success",startSavePromise)
+        })
+        .catch(function(error){
+          console.log("start Save error",error)
+        })
+      })
+      $("#stopSave").click(function () {
+        /*结束录制方法1*/
+        // decoder.stopSave(0);
+        /*结束录制方法2*/
+        var stopSavePromise = decoder.stopSave(0);
+        stopSavePromise.then(function(data){
+          console.log("stop save success",stopSavePromise)
+        })
+        .catch(function(error){
+          console.log("stop Save error",error)
+        })
+      })
+      $("#play").click(function () {
+        decoder.play();
+      })
+      $("#enableZoom").click(function () {
+        decoder.enableZoom();
+      })
+      $("#closeZoom").click(function () {
+        decoder.closeZoom();
+      })
+    })
+    //$("#init").click()
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div class="layui-form-item">
+        <label class="layui-form-label">订单号</label>
+        <div class="layui-input-block">
+            <input type="text" id="orderNum" placeholder="" autocomplete="off" class="layui-input" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工艺状态</label>
+        <div class="layui-input-block">
+            <input type="text" id="state" placeholder="" autocomplete="off" class="layui-input" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">说明</label>
+        <div class="layui-input-block">
+            <textarea id="text" placeholder="" class="layui-textarea" readonly></textarea>
+        </div>
+    </div>
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a><span class="layui-btn layui-btn-xs" lay-event="downLoad">下载</span></a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script id="toolbarDemo">
+        <div class="layui-btn-container">
+
+        </div>
+    </script>
+    <script>
+        function method(orderId1,type1) {
+            orderId = orderId1
+            type=type1
+            layui.use('table', function () {
+                var table = layui.table, $ = layui.$;
+
+                //第一个实例
+                reload = table.render({
+                    elem: '#demo'
+
+                    , url: '审核结果弹窗读数据.ashx'
+                    //, page: true,
+                    //toolbar: '#toolbarDemo',
+                    , where: { orderId: orderId ,type:type}
+                    , cols: [[ //表头
+                        { field: 'number', type: 'numbers', title: '编号', width: '10%', fixed: 'left' }
+
+                        , { field: 'fileName', title: '文件名', }
+                        , { field: 'fileSize', title: '文件大小', }
+                        , { field: 'filePath', title: '文件路径', hide: true }
+                        , { field: 'toolbar', title: '操作', width: '30%', toolbar: '#barDemo' }
+                    ]],//
+                    done: function (d) {
+                        if (d.data[0].fileName == null) {
+                           $("tbody").find("tr").remove()
+                        }
+                        $("#text").val(d.data[0].Audit_Result)
+                        $("#orderNum").val(d.data[0].OrderNum)
+                        if (d.data[0].State == "审核未通过，请尽快确认") {
+                            $("#state").val(d.data[0].State)
+                            $("#state").parents(".layui-form-item").after(` <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="*" onclick="submit()">确认</button>
+    
+    </div>
+  </div>`)
+                        } else {
+                             $("#state").val(d.data[0].State)
+                        }
+                       
+                    }
+                });
+                table.on('tool(test)', function (obj) {
+                var data = obj.data;
+
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        $.ajax({
+                            url: 'fileDelete.ashx',
+                            data: { 'number': data.filePath },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        reload.reload({})
+                                    })
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'downLoad') {
+                    $('#110').remove();
+                 
+                    $.ajax({
+                        url: '../downLoadPathRead.ashx',
+                        success: function (d) {
+                            var http = d;
+                            var path = http + $("#orderNum").val() + '/审核结果/' + data.fileName;
+                    var button = '<a href="' + path + '" download="' + data.fileName + '"><button id="110" hidden>1</button></a>';
+                    $('body').append(button);
+                    $('#110').click();
+                        }
+                    })
+                   
+                }
+            });
+            });
+        }
+        function submit() {
+            layer.confirm("是否确认", function () {
+                $.ajax({
+                    url: '工艺不被通过点确认.ashx',
+                    data: { "orderId": orderId,"type":type },
+                    success: function (d) {
+                        
+                        location.reload()
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+</html>

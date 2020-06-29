@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.Kanban.工程中心Method
+{
+    /// <summary>
+    /// 看板意向订单评估状态 的摘要说明
+    /// </summary>
+    public class 看板意向订单评估状态 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            int noAssessment = 0;
+            int hasAssessed = 0;
+            int underWay = 0;
+            try
+            {
+                System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+                {
+                    noAssessment = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention == -3).Count();
+                    underWay = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention == -1||r.Intention ==0).Count();
+                    hasAssessed = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.virtualProgPersId != null && r.Intention != -1 && r.Intention != 0).Count();
+                }
+                var mode = new
+                {
+                    ///未评估
+                    noAssessment = noAssessment,
+                    ///进行中
+                    underWay = underWay,
+                    ///已完成
+                    hasAssessed = hasAssessed
+                };
+                var json = serializer.Serialize(mode);
+                context.Response.Write("data:"+json+"\n\n");
+                context.Response.ContentType = "text/event-stream";
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write(ex.Message);
+            }
+
+
+            context.Response.Write("Hello World");
+
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

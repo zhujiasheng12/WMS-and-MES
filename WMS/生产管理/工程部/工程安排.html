@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+        key = "";
+        layui.use(['table', 'layer','element'], function () {
+            table = layui.table, layer = layui.layer, $ = layui.$, element = layui.element;
+           
+             
+            table.on('toolbar(table1)', function (obj) {
+
+                switch (obj.event) {
+               
+                    case 'search':
+                       kay=($("#select1").val())
+                        debugger
+                     
+                        table.reload('idTest1', {
+                            url: 'orderEntry.ashx?type=意向订单&key='+$("#select1").val()
+                        })
+                        break;
+                    case 'reload':
+                        key = "";
+                        table1.reload()
+                        break;
+                };
+            });
+
+           
+            table.on('tool(table1)', function (obj) {
+                var data = obj.data;
+              if (obj.event === 'edit') {
+
+                    layer.open({
+                        type: 2,
+                        content: 'orderEdit.html',
+                        area: ['50%', '80%'],
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.method(data.Order_ID,"意向订单")
+                        }
+                    })
+                }
+            });
+
+            table.on('toolbar(table2)', function (obj) {
+
+                switch (obj.event) {
+
+                    case 'search':
+                        $('#searchContent').val($("#select2").val())
+                        debugger
+                     
+                        table.reload('idTest2', {
+                            url: 'orderEntry.ashx?type=生产订单&key=' + $("#select2").val(),
+                        })
+                        break;
+                    case 'reload':
+                        $('#searchContent').val("")
+                        table2.reload()
+                        break;
+                };
+            });
+
+
+            //table.on('tool(table2)', function (obj2) {
+            //    var data2 = obj2.data;
+            //    if (obj2.event === 'edit') {
+            //        debugger
+            //        layer.open({
+            //            type: 2,
+            //            content: 'orderEdit.html',
+            //            area: ['50%', '80%'],
+            //            success: function (layero, index) {
+
+            //                var iframeWin = window[layero.find('iframe')[0]['name']];
+            //                iframeWin.method(data2.Order_ID,"生产订单")
+            //            }
+            //        })
+            //    }
+            //});
+
+        })
+    </script>
+    <script>
+        fun()
+        function fun() {
+            layui.use(['table', 'layer'], function () {
+                table = layui.table, layer = layui.layer, $ = layui.$;
+                $.ajax({
+
+                    url: '工程安排弹窗提醒.ashx',
+                    success: function (d) {
+                        debugger
+                        if (d != "") {
+                            var arr = d.split(",")
+                            var str = "";
+                            for (var i = 0; i < arr.length; i++) {
+                                str+=arr[i]+"</br>"
+                            }
+                            
+                           
+                             layer.open({
+                            type: 0,
+                            area: ['30%', '30%'],
+                            offset: 'rb',
+                            skin: 'layui-layer-lan',
+                            anim: 0,
+                             shade: 0 ,//不显示遮罩
+                            cancel: function (index) {
+                                table1.reload()
+                                table2.reload()
+                            },
+                            yes: function (index, layero) {
+                                table1.reload()
+                                table2.reload()
+                                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                            },
+                            content: str //这里content是一个普通的String
+                        });
+                      
+                        }
+                         setTimeout('fun()', 60000)
+                    }
+                })
+            })
+        }
+    </script>
+    <script type="text/html" id="toolbarDemo1">
+        <div class="layui-row">
+    
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="search" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="reload" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select1" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-row">
+    
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="Button1" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="Button2" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select2" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </script>
+    <script type="text/html" id="barDemo1">
+        <button class="layui-btn layui-btn-xs" limit="工程安排_编辑" lay-event="edit">编辑</button>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+      <script type="text/html" id="barDemo2">
+        <button class="layui-btn layui-btn-xs" limit="工程安排_编辑" lay-event="edit">编辑</button>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table, $ = layui.$;
+            table1 = table.render({
+                elem: '#table1'
+
+            , url: 'orderEntry.ashx?type=意向订单' //数据接口
+            , page: true //开启分页
+            , toolbar: '#toolbarDemo1'
+            , id: 'idTest1'
+            , cols: [[ //表头
+                { field: 'number', title: '序号', type: 'numbers', width: 60, fixed: 'left' }
+                , { field: 'Order_Number', title: '产品订单号', width: 120 }
+            , { field: "clientName", title: "客户名称", width: 90 }
+                , { field: 'Order_Leader', title: '订单负责人', width: 105 }
+                , { field: 'Product_Name', title: '产品名称', width: 120 }
+                , { field: 'Product_Material', title: '产品材料', width: 90 }
+                , {
+                    field: 'Product_Drawing', title: '产品图纸', width: 90, templet: function (d) {
+                        return '<span style="color: #c00;">点击查看</span>'
+                    }
+                }
+                , { field: 'Product_Output', title: '订单数量', width: 90 }
+                , { field: 'Order_Plan_Start_Time', title: '订单开始时间', width: 160, hide: true }
+                , { field: 'Order_Plan_End_Time', title: '订单结束时间', width: 160, hide: true }
+                , { field: 'Order_State', title: '订单状态', width: 90 }
+
+                , { field: 'Engine_Program_ManagerId', title: '工程编程责任人Id', width: 135, hide: true }
+
+                , { field: 'virtualProgPers', title: '虚拟方案责任人', width: 135 }
+
+                //, { field: 'Engine_Status', title: '工程状态', width: 90 }
+                , { field: 'operation', title: '操作', toolbar: '#barDemo1', width: 100, fixed: 'right' }
+                , { field: 'Order_ID', title: 'id', hide: true }
+            ]],
+            done: function () {
+              
+                    var limit = JSON.parse(sessionStorage.getItem('limit'));
+                    if (limit != null) {
+                        for (var i = 0; i < limit.length; i++) {
+                            $('[limit="' + limit[i] + '"]').attr("disabled", "disabled").addClass('layui-btn-disabled')
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: 'orderSearch.ashx?type=意向订单',
+                        success: function (d) {
+                            var objs = JSON.parse(d);
+                    
+                            $.each(objs, function (i, obj) {
+                             
+                                if (obj.key == key) {
+                                    $('#select1').append('<option value="' + obj.key + '" selected>' + obj.key + '</option>')
+                                } else {
+                                    $('#select1').append('<option value="' + obj.key + '">' + obj.key + '</option>')
+                                }
+
+                            })
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                form.render()
+                            })
+                        }
+                    });
+
+                    var states = $('td[data-field="Order_State"]');
+                    $.each(states, function (i, item) {
+                        var text = $(item).find("div").text()
+                  
+                        switch (text) {
+                            case '-1':
+                                $(item).find("div").text("未评估");
+                                break;
+                            case '0':
+                                $(item).find("div").text("不同意");
+                                break;
+                            case '1':
+                                $(item).find("div").text("已评估");
+                                break;
+                        }
+
+
+                    })
+                
+
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+               
+                    $("#table1").siblings(".layui-form").find('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '图纸.html',
+                            area: ['650px', '500px'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+                }
+            });
+            //第一个实例
+            table2 = table.render({
+                elem: '#table2'
+               
+                , url: 'orderEntry.ashx?type=生产订单' //数据接口
+                , page: true //开启分页
+                , toolbar: '#toolbarDemo'
+                , id: 'idTest2'
+                , cols: [[ //表头
+                    { field: 'number', title: '序号', type: 'numbers', width: 60, fixed: 'left' }
+                    , { field: 'Order_Number', title: '产品订单号', width: 120 }
+                , { field: "clientName",title:"客户名称",width:300 }
+                    , { field: 'Order_Leader', title: '订单负责人', width: 105 }
+                    , { field: 'Product_Name', title: '产品名称', width: 160 }
+                    , { field: 'Product_Material', title: '产品材料', width:90 }
+                    , {
+                        field: 'Product_Drawing', title: '产品图纸', width: 90, templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        }
+                    }
+                    , { field: 'Product_Output', title: '订单数量', width: 90 }
+                    , { field: 'Order_Plan_Start_Time', title: '订单开始时间', width:160, hide: true }
+                    , { field: 'Order_Plan_End_Time', title: '订单结束时间', width:160, hide: true }
+                    , { field: 'Order_State', title: '订单状态', width: 90 }
+                   
+                    , { field: 'Engine_Program_ManagerId', title: '工程编程责任人Id', width: 135, hide: true }
+               
+                    , { field: 'Engine_Program_Manager', title: '工程编程责任人', width:135 }
+                 
+                    //, { field: 'Engine_Status', title: '工程状态', width: 90 }
+                    , { field: 'operation', title: '操作', toolbar: '#barDemo2', width:100,fixed:'right' }
+                    , { field: 'Order_ID', title: 'id', hide: true, fixed: 'right' }
+                ]],
+                done: function () {
+                    var limit = JSON.parse(sessionStorage.getItem('limit'));
+                    if (limit != null) {
+                        for (var i = 0; i < limit.length; i++) {
+                            $('[limit="' + limit[i] + '"]').attr("disabled", "disabled").addClass('layui-btn-disabled')
+                        }
+                    }
+                   
+
+                    $.ajax({
+                        url: 'orderSearch.ashx?type=生产订单',
+                        success: function (d) {
+                            var objs = JSON.parse(d);
+                         
+                            $.each(objs, function (i, obj) {
+                            
+                                if (obj.key == $('#searchContent').val()) {
+                                    $('#select2').append('<option value="' + obj.key + '" selected>' + obj.key + '</option>')
+                                } else {
+                                    $('#select2').append('<option value="' + obj.key + '">' + obj.key + '</option>')
+                                }
+                               
+                            })
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                form.render()
+                            })
+                        }
+                    });
+
+                    var states = $('td[data-field="Order_State"]');
+                    $.each(states, function (i, item) {
+                        var text = $(item).find("div").text()
+                    
+                        switch (text) {
+                            case '2':
+                                $(item).find("div").text("生产");
+                                break;
+                            case '3':
+                                $(item).find("div").text("下推");
+                                break;
+                         
+                        }
+
+
+                    })
+                    $("#table2").siblings(".layui-form , .layui-border-box, .layui-table-view").find('[lay-event="edit"]').click(function () {
+                        var orderId = $(this).parents('td[data-field="operation"]').siblings('td[data-field="Order_ID"]').children().text()
+                        layer.open({
+                            type: 2,
+                            content: 'orderEdit.html',
+                            area: ['500px', '450px'],
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0]['name']];
+                                iframeWin.method(orderId, "生产订单")
+                            }
+                        })
+                    })
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+                    $("#table2").siblings(".layui-form , .layui-border-box, .layui-table-view").find('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '图纸.html',
+                            area: ['650px', '500px'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+                }
+            });
+
+        });
+    </script>
+  
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li>意向订单</li>
+    <li  class="layui-this">生产订单</li>
+   
+  </ul>
+  <div class="layui-tab-content">
+       <div class="layui-tab-item">
+
+             <table id="table1" lay-filter="table1"></table>
+       </div>
+       <div class="layui-tab-item layui-show">
+
+            <table id="table2" lay-filter="table2"></table>
+       </div>
+
+  </div>
+</div>      
+       
+    <input id="searchContent" hidden />
+   
+</body>
+</html>

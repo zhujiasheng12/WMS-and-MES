@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div class="layui-row" style="height:30%">
+        <div class="layui-col-md4" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:100px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">报修状态</div>
+                <div class="layui-card-body" style="text-align:center;position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3);color:white">
+
+                    <div id="repairState" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md8" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:100px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">报修/维修</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);color:white">
+                    <div id="lineChart" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:30%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:100px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">报修/维修</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);color:white">
+                    <table id="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md6" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:100px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">报警列表</div>
+                <div class="layui-card-body" id="card-body1" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3);color:white;overflow-y:scroll">
+
+
+                    <ul id="ul1" class="layui-timeline" style="padding-top:10px">
+                        <!--<li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">8月12日</h3>
+                                <p style="color:red">
+                                    1A-01报警
+                                    <br>报警描述：主轴制冷机异常
+
+                                </p>
+                            </div>
+                        </li>
+
+
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">8月11日</h3>
+                                <p style="color:red">
+                                    1A-02报警
+                                    <br>报警描述：切屑液不足
+
+                                </p>
+                            </div>
+                        </li>-->
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:100px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">处理情况</div>
+                <div class="layui-card-body" id="card-body2" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);color:white;overflow-y:scroll">
+
+
+                    <ul id="ul2" class="layui-timeline" style="padding-top:10px">
+                        <!--<li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">8月12日</h3>
+                                <p style="color:darkgreen">
+                                    胡帆帆完成机台1A-01的报修处理,报警描述：主轴制冷机异常
+                                    胡帆帆完成机台1A-01的报修处理,报警描述：主轴制冷机异常
+                                    胡帆帆完成机台1A-01的报修处理,报警描述：主轴制冷机异常
+                                </p>
+                            </div>
+                        </li>-->
+
+
+                        <!--<li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">8月11日</h3>
+                                <p style="color:darkgreen">
+                                    朱家生完成机台1A-02的报修处理,报警描述：切屑液不足
+                                </p>
+                            </div>-->
+                        <!--</li>-->
+                    </ul>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var myChartOptionRepairState = echarts.init(document.getElementById('repairState'));
+        var optionRepairState = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '70%',
+                    label: {
+                        normal: {
+
+                            formatter: '{b}:{c} ({d}%)',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 17
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [
+                        { value: 335, name: '已完成', itemStyle: { color: 'green' } },
+                        { value: 310, name: '待接单', itemStyle: { color: 'red' } },
+                        { value: 234, name: '待维修', itemStyle: { color: 'yellow' } },
+                        { value: 135, name: '维修中', itemStyle: { color: 'orange' } },
+                        { value: 154, name: '挂起中', itemStyle: { color: 'gray' } }
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+
+                    }
+                }
+            ]
+        };
+
+        $.ajax({
+            url: '维修/报修状态圆饼.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d)
+                optionRepairState.series[0].data[0].value = obj.yiwancheng;
+                optionRepairState.series[0].data[1].value = obj.daijiedan;
+                optionRepairState.series[0].data[2].value = obj.daiweixiu;
+                optionRepairState.series[0].data[3].value = obj.weixiuzhong;
+
+                optionRepairState.series[0].data[4].value = obj.guaqi;
+
+                myChartOptionRepairState.setOption(optionRepairState);
+            }
+        })
+        setInterval(function () {
+            $.ajax({
+                url: '维修/报修状态圆饼.ashx',
+                success: function (d) {
+                    var obj = JSON.parse(d)
+                    optionRepairState.series[0].data[0].value = obj.yiwancheng;
+                    optionRepairState.series[0].data[1].value = obj.daijiedan;
+                    optionRepairState.series[0].data[2].value = obj.daiweixiu;
+                    optionRepairState.series[0].data[3].value = obj.weixiuzhong;
+
+                    optionRepairState.series[0].data[4].value = obj.guaqi;
+
+                    myChartOptionRepairState.setOption(optionRepairState);
+                }
+            })
+
+        }, 1000);
+
+    </script>
+
+    <script>
+        var myChart = echarts.init(document.getElementById('lineChart'));
+        option = {
+
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+
+                data: [{
+                    name: '报修量',
+                    textStyle: { color: "violet" }
+                },
+                {
+                    name: '维修量',
+                    textStyle: { color: "yellow" }
+                }
+                ],
+
+                textStyle: {
+                    color: '#ffffff'
+                }
+            },
+
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14'],
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#ffffff'
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'white',
+                        width: 0.5,//这里是为了突出显示加上的
+                    }
+                }
+
+
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#ffffff'
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'white',
+                        width: 0.5,//这里是为了突出显示加上的
+                    }
+                }
+
+            },
+            series: [
+                {
+                    name: '报修量',
+                    type: 'line',
+                    data: [11, 11, 15, 13, 12, 13, 10],
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: 'violet'
+                            }
+                        }
+                    },
+
+                },
+                {
+                    name: '维修量',
+                    type: 'line',
+                    data: [1, -2, 2, 5, 3, 2, 0],
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: 'yellow'
+                            }
+                        }
+                    },
+
+                }
+            ]
+        };
+        $.ajax({
+            url: '维修/报修维修折线图.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d);
+                option.series[0].data = [];
+                option.series[1].data = [];
+                option.xAxis.data = [];
+                for (var i = 0; i < obj.length; i++) {
+                    option.series[0].data.push(obj[i].fixNum)
+                    option.series[1].data.push(obj[i].repairNum)
+                    option.xAxis.data.push(obj[i].date)
+                }
+
+                myChart.setOption(option);
+            }
+        })
+
+
+        setInterval(function () {
+            $.ajax({
+                url: '维修/报修维修折线图.ashx',
+                success: function (d) {
+                    var obj = JSON.parse(d);
+                    option.series[0].data = [];
+                    option.series[1].data = [];
+                    option.xAxis.data = [];
+                    for (var i = 0; i < obj.length; i++) {
+                        option.series[0].data.push(obj[i].fixNum)
+                        option.series[1].data.push(obj[i].repairNum)
+                        option.xAxis.data.push(obj[i].date)
+                    }
+
+                    myChart.setOption(option);
+                }
+            })
+        }, 3000);
+
+
+    </script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            tableReload = table.render({
+                elem: '#table',
+                height: '160%',
+
+                url: '维修/报修维修表格.ashx',
+                cols: [[ //表头
+                    { field: 'CncNum', title: '机台编号', width: 180 }
+                    , { field: 'RepairDesc', title: '报修内容', width: 180 }
+                    , { field: 'RepairTime', title: '报修时间', width: 180, }
+                    , { field: 'FixStaff', title: '维修人', width: 180 }
+                    , { field: 'StopTime', title: '停机时间', width: 177 }
+                    , { field: 'Receptiontime', title: '接单时间', width: 177 }
+                    , { field: 'StartTime', title: '维修时间', width: 177 }
+                    , { field: 'State', title: '维修状态', width: 180, }
+                    , { field: 'EndTime', title: '完成日期' }
+
+                ]],
+                //data: [
+                //      {'cncNum':'1A-01','content':'撞机','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'挂起','date':''}
+                //       ,{'cncNum':'1A-02','content':'切削液不足','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'完成','date':'2019-08-14'}
+                //         ,{'cncNum':'1A-01','content':'撞机','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'挂起','date':''}
+                //       ,{'cncNum':'1A-02','content':'切削液不足','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'完成','date':'2019-08-14'}
+                //        ,{'cncNum':'1A-01','content':'撞机','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'挂起','date':''}
+                //       ,{'cncNum':'1A-02','content':'切削液不足','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'完成','date':'2019-08-14'}
+                //         ,{'cncNum':'1A-01','content':'撞机','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'挂起','date':''}
+                //       ,{'cncNum':'1A-02','content':'切削液不足','time':'2019-08-14','user':'胡帆帆','stopTime':'2019-08-14','acceptTime':'2019-08-14','repairTime':'2019-08-14','state':'完成','date':'2019-08-14'}
+                //  ],
+                done: function () {
+                    var arr = $('td[data-field="state"]')
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].children[0].innerText == '挂起') {
+                            $(arr[i]).css('color', 'red')
+                        }
+                        if (arr[i].children[0].innerText == '完成') {
+                            $(arr[i]).css('color', 'green')
+                        }
+                    }
+
+                    $('tr').css('color', 'white')
+
+                    $('.layui-table-header').css('background-color', 'rgba(0, 0, 0, 0.8)')
+
+
+                    $('thead').find('tr').css('background-color', 'rgba(0, 0, 0, 0.8)')
+                    var trs = $('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+                }
+
+            });
+
+        });
+
+        var i = 0;
+        var old = -1;
+        var new1 = -2;
+        setInterval(function () {
+            if ($('.layui-table-body.layui-table-main').length == 0) {
+                return;
+            }
+            $('.layui-table-body.layui-table-main').scrollTop(i);
+            new1 = $('.layui-table-body.layui-table-main').scrollTop();
+            if (old == new1) {
+                i = 0;
+                old = -1;
+                return;
+            }
+            i +=1.2;
+            old = $('.layui-table-body.layui-table-main').scrollTop();
+        }, 200);
+
+        setInterval(function () {
+            tableReload.reload()
+        }, 60000)
+
+
+    </script>
+    <!--报警列表  处理情况-->
+    <script>
+            $.ajax({
+                url: '维修/报警列表.ashx',
+                success: function (d) {
+                    $('#ul1').empty()
+                    var obj = JSON.parse(d);
+                    for (var i = obj.length-1; i >=0; i--) {
+                        var p = "";
+                        for (var j = 0; j < obj[i].alarms.length; j++) {
+                            p += '<p style="color:red">' + obj[i].alarms[j] + '</p>'
+                        }
+
+                        var li = '<li class="layui-timeline-item">' +
+                            '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>' +
+                            ' <div class="layui-timeline-content layui-text">' +
+                            ' <h3 class="layui-timeline-title" style="color:white">' + obj[i].data + '</h3>' +
+                            p +
+                            '</div>' +
+                            '</li>'
+
+                        $('#ul1').append(li)
+                    }
+
+
+                }
+            })
+        setInterval(function () {
+            $.ajax({
+                url: '维修/报警列表.ashx',
+                success: function (d) {
+                    $('#ul1').empty()
+                    var obj = JSON.parse(d);
+                    for (var i = obj.length-1; i >=0; i--) {
+                        var p = "";
+                        for (var j = 0; j < obj[i].alarms.length; j++) {
+                            p += '<p style="color:red">' + obj[i].alarms[j] + '</p>'
+                        }
+
+                        var li = '<li class="layui-timeline-item">' +
+                            '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>' +
+                            ' <div class="layui-timeline-content layui-text">' +
+                            ' <h3 class="layui-timeline-title" style="color:white">' + obj[i].data + '</h3>' +
+                            p +
+                            '</div>' +
+                            '</li>'
+
+                        $('#ul1').append(li)
+                    }
+
+
+                }
+            })
+        }, 1000)
+
+        {
+            var i2 = 0;
+            var old2 = -1;
+            var new2 = -2;
+            setInterval(function () {
+                if ($('#card-body1').length == 0) {
+                    return;
+                }
+                $('#card-body1').scrollTop(i2);
+                new2 = $('#card-body1').scrollTop();
+                if (old2 == new2) {
+                    i2 = 0;
+                    old2 = -1;
+                    new2 = -2;
+                    return;
+                }
+                i2 += 1.2;
+                old2 = $('#card-body1').scrollTop();
+            }, 200);
+        }
+
+
+
+
+
+          $.ajax({
+                url: '维修/报修处理情况.ashx',
+                success: function (d) {
+                    $('#ul2').empty()
+                    var obj = JSON.parse(d);
+                    for (var i = 0; i < obj.length; i++) {
+                        var p = "";
+                        for (var j = 0; j < obj[i].desc.length; j++) {
+                            p += '<p style="color:violet">' + obj[i].desc[j] + '</p>'
+                        }
+
+                        var li = '<li class="layui-timeline-item">' +
+                            '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>' +
+                            ' <div class="layui-timeline-content layui-text">' +
+                            ' <h3 class="layui-timeline-title" style="color:white">' + obj[i].time + '</h3>' +
+                            p +
+                            '</div>' +
+                            '</li>'
+
+                        $('#ul2').append(li)
+                    }
+                }
+            })
+         setInterval(function () {
+            $.ajax({
+                url: '维修/报修处理情况.ashx',
+                success: function (d) {
+                    $('#ul2').empty()
+                    var obj = JSON.parse(d);
+                    for (var i = 0; i < obj.length; i++) {
+                        var p = "";
+                        for (var j = 0; j < obj[i].desc.length; j++) {
+                            p += '<p style="color:violet">' + obj[i].desc[j] + '</p>'
+                        }
+
+                        var li = '<li class="layui-timeline-item">' +
+                            '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>' +
+                            ' <div class="layui-timeline-content layui-text">' +
+                            ' <h3 class="layui-timeline-title" style="color:white">' + obj[i].time + '</h3>' +
+                            p +
+                            '</div>' +
+                            '</li>'
+
+                        $('#ul2').append(li)
+                    }
+                }
+            })
+        }, 1000)
+
+        {
+            var i3 = 0;
+            var old3 = -1;
+            var new3 = -2;
+            setInterval(function () {
+                if ($('#card-body2').length == 0) {
+                    return;
+                }
+                $('#card-body2').scrollTop(i3);
+                new3 = $('#card-body2').scrollTop();
+                if (old3 == new3) {
+                    i3 = 0;
+                    old3= -1;
+                    new3 = -2;
+                    return;
+                }
+                i3 += 1.2;
+                old3 = $('#card-body2').scrollTop();
+            }, 200);
+        }
+
+
+
+
+
+
+
+
+    </script>
+   
+</body>
+</html>

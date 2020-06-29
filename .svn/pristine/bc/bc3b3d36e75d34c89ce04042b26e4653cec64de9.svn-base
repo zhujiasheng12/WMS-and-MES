@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CNCINFOModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“CNCINFO.dbo.Cnc”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="Cnc">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="MachNum" />
+      <PropertyRef Name="IP" />
+      <PropertyRef Name="MachType" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachNum" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IP" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="MachState" Type="varchar" MaxLength="50" />
+    <Property Name="MachType" Type="int" Nullable="false" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“CNCINFO.dbo.CncBrand”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="CncBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Brand" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Brand" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“CNCINFO.dbo.CncType”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="CncType">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Type" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BrandID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="CNCINFOModelStoreContainer">
+    <EntitySet Name="Cnc" EntityType="Self.Cnc" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Cnc].[ID] AS [ID], 
+    [Cnc].[MachNum] AS [MachNum], 
+    [Cnc].[IP] AS [IP], 
+    [Cnc].[MachState] AS [MachState], 
+    [Cnc].[MachType] AS [MachType]
+    FROM [dbo].[Cnc] AS [Cnc]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="CncBrand" EntityType="Self.CncBrand" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CncBrand].[ID] AS [ID], 
+    [CncBrand].[Brand] AS [Brand]
+    FROM [dbo].[CncBrand] AS [CncBrand]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="CncType" EntityType="Self.CncType" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CncType].[ID] AS [ID], 
+    [CncType].[Type] AS [Type], 
+    [CncType].[BrandID] AS [BrandID]
+    FROM [dbo].[CncType] AS [CncType]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+
+    <link href="../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../Resources/js/easyui/jquery.easyui.min.js"></script>
+    <script src="../Resources/js/jquery.cookie.js"></script>
+   
+</head>
+<body>
+
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:90px" >轮播时间（秒）<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="time" lay-verify="number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"style="width:90px">轮播项目<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+
+                <div id="tree"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:90px">车间选择<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text"  name="father" lay-verify="required" id="father" class="easyui-combotreegrid" data-options="
+					method:'get',
+					width:'100%',
+					panelWidth:300,
+
+					labelPosition:'top',
+					url:'../工厂管理/PositionHandler.ashx',
+					idField:'id',
+					treeField:'name',
+					columns:[[
+				   {field:'name',title:'车间',width:300},
+                   {field:'id',title:'id',width:300,hidden:true},
+
+					]]">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">开始轮播</button>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+       var Interval= setInterval(function () {
+            if ($('.layui-icon.layui-icon-file').length == 0) {
+                return;
+            } else {
+                $('.layui-icon.layui-icon-file').removeClass('layui-icon-file')
+                clearInterval(Interval)
+            }
+            
+        }, 100)
+
+        $('[name="time"]').val($.cookie("time"))
+        var json = $.cookie("json")
+            
+               var data= [{
+                   title: '工程中心电子看板' //一级菜单
+                  , checked: false
+               }, {
+                   title: '刀具中心电子看板' //一级菜单
+                  , checked: false
+               },
+                    {
+                        title: '品质中心电子看板' //一级菜单
+                   , checked: false
+                    }
+                    , {
+                        title: '维修中心电子看板' //一级菜单
+                   , checked: false
+                    }
+                    , {
+                        title: '资材中心电子看板' //一级菜单
+                   , checked: false
+                    }, {
+                        title: '订单状态电子看板' //一级菜单
+                        , checked: false
+                 
+                   }, {
+                       title: '报警报修电子看板' //一级菜单
+                       , checked: false
+
+                   }, {
+                       title: '刀具任务电子看板' //一级菜单
+                       , checked: false
+
+                   }, {
+                       title: '车间整体电子看板' //一级菜单
+                       , checked: false
+
+                   }
+
+        ]
+        if (typeof(json) != "undefined") {
+
+            var obj = JSON.parse(json)
+            for (var i = 0; i < data.length; i++) {
+                data[i].checked = true;
+            }
+            for (var i = 0; i < obj.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                  
+                    if (data[j].title == obj[i]) {
+                        data[j].checked = false;
+                        continue;
+                    }
+                }
+            }
+        }
+                layui.use('tree', function () {
+            var tree = layui.tree;
+
+            //渲染
+            var inst1 = tree.render({
+                elem: '#tree'  //绑定元素
+                , showLine: true
+                , showCheckbox: true
+                , id: 'demoId'
+                , data: data
+            });
+        });
+
+     
+        
+    </script>
+    <script>
+        layui.use(['form','tree'], function () {
+            var form = layui.form,tree=layui.tree;
+            form.on('submit(*)', function (data) {
+                var time = Number($('[name="time"]').val()) * 1000
+                var arr = $('.layui-form-checkbox')
+                 var obj = []; 
+                for (var i = 0; i <arr.length; i++) {
+                    if (!$(arr[i]).hasClass('layui-form-checked')) {
+                        var text = $(arr[i]).siblings('.layui-tree-txt')[0].innerText
+                         obj.push(text)
+                    }
+                }
+               
+               
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index);
+                var json = JSON.stringify(obj)
+                var workId = $('#father').val()
+                localStorage.setItem("workId", workId)
+                $.cookie('workId', workId, { expires: 300 });//300天
+                $.cookie('time', Number($('[name="time"]').val()), { expires: 300 });//300天
+                 $.cookie('json', json, { expires: 300 });//300天
+                // parent.setWorkName();
+                parent.fun(time,json);
+             
+            });
+        })
+
+              $('#father').combotreegrid({
+                onLoadSuccess: function () {
+                    $('.tree-icon.tree-file').removeClass('tree-file')
+                      $('.tree-icon.tree-folder').removeClass('tree-folder')
+                      $('#father').combotreegrid('setValue', { id: $.cookie('workId') });
+                }
+            })
+    </script>
+</body>
+</html>

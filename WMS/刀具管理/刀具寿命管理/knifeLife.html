@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.min.js"></script>
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+
+    
+</head>
+<body class="layui-layout-body">
+    <input id="cncId" hidden/>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="background-color:white;height:50px;border-bottom: solid 1px lightgray;">
+
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+
+            <div class="layui-row">
+
+                <div class="layui-col-md5">
+                    <button class="layui-btn layui-btn-sm" style="float:left;margin:10px" onclick="location.reload()">刷新</button>
+                    <label style="float:right"><font id="" size="6" face="arial " style="">预警刀具数</font></label>
+                </div>
+                <div class="layui-col-md1 layui-col-space10">
+                    <p style="float:left"><font id="yellow" size="8" face="arial " style="color:#F8B62D;"></font></p>
+
+                </div>
+                <div class="layui-col-md2">
+                    <label style="float:right"><font id="" size="6" face="arial" style="">超时刀具数</font></label>
+                </div>
+                <div class="layui-col-md1">
+                    <p style="float:left"><font id="red" size="8" face="arial" style=" color:red"></font></p>
+
+                </div>
+            </div>
+            <div class="layui-row" >
+                <div class="layui-col-md12" style="font-size:140%;margin-left:210px">
+                    当前机床:<p1 style="margin-right:20px"></p1>
+                    机床型号:<p4 style="margin-right:20px"></p4>
+                    当前刀号:<p2 style="margin-right:20px"></p2>
+                    主轴转速:<p3></p3>
+                </div>
+
+            </div>
+           
+
+        </div>
+
+        <div class="layui-side layui-bg-black" style="background-color:white;top:57px">
+            <div class="layui-side-scroll" style="">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+               
+                <table id="tt" style="width:100%;height:100%;"></table>
+            </div>
+        </div>
+
+        <div class="layui-body" style="bottom:0;top:90px">
+            <!-- 内容主体区域 -->
+            <div style="padding-left:10px;">
+               
+                <table id="demo" lay-filter="test"></table>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script type="text/html" id="toolbarDemo">
+        
+        <!--<div style="font-size:200%">
+        当前机床:<p1 style="margin-right:20px"></p1>
+        机床型号:<p4 style="margin-right:20px"></p4>
+        当前刀号:<p2 style="margin-right:20px"></p2>
+        主轴转速:<p3></p3>
+    </div>-->
+    </script>
+    <script>
+        $.ajax({
+            url: 'stateNumberRead.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d);
+                $('#yellow').text(obj.yellowNumber);
+                $('#red').text(obj.redNumber);
+            }
+        })
+    </script>
+    <script>
+    fun()
+    //setInterval(" refresh()", 1000)
+    //setInterval("refreshTable()",1000)
+    
+    function fun() {
+        $('#tt').treegrid({
+            url: 'PositionHandler.ashx',
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+            rownumbers: true,
+
+            columns: [[
+                { title: '位置名称', field: 'name', width: '120%' },
+
+                { field: 'id', title: 'id', width: 80, hidden: true },
+                { field: 'CncID', title: 'CncID', width: 80,  },
+                { field: 'flag', title: 'flag', width: 80,  }
+            ]],
+
+        });
+    }
+    function refresh() {
+        $.ajax({
+            url: '读机床刀具寿命.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d)
+                for (var i = 0; i < obj.length; i++) {
+                    var tds = $('td[field="CncID"]')
+                    for (var j = 0; j < tds.length; j++) {
+                        if (tds[j].children[0].innerText == obj[i].CncID) {
+                            $(tds[j]).siblings('td[field="flag"]')[0].children[0].innerText = obj[i].flag
+
+                        }
+                    }
+                   
+                    
+                   //
+                }
+
+
+                var arr = $('[field="flag"]');
+                for (var i = 0; i < arr.length; i++) {
+                    var state = arr[i].children[0].innerText
+                    if (state == 0 | state==-1) {
+                        $(arr[i]).parent('tr').css('background-color', 'white')
+                    }
+                    if (state == 1) {
+                        $(arr[i]).parent('tr').css('background-color', '#F8B62D')
+                        var fathers = $(arr[i]).parents('.treegrid-tr-tree')
+                        for (var ii = 0; ii < fathers.length; ii++) {
+                            var fatherPrev = $(fathers[ii]).prev().css('background-color')
+                            if (fatherPrev != "rgb(255, 0, 0)") {
+                                $(fathers[ii]).prev().css('background-color', '#F8B62D')
+                            }
+                        }
+
+
+                    }
+                    if (state == 2) {
+                        $(arr[i]).parent('tr').css('background-color', 'red')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().css('background-color', 'red')
+
+                    }
+                    
+
+                }
+            }
+        })
+    }
+   
+    $('#tt').treegrid({
+
+        onLoadSuccess: function (data) {
+             $('td').css('border', 'none')
+                        $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                    $('.tree-icon').removeClass('tree-icon tree-file')
+            $(".datagrid-header").find("span").css('font-size','130%')
+            $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' });
+                var arr = $('[field="flag"]');
+                for (var i = 0; i < arr.length; i++) {
+                    var state = arr[i].children[0].innerText
+                    if (state == 1) {
+                        $(arr[i]).parent('tr').css('background-color', '#F8B62D')
+                        var fathers = $(arr[i]).parents('.treegrid-tr-tree')
+                        for (var ii = 0; ii < fathers.length; ii++) {
+                            var fatherPrev = $(fathers[ii]).prev().css('background-color')
+                            if (fatherPrev != "rgb(255, 0, 0)") {
+                                $(fathers[ii]).prev().css('background-color', '#F8B62D')
+                            }
+                        }
+
+
+                    }
+                    if (state == 2) {
+                        $(arr[i]).parent('tr').css('background-color', 'red')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().css('background-color', 'red')
+
+                    }
+
+                }
+                $('tr').click(function () {
+                    var id = $(this)[0].children[2].children[0].innerText
+                    $("#cncId").val(id)
+                    layui.use(['table', 'laypage'], function () {
+                        var table = layui.table, $ = layui.$, laypage = layui.laypage;
+
+                        //第一个实例
+                        table.render({
+                            elem: '#demo'
+
+                            , url: 'knifeRead.ashx' //数据接口
+                            , where: { id: id }
+                            , page: true //开启分页
+                            , limit: 90
+                            , toolbar: '#toolbarDemo'
+                            , cols: [[ //表头
+
+                                { field: 'toolID', title: '刀号', width: '6%' }
+                              
+                                , { field: 'toolLength', title: '装刀长度', width: '15%' }
+                                , { field: 'toolCurrTime', title: '当前使用时间(min)', width: '15%' }
+                                , { field: 'toolMaxTime', title: '最大使用时间(min)', width: '15%', }
+                                , { field: 'toolAttribute', title: '刀具属性', width: 100 }
+                                , { field: 'toolIdentity', title: '刀具ID', width: 140 }
+                                     , { field: 'toolShank', title: '刀柄', width:140 }
+                                , { field: 'existence', title: '有无刀', width: 100 }
+                                
+                             
+                                
+
+                            ]],//
+                            done: function (dd) {
+                                $(".layui-table-view").css('margin',0)
+                                $.ajax({
+                                    url: 'nowTool.ashx',
+                                    data: { "cncId": id },
+                                    success: function (d) {
+                                        var arr = d.split(',')
+                                        $("p1").text(arr[0])
+                                        $('p2').text(arr[1])
+                                        $('p3').text(arr[2])
+                                          $('p4').text(arr[3])
+                                    }
+                                })
+
+
+                                var max = $('td[data-field="toolMaxTime"]')
+                                var now = $('td[data-field="toolCurrTime"]')
+                                for (var i = 0; i < max.length; i++) {
+                                    var ma = new Number(max[i].children[0].innerText)
+                                    var no = new Number(now[i].children[0].innerText)
+                                    if (ma <= no ) {
+                                        $(max[i]).parent('tr').css({ 'background-color': 'red', 'color': 'black' })
+                                    } else if (no > ma * 0.8 & ma > 0) {
+                                        $(max[i]).parent('tr').css('background-color', '#F8B62D')
+                                    }
+                                    if (ma == 0 & no == 0) {
+                                        $(max[i]).parent('tr').css('background-color', 'white')
+                                    }
+                                }
+                            }
+                        });
+
+                    });
+                })
+            $('tr')[1].click();
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+
+            }
+        });
+        $(function () {
+
+            $('#create').click(function () {
+                layer.open({
+                    type: 2,
+                    area: ['50%', '85%'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    content: '位置管理创建弹窗.html',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                        console.log(body.html()) //得到iframe页的body内容
+                        //body.find('input').val('Hi，我是从父页来的')
+                        body.find('#brand').val(brand)
+                        body.find('#number').val(number)
+                        body.find('#ip').val(ip)
+                        body.find('#model').val(model)
+                    }
+                });
+            })
+        })
+    </script>
+</body>
+</html>

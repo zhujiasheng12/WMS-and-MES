@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+</head>
+<body>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">虚拟方案文档</li>
+            <li>工序</li>
+
+        </ul>
+        <div class="layui-tab-content" style="height: 100px;">
+            <div class="layui-tab-item layui-show">
+                <input style="margin-left:1%;" id="file" type="file" multiple="multiple">
+                <button id="upload" class="layui-btn layui-btn-sm">上传</button>
+                <table id="demo" lay-filter="test"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table id="process" lay-filter="process"></table>
+            </div>
+
+        </div>
+    </div>
+
+    <p id="orderId" hidden></p>
+    <p id="number" hidden></p>
+    <script type="text/html" id="barDemo">
+        <a><span class="layui-btn layui-btn-xs" lay-event="downLoad">下载</span></a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    
+    <script type="text/html" id="processOperation">
+        <a><span class="layui-btn layui-btn-xs" lay-event="edit">编辑</span></a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script id="toolbarDemo">
+        <div class="layui-btn-container">
+            <div class="layui-btn layui-btn-sm" lay-event="add" >添加工序</div>
+        </div>
+    </script>
+    <script>
+        function method(orderId, orderNumber) {
+            orderNumber1=orderNumber
+            layui.use('table', function () {
+                var table = layui.table, $ = layui.$;
+                $('#number').text(orderNumber)
+                $('#orderId').text(orderId)
+                //第一个实例
+                reload = table.render({
+                    elem: '#demo'
+
+                    , url: 'virtualFile.ashx'
+                    , page: true,
+                    //toolbar: '#toolbarDemo',
+                    where: { "orderNumber": orderNumber }
+                    , cols: [[ //表头
+                        { field: 'number', type: 'numbers', title: '编号', width: '10%', fixed: 'left' }
+                        , { field: 'fileName', title: '文件名', width: '30%' }
+                        , { field: 'fileSize', title: '文件大小', width: '30%' }
+                        , { field: 'filePath', title: '文件路径', width: '30%', hide: true }
+                        , { field: 'toolbar', title: '操作', width: '30%', toolbar: '#barDemo' }
+                    ]]
+                });
+
+                process = table.render({
+                    elem: '#process'
+
+                    , url: 'virtualProcessRead.ashx'
+                    , page: true,
+                    toolbar: '#toolbarDemo',
+                    where: { "orderId": orderId }
+                    , cols: [[ //表头
+                        { field: 'number', type: 'numbers', title: '编号', width: '10%', fixed: 'left' }
+                        , { field: 'processNum', title: '工序号', width: '20%' }
+                        , { field: 'processTime', title: '时间(min)', width: '20%' }
+                        , { field: 'deviceType', title: '机床类型', width: '20%' }
+                          , { field: 'cncNumber', title: '机床数量', width: '20%' }
+                        //
+                        , { field: 'id', title: '工序id', width: '20%', hide: true }
+                        , { field: 'operation', title: '操作', width: '20%', toolbar: '#processOperation' }
+                    ]]
+                });
+
+            });
+
+        }
+    </script>
+    <script>
+        layui.use(['table', 'layer', 'element'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+
+            $(function () {
+                $("#upload").click(function () {
+                    var formData = new FormData();
+                    var file = $("#file")[0].files
+
+                    if (file.length == 0) {
+                        layer.alert("请选择文件")
+                    } else {
+                        for (var i = 0; i < file.length; i++) {
+                            formData.append("file" + i, file[i])
+                        }
+                        formData.append('number', $("#number").text())
+                        $.ajax({
+                            url: 'virtualUpload.ashx',
+                            data: formData,
+                            type: 'post',
+                            processData: false,
+                            contentType: false,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+                                        reload.reload({
+
+                                        })
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            })
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        $.ajax({
+                            url: '删除虚拟方案文档.ashx',
+                            data: { filePath: data.filePath,orderNumber:orderNumber1},
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        reload.reload({})
+                                    })
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'downLoad') {
+                    $.ajax({
+                        url: '../downLoadPathRead.ashx',
+                        success: function (d) {
+                            $('#110').remove();
+                            var number = $('#number').text();
+                            var http = d;
+                            var path = http + number + '/虚拟加工方案文档/' + data.fileName;
+                            var button = '<a href="' + path + '" download="' + data.fileName + '"><button id="110" hidden>1</button></a>';
+                            $('body').append(button);
+                            $('#110').click();
+                        }
+                    })
+
+                }
+            });
+             table.on('tool(process)', function (obj) {
+                var data = obj.data;
+
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        $.ajax({
+                            url: 'virtualProcessDel.ashx',
+                            data: { 'id': data.id },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        process.reload({})
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        area:['70%','70%'],
+                        content: '编辑虚拟工序.html',
+                        success: function (layero, index) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.id)
+                        }
+                    });   
+
+                }
+            });
+            table.on('toolbar(process)', function (obj) {
+
+                switch (obj.event) {
+                    case 'add':
+                        layer.open({
+                            type: 2,
+                            area: ['60%', '90%'],
+                            content: '新建虚拟工序.html',
+                            success: function (layero, index) {
+                                var iframeWin = window[layero.find('iframe')[0]['name']];
+                                var orderId = $('#orderId').text();
+                                iframeWin.method(orderId);
+                            }
+                        });
+                        break;
+
+                };
+            });
+        })
+    </script>
+</body>
+
+</html>

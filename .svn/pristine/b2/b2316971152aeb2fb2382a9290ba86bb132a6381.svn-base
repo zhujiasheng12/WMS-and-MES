@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  有关如何配置 ASP.NET 应用程序的详细信息，请访问
+  https://go.microsoft.com/fwlink/?LinkId=169433
+-->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+  </configSections>
+  <!--
+    有关 .NET 4.5 的 web.config 更改的说明，请参见 http://go.microsoft.com/fwlink/?LinkId=235367。
+
+    可在 <httpRuntime> 标记上设置以下特性。
+      <system.Web>
+        <httpRuntime targetFramework="4.5" />
+      </system.Web>
+  -->
+  <system.web>
+    <pages validateRequest="false" />
+    <compilation debug="true" targetFramework="4.6.1" />
+    <httpRuntime requestValidationMode="2.0" executionTimeout="9000" maxRequestLength="1000000" useFullyQualifiedRedirectUrl="false " minFreeThreads="8 " minLocalRequestFreeThreads="4 " appRequestQueueLimit="100 " />
+  </system.web>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" type="Microsoft.CSharp.CSharpCodeProvider, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701">
+        <providerOption name="CompilerVersion" value="v4.0" />
+      </compiler>
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" type="Microsoft.VisualBasic.VBCodeProvider, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+">
+          <providerOption name="CompilerVersion" value="v4.0" />
+      </compiler>
+    </compilers>
+  </system.codedom>
+  <connectionStrings>
+    <add name="JDJS_WMS_DB_USEREntities" connectionString="metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=192.168.1.72;initial catalog=WmsAuto;user id=sa;password=sql2008;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+  </connectionStrings>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="mssqllocaldb" />
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <system.webServer>
+    <!---->
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="1000000000" />
+      </requestFiltering>
+    </security>
+    <staticContent>
+      <remove fileExtension=".json" />
+      <mimeMap fileExtension=".json" mimeType="text/json" />
+    </staticContent>
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="EntityFramework" publicKeyToken="b77a5c561934e089" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>

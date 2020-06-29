@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KnifeAdminModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BadHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BorrowHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="GetHistory">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“KnifeAdmin.dbo.HiltBadHistory”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="HiltBadHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" />
+    <Property Name="Remark" Type="varchar" MaxLength="50" />
+    <Property Name="BadNumber" Type="int" />
+    <Property Name="BadTime" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“KnifeAdmin.dbo.HiltBorrowHistory”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="HiltBorrowHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+      <PropertyRef Name="UserDepartment" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="KnifeDepartment" />
+      <PropertyRef Name="KnifeName" />
+      <PropertyRef Name="KnifeSpecification" />
+      <PropertyRef Name="BorrowNumber" />
+      <PropertyRef Name="ReturnNumber" />
+      <PropertyRef Name="BadNumber" />
+      <PropertyRef Name="BorrowTime" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BorrowNumber" Type="int" Nullable="false" />
+    <Property Name="ReturnNumber" Type="int" Nullable="false" />
+    <Property Name="BadNumber" Type="int" Nullable="false" />
+    <Property Name="FinishTime" Type="datetime" />
+    <Property Name="BorrowTime" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
+    <Property Name="project" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“KnifeAdmin.dbo.HiltGetHistory”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="HiltGetHistory">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="Time" Type="datetime" />
+  </EntityType>
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“KnifeAdmin.dbo.HiltKnifeStock”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="HiltKnifeStock">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="KnifeStock">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeName" Type="varchar" MaxLength="50" />
+    <Property Name="KnifeSpecifications" Type="varchar" MaxLength="50" />
+    <Property Name="AllKnife" Type="int" />
+    <Property Name="NewKnife" Type="int" />
+    <Property Name="OldKnife" Type="int" />
+  </EntityType>
+  <EntityType Name="UserPassword">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Limit" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="KnifeAdminModelStoreContainer">
+    <EntitySet Name="BadHistory" EntityType="Self.BadHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BorrowHistory" EntityType="Self.BorrowHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GetHistory" EntityType="Self.GetHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KnifeStock" EntityType="Self.KnifeStock" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserPassword" EntityType="Self.UserPassword" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HiltBadHistory" EntityType="Self.HiltBadHistory" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [HiltBadHistory].[Id] AS [Id], 
+    [HiltBadHistory].[UserDepartment] AS [UserDepartment], 
+    [HiltBadHistory].[UserName] AS [UserName], 
+    [HiltBadHistory].[KnifeDepartment] AS [KnifeDepartment], 
+    [HiltBadHistory].[KnifeName] AS [KnifeName], 
+    [HiltBadHistory].[KnifeSpecification] AS [KnifeSpecification], 
+    [HiltBadHistory].[Remark] AS [Remark], 
+    [HiltBadHistory].[BadNumber] AS [BadNumber], 
+    [HiltBadHistory].[BadTime] AS [BadTime]
+    FROM [dbo].[HiltBadHistory] AS [HiltBadHistory]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="HiltBorrowHistory" EntityType="Self.HiltBorrowHistory" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [HiltBorrowHistory].[Id] AS [Id], 
+    [HiltBorrowHistory].[UserDepartment] AS [UserDepartment], 
+    [HiltBorrowHistory].[UserName] AS [UserName], 
+    [HiltBorrowHistory].[KnifeDepartment] AS [KnifeDepartment], 
+    [HiltBorrowHistory].[KnifeName] AS [KnifeName], 
+    [HiltBorrowHistory].[KnifeSpecification] AS [KnifeSpecification], 
+    [HiltBorrowHistory].[BorrowNumber] AS [BorrowNumber], 
+    [HiltBorrowHistory].[ReturnNumber] AS [ReturnNumber], 
+    [HiltBorrowHistory].[BadNumber] AS [BadNumber], 
+    [HiltBorrowHistory].[FinishTime] AS [FinishTime], 
+    [HiltBorrowHistory].[BorrowTime] AS [BorrowTime], 
+    [HiltBorrowHistory].[Remarks] AS [Remarks], 
+    [HiltBorrowHistory].[NewOldKnife] AS [NewOldKnife], 
+    [HiltBorrowHistory].[project] AS [project]
+    FROM [dbo].[HiltBorrowHistory] AS [HiltBorrowHistory]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="HiltGetHistory" EntityType="Self.HiltGetHistory" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [HiltGetHistory].[ID] AS [ID], 
+    [HiltGetHistory].[KnifeDepartment] AS [KnifeDepartment], 
+    [HiltGetHistory].[KnifeName] AS [KnifeName], 
+    [HiltGetHistory].[KnifeSpecifications] AS [KnifeSpecifications], 
+    [HiltGetHistory].[KnifeNumber] AS [KnifeNumber], 
+    [HiltGetHistory].[Remarks] AS [Remarks], 
+    [HiltGetHistory].[Time] AS [Time]
+    FROM [dbo].[HiltGetHistory] AS [HiltGetHistory]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="HiltKnifeStock" EntityType="Self.HiltKnifeStock" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [HiltKnifeStock].[Id] AS [Id], 
+    [HiltKnifeStock].[Department] AS [Department], 
+    [HiltKnifeStock].[KnifeName] AS [KnifeName], 
+    [HiltKnifeStock].[KnifeSpecifications] AS [KnifeSpecifications], 
+    [HiltKnifeStock].[AllKnife] AS [AllKnife], 
+    [HiltKnifeStock].[NewKnife] AS [NewKnife], 
+    [HiltKnifeStock].[OldKnife] AS [OldKnife]
+    FROM [dbo].[HiltKnifeStock] AS [HiltKnifeStock]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

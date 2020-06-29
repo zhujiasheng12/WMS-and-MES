@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#demo'
+                , toolbar: '#toolbar'
+                , url: '订单进度读数据.ashx' //数据接口
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'numbers', type:'numbers',title: '序号', width: 80,  fixed: 'left' }
+                    , { field: 'OrderNum', title: '产品订单号', width: 110 }
+                    , { field: 'OrderOwner', title: '订单责任人', width: 110 }
+                    , { field: 'EngineProgramManager', title: '工程编程责任人', width: 135 }
+                    , { field: 'OrderRequireNumber', title: '订单需求量', width: 110 }
+                    , { field: 'ShipNumber', title: '已发货数', width: 90 }
+                    , { field: 'AllProcessedNumber', title: '当前已加工总数', width: 140,  }
+                    , { field: 'GoodProcessNumber', title: '当前已加工良品数', width: 150, }
+                    , { field: 'PassRate', title: '当前良品率', width: 110 }
+                    , { field: 'TargetProductRatio', title: '目标产量占比', width: 120, }
+                    , { field: 'ProcessBeginTime', title: '生产开始时间', width: 120, }
+                    , { field: 'ProcessEndTime', title: '生产结束时间', width: 120, }
+                    , { field: 'OrderState', title: '订单状态', width: 90, }
+                        , { field: 'EngineState', title: '工程状态', width: 90,  }
+                ]]
+            });
+
+        });
+    </script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+    </script>
+</body>
+</html>

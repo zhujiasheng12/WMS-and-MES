@@ -1,0 +1,225 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.Kanban.订单ashx
+{
+    /// <summary>
+    /// 表格 的摘要说明
+    /// </summary>
+    public class 表格 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            //订单信息读取
+            List<OrderInfoRead> orderProcesses = new List<OrderInfoRead>();
+            //List<OrderProcessRead> orderProcesses = new List<OrderProcessRead>();
+            using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities ())
+            {
+                var orders = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention == 2);
+                foreach (var order in orders)
+                {
+                    OrderInfoRead orderProcessRead = new OrderInfoRead();
+
+                    orderProcessRead.orderNum = order.Order_Number;
+                    orderProcessRead.orderUser = order.Order_Leader.ToString();
+                    orderProcessRead.programUser = order.Engine_Program_Manager;
+                    orderProcessRead.orderNeedNumber = order.Product_Output.ToString();
+                    int orderstate = Convert.ToInt32(order.Intention);
+                    var processstate12 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && (r.isFlag == 2 || r.isFlag == 1));
+                    var processstate3 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && (r.isFlag == 3));
+                    var processstate1 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && (r.isFlag == 1));
+                    var processstate2 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && (r.isFlag == 2));
+                    if (processstate12.Count() > 0)
+                    {
+                        if (processstate3.Count() > 0)
+                        {
+                            orderProcessRead.OrderState = "生产中";
+
+                            var begin = processstate3.OrderBy(r => r.StartTime);
+                            orderProcessRead.ProcessBeginTime = "实际" + begin.First().StartTime.ToString();
+                            var end = processstate12.OrderByDescending(r => r.EndTime);
+                            orderProcessRead.ProcessEndTime = "预计" + end.First().EndTime.ToString();
+                        }
+                        else
+                        {
+                            orderProcessRead.OrderState = "生产中";
+
+                            if (processstate2.Count() > 0)
+                            {
+                                var begin = processstate12.OrderBy(r => r.StartTime);
+                                orderProcessRead.ProcessBeginTime = "实际" + begin.First().StartTime.ToString();
+                            }
+                            else
+                            {
+                                var begin = processstate12.OrderBy(r => r.StartTime);
+                                orderProcessRead.ProcessBeginTime = "预计" + begin.First().StartTime.ToString();
+                            }
+                            var end = processstate12.OrderByDescending(r => r.EndTime);
+                            orderProcessRead.ProcessEndTime = "预计" + end.First().EndTime.ToString();
+                        }
+
+                    }
+                    else
+                    {
+                        if (processstate3.Count() > 0)
+                        {
+                            orderProcessRead.OrderState = "等待品质确认";
+
+                            var begin = processstate3.OrderBy(r => r.StartTime);
+                            orderProcessRead.ProcessBeginTime = "实际" + begin.First().StartTime.ToString();
+                            var end = processstate3.OrderByDescending(r => r.EndTime);
+                            orderProcessRead.ProcessEndTime = "实际" + end.First().EndTime;
+                        }
+                        else
+                        {
+                            orderProcessRead.OrderState = "等待生产";
+
+                            orderProcessRead.ProcessBeginTime = "-";
+                            orderProcessRead.ProcessEndTime = "-";
+                        }
+                    }
+                    int OverNum = 0;
+                    List<int> processID = new List<int>();
+                    var orderprocess = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == order.Order_ID && r.sign != 0);
+                    if (orderprocess.Count() > 0)
+                    {
+                        foreach (var item in orderprocess)
+                        {
+                            int id = Convert.ToInt32(item.ProcessID);
+                            if (!processID.Contains(id))
+                            {
+                                processID.Add(id);
+                            }
+                        }
+                        int max = processID.Max();
+                        var MaxProcess = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == order.Order_ID && r.sign != 0 && r.ProcessID == max).First();
+                        var over = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.ProcessID == MaxProcess.ID && r.isFlag == 3);
+                        OverNum = over.Count();
+                    }
+                    orderProcessRead.AllProcessedNumber = OverNum.ToString();
+                    var confirm = wms.JDJS_WMS_Quality_Confirmation_Table.Where(r => r.OrderID == order.Order_ID);
+                    if (confirm.Count() > 0)
+                    {
+
+                        if (OverNum < 1)
+                        {
+                            orderProcessRead.PassRate = "0";
+                            orderProcessRead.GoodProcessNumber = "0";
+
+                            orderProcessRead.TargetProductRatio = "0";
+                        }
+                        else
+                        {
+                            orderProcessRead.GoodProcessNumber = confirm.First().QualifiedProductNumber.ToString();
+                            orderProcessRead.PassRate = (Convert.ToDouble(confirm.First().QualifiedProductNumber) / OverNum).ToString("0.000000");
+                            var finish = wms.JDJS_WMS_Finished_Product_Manager.Where(r => r.OrderID == order.Order_ID);
+                            if (finish.Count() > 0)
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                            orderProcessRead.TargetProductRatio = (Convert.ToDouble(confirm.First().QualifiedProductNumber) / Convert.ToDouble(order.Product_Output)).ToString("0.000000");
+                        }
+
+                    }
+                    else
+                    {
+                        orderProcessRead.GoodProcessNumber = "0";
+                        orderProcessRead.PassRate = "0";
+
+
+                        orderProcessRead.TargetProductRatio = "0";
+                    }
+
+
+                    orderProcesses.Add(orderProcessRead);
+
+                }
+                var orders3 = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention == 3);
+                foreach (var order in orders3)
+                {
+                    OrderInfoRead orderProcessRead = new OrderInfoRead();
+
+                    orderProcessRead.orderNum = order.Order_Number;
+                    orderProcessRead.orderUser = order.Order_Leader.ToString();
+                    orderProcessRead.programUser = order.Engine_Program_Manager;
+                    orderProcessRead.OrderState = "工程处理中";
+                    orderProcessRead.AllProcessedNumber = "0";
+                    orderProcessRead.GoodProcessNumber = "0";
+                    orderProcessRead.PassRate = "0";
+                    orderProcessRead.ProcessBeginTime = "-";
+                    orderProcessRead.ProcessEndTime = "-";
+                    orderProcessRead.TargetProductRatio = "0";
+                    orderProcessRead.orderNeedNumber = order.Product_Output.ToString();
+                    orderProcesses.Add(orderProcessRead);
+                }
+                var model = new { code = 0, data = orderProcesses };
+                System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                var json = serializer.Serialize(model);
+                context.Response.Write("data:"+json+"\n\n");
+                context.Response.ContentType="text/event-stream";
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    public class OrderInfoRead
+    {
+        /// <summary>
+        /// 产品订单号
+        /// </summary>
+        public string orderNum;
+        /// <summary>
+        /// 订单责任人
+        /// </summary>
+        public string orderUser;
+        /// <summary>
+        /// 工程编程责任人
+        /// </summary>
+        public string programUser;
+        /// <summary>
+        /// 订单需求量
+        /// </summary>
+        public string orderNeedNumber;
+        /// <summary>
+        /// 当前已加工总数
+        /// </summary>
+        public string AllProcessedNumber;
+        /// <summary>
+        /// 当前已加工良品数
+        /// </summary>
+        public string GoodProcessNumber;
+        /// <summary>
+        /// 当前良品率
+        /// </summary>
+        public string PassRate;
+        /// <summary>
+        /// 目标产量占比
+        /// </summary>
+        public string TargetProductRatio;
+        /// <summary>
+        /// 生产开始时间
+        /// </summary>
+        public string ProcessBeginTime;
+        /// <summary>
+        /// 生产结束时间
+        /// </summary>
+        public string ProcessEndTime;
+        /// <summary>
+        /// 订单状态
+        /// </summary>
+        public string OrderState;
+    }
+}

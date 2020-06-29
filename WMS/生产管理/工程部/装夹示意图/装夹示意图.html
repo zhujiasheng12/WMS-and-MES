@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <script src="/Resources/js/jquery.min.js"></script>
+</head>
+<body style="padding:20px">
+    <div>
+          <input style="margin-left:1%;" id="file" type="file" >
+    <button id="upload" class="layui-btn layui-btn-sm">上传</button>
+         <button onclick="del()" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>
+    </div>
+  
+    <table id="demo" lay-filter="test"></table>
+    <p id="number" hidden></p>
+    <script type="text/html" id="barDemo">
+        <a><span class="layui-btn layui-btn-xs" lay-event="downLoad">下载</span></a>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+    
+    <script>
+        function method(orderNum1,workNum1) {
+            orderNum = orderNum1;
+            workNum = workNum1;
+            $('body').append('<img style="width:400px;height:400px" src="../../资材部/获取装夹示意图.ashx?orderNum=' + orderNum + '&processNum=' + workNum + '" />')
+
+        }
+    </script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            table = layui.table, layer = layui.layer, $ = layui.$;
+
+            $(function () {
+                $("#upload").click(function () {
+                    var formData = new FormData();
+                    var file = $("#file")[0].files
+                    
+                    if (file.length == 0) {
+                        layer.alert("请选择文件")
+                    } else {
+                        for (var i = 0; i < file.length; i++) {
+                            formData.append("file"+i,file[i])
+                        }
+                       
+                       
+                        formData.append('orderNum', orderNum)
+                        formData.append('workNum', workNum)
+                        $.ajax({
+                            url: 'upload.ashx',
+                            data: formData,
+                            type:'post',
+                            processData: false,
+                            contentType: false,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+                                        location.reload();
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                            }
+                        })
+                    }
+                })
+            })
+           
+        })
+        function del() {
+            layer.confirm("是否删除？", function () {
+                $.ajax({
+                    url: 'del.ashx',
+                    type: 'post',
+                    data: { orderNum: orderNum, workNum: workNum },
+                    success: function (res) {
+                        if (res == "ok") {
+                            layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                location.reload();
+                            })
+                        } else {
+                            layer.alert(res)
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+</html>

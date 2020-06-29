@@ -1,0 +1,1375 @@
+﻿<!DOCTYPE html >
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <!--<link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />-->
+  
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body style="height:100%" class="layui-layout-body">
+    <!--初始化-->
+    <script>
+        $.ajax({
+            url: '../../人员管理/session/Jurisdiction.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d);
+                var id = obj.id;
+
+                layui.use('table', function () {
+                    var table = layui.table;
+
+                    //第一个实例
+                    table1 = table.render({
+                        elem: '#orderNumber'
+
+                        , where: { id: id }
+                        , url: 'orderRead.ashx' //数据接口
+                        , page: {
+                            layout: ['prev', 'page', 'next', 'count', 'limit']
+                        }
+
+                        //, toolbar: '#order'
+                        , cols: [[ //表头
+                            { field: 'number', type: 'numbers', title: '序号', width: 35, }
+                            , { field: 'orderNumber', title: '订单', width: 120 }
+                            , {
+                                field: 'orderName', title: '订单名称', width: 90, templet: function (d) {
+                                    return '<span style="color: #c00;">'+d.orderName+'</span>'
+                                }
+                            }
+                            , { field: 'time', title: '预计编程完成时间', }
+                            , { field: 'orderId', title: 'id', width: 180, hide: true }
+                            , { field: 'flag', title: 'flag', width: 180, hide: true }
+
+                        ]],
+                        done: function (d) {
+
+                            $('[data-field="time"]').click(function () {
+                                var orderId = $(this).siblings('[data-field="orderId"]')[0].children[0].innerText
+                                var time = $(this)[0].children[0].innerText
+                                if (time != "") {
+                                    //return;
+                                }
+                                layer.open({
+                                    type: 2,
+                                    area: ['40%', '60%'],
+                                    content: '预计编程完成时间.html',
+                                    success: function (layero, index) {
+                                        var body = layer.getChildFrame('body', index);
+                                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.method(orderId, time)
+                                    }
+                                });
+                            })
+
+
+                            var flags = $("[data-field='flag']")
+                            for (var i = 0; i < flags.length; i++) {
+                                if (flags[i].children[0].innerHTML == 1) {
+
+                                    $(flags[i]).siblings('[data-field="orderNumber"]').css('color', 'blue')
+                                } else {
+                                    $(flags[i]).siblings('[data-field="orderNumber"]').css('color', 'gray')
+                                }
+                            }
+                            $('tr').mouseenter(function () {
+                                $(this).css('background-color', 'antiquewhite')
+                            })
+                            $('tr').mouseleave(function () {
+                                $(this).css('background-color', 'white')
+                            })
+
+
+                            $('td[data-field="orderNumber"]')[0].click()
+
+                            $('td[data-field="orderName"]').css('cursor', 'pointer')
+                            $('td[data-field="orderName"]').click(function () {
+                                var number = $(this).siblings('[data-field="orderNumber"]')[0].children[0].innerText
+                                layer.open({
+                                    type: 2,
+                                    content: '图纸.html',
+                                    area: ['60%', '80%'],
+                                    success: function (layero, index) {
+                                        var body = layer.getChildFrame('body', index);
+                                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.method(number)
+
+                                    }
+                                })
+                            })
+
+                        }
+                    });
+
+
+                });
+            }
+        })
+
+        /**/</script>
+    <script>
+        fun()
+        function fun() {
+            layui.use(['table', 'layer'], function () {
+                table = layui.table, layer = layui.layer, $ = layui.$;
+                $.ajax({
+
+                    url: '工程师弹窗提醒.ashx',
+                    success: function (d) {
+                        if (d != "") {
+                            var arr = d.split("/r/n")
+                            var str = ""
+                            for (var i = 0; i < arr.length; i++) {
+                                str += arr[i] + "</br>"
+                            }
+                            layer.open({
+                                type: 0,
+                                area: ['30%', '30%'],
+                                offset: 'rb',
+                                skin: 'layui-layer-lan',
+                                anim: 0,
+                                shade: 0,//不显示遮罩
+                                cancel: function (index) {
+                                    tableReload.reload()
+                                },
+                                yes: function (index, layero) {
+                                    tableReload.reload()
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                },
+                                content: str //这里content是一个普通的String
+                            });
+
+                        }
+                        setTimeout('fun()', 60000)
+                    }
+                })
+            })
+        }
+
+/**/</script>
+    <!--事件-->
+    <script type="text/html" id="order">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i class=" layui-icon layui-icon-refresh"></i>刷新</button>
+    </script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            layui.table.on('row(orderNumber)', function (obj) {
+                orderId = obj.data.orderId;//订单ID
+                orderNum = obj.data.orderNumber//订单号
+                flag = obj.data.flag//标志
+
+                tableReload = layui.table.render({
+                    elem: '#nc'
+
+                    , where: { id: obj.data.orderId }
+                    , url: 'ncRead.ashx' //数据接口
+
+                    , toolbar: '#toolbar'
+                    , cols: [[ //表头
+
+                        { field: 'workNumber', title: '工序', width: 60 }
+
+                        , { field: 'coefficient', title: '一出N', width: 75 }
+
+                        , {
+                            field: 'technologyFile', title: '工艺文件', width: 90, templet: function (d) {
+                                return '<p style="color:blue">点击查看</p>'
+                            }
+                        }
+                        , { field: 'deviceType', title: '设备类型', width: 160 }
+                        , {
+                            field: 'BlankType', title: '毛坯类型', width: 90, templet: function (d) {
+                                return '<p style="color:blue">' + d.BlankType + '</p>'
+                            }
+                        }
+                        , { field: 'BlankSpecification', title: '毛坯规格', width: 150 }
+                        , { field: 'BlankNumber', title: '毛坯数量', width: 90 }
+                        //, { field: 'fixName', title: '治具名称', width: 90 }
+                        , {
+                            field: 'fixName', title: '治具类型', width: 90, templet: function (d) {
+                                return '<p style="color:blue">' + d.fixtureType + '</p>'
+                            }
+                        }
+                        , { field: 'JigSpecification', title: '治具规格', width: 90 }
+                        , { field: 'JigNumber', title: '治具数量', width: 90 }
+
+                        , { field: 'do', title: '操作', toolbar: '#do', width: 120, fixed: 'right' }
+                        , { field: 'id', title: 'id', width: 180, hide: true }
+                        , { field: 'flag', title: 'flag', width: 180, hide: true }
+                    ]],
+                    done: function (d) {
+
+
+
+
+
+
+                        $.ajax({
+                            url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+
+                            success: function (d) {
+                                if (d == "ok") {
+
+
+
+
+                                } else {
+                                    $("#createProcedure").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $("#submit_Audit").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $("#audit_Result").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('[lay-event="edit"]').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('[lay-event="delete"]').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+
+                                }
+                            }
+
+                        })
+
+
+
+                        $.ajax({
+                            url: '/人员管理/session/Jurisdiction.ashx/',
+                            success: function (d) {
+
+
+
+                                var obj = JSON.parse(d)
+                                if (obj.id == null) {
+                                    parent.location.href = "/Login/Login.html"
+                                }
+                                var arr = obj.Limit
+
+                                for (var i = 0; i < arr.length; i++) {
+                                    if (arr[i] == "工程处理_审核") {
+                                        $("#audit").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    }
+                                }
+
+
+
+
+
+
+                            }
+                        })
+
+                        $('p2').text(orderNum);
+
+                        $('td[data-field="BlankType"]').click(function () {
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var workNum = $(this).siblings('[data-field="workNumber"]')[0].children[0].innerText
+
+
+
+                            layer.open({
+                                type: 2,
+                                content: '毛坯治具图纸弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNum, processId, workNum, "毛坯", orderId)
+
+                                }
+
+                            })
+
+                        })
+                        $('td[data-field="fixtureType"]').click(function () {
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var workNum = $(this).siblings('[data-field="workNumber"]')[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                content: '毛坯治具图纸弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNum, processId, workNum, "治具", orderId)
+
+                                }
+
+                            })
+                        })
+
+                        $('td[data-field="technologyFile"]').click(function () {
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var workNum = $(this).siblings('[data-field="workNumber"]')[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                content: '毛坯治具图纸弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNum, processId, workNum, "工艺文件", orderId)
+
+                                }
+
+                            })
+                        })//
+                    }
+                });
+
+                tableReloadProcess = layui.table.render({
+                    elem: '#process'
+
+                    , where: { id: obj.data.orderId }
+                    , url: 'ncRead.ashx' //数据接口
+
+                    , toolbar: '#toolbarProcess'
+                    , cols: [[ //表头
+                        //{ field: 'number',type:'numbers', title: '序号', width: '6%', },
+                        { field: 'workNumber', title: '工序', width: 60 }
+                        , {
+                            field: 'programName', title: 'NC文件', width: 150, templet: function (d) {
+                                return '<p style="color:blue">' + d.programName + '</p>'
+                            }
+                        }
+                        , {
+                            field: 'toolChartName', title: '刀具表文件', width: 150, templet: function (d) {
+                                return '<p style="color:blue">' + d.toolChartName + '</p>'
+                            }
+                        }
+                        , {
+                            field: 'ncFile', title: '编程文件', width: 160, templet: function (d) {
+                                return '<p style="color:blue">点击查看</p>'
+                            }
+                        }
+                        , { field: 'programTime', title: '加工时间', width: 90 }
+                           , { field: 'nonCuttingTime', title: '辅助时间', width: 90 }
+                        , {
+                            field: 'cnc', title: '机台绑定', width: 90, templet: function (d) {
+                                return '<x style="color:blue">点击查看</x>'
+                            }
+                        }
+
+                        , { field: 'deviceType', title: '设备类型', width: 160 }
+
+                        , { field: 'coefficient', title: '一出N', /*width: 60*/ }
+                        , { field: 'do', title: '操作', toolbar: '#doProgram', width: 120, fixed: 'right' }
+                        , { field: 'id', title: 'id', width: 180, hide: true }
+                        , { field: 'flag', title: 'flag', width: 180, hide: true }
+                         , { field: 'toolPrepare', title: 'toolPrepare', width: 180, hide: true }
+                    ]],
+                    done: function (d) {
+
+
+
+
+                        $.ajax({
+                            url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+
+                            success: function (d) {
+                                if (d == "ok") {
+
+
+
+                                } else {
+                                    $('#technologyProgramming').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('#program_Audit_Result').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('#program_Submit_Audit').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('#manual').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    $('#start').addClass('layui-btn-disabled').attr('disabled', 'disabled')
+
+                                }
+                            }
+
+                        })
+
+
+                        $.ajax({
+                            url: '/人员管理/session/Jurisdiction.ashx/',
+                            success: function (d) {
+
+
+
+                                var obj = JSON.parse(d)
+                                if (obj.id == null) {
+                                    parent.location.href = "/Login/Login.html"
+                                }
+                                var arr = obj.Limit
+
+                                for (var i = 0; i < arr.length; i++) {
+                                    if (arr[i] == "工程处理_审核") {
+                                        $("#program_Audit").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+                                    }
+                                }
+
+                            }
+                        })
+                        $('p2').text(orderNum);
+                               var toolPrepares = $('td[data-field="toolPrepare"]')
+                        for (var i = 0; i < toolPrepares.length; i++) {
+                            if ($(toolPrepares[i]).find("div").text() != "-1") {
+                                var trIndex = $(toolPrepares[i]).parents("tr").attr("data-index")
+                               $(toolPrepares[i]).parents(".layui-table-body.layui-table-main").siblings(".layui-table-fixed-r").find('tr[data-index=' + trIndex + ']').find("button").addClass('layui-btn-disabled').attr('disabled', 'disabled')
+
+                            }
+                        }
+                        $('td[data-field="programName"]').click(function () {
+                            var orderNumber = orderNum
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var name = $(this)[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                area: ['70%', '70%'],
+                                content: '加工文件弹窗.html',
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNumber, processId, orderId)
+                                },
+                                cancel: function (index, layero) {
+                                    layer.close(index)
+                                    tableReloadProcess.reload()
+                                    return false;
+                                }
+                            });
+
+                        })
+
+
+                        $('td[data-field="toolChartName"]').click(function () {
+                            var orderNumber = orderNum
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var name = $(this)[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                area: ['80%', '70%'],
+                                content: '刀具表文件弹窗.html',
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNumber, processId, orderId)
+                                },
+                                cancel: function (index, layero) {
+                                    layer.close(index)
+                                    tableReloadProcess.reload()
+                                    return false;
+                                }
+                            });
+
+                        })
+
+                        $('td[data-field="ncFile"]').click(function () {
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            var workNum = $(this).siblings('[data-field="workNumber"]')[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                content: '毛坯治具图纸弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(orderNum, processId, workNum, "编程文件", orderId)
+
+                                }
+
+                            })
+                        })
+
+                        $('td[data-field="cnc"]').click(function () {
+                            var orderNumber = orderNum
+                            var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                            layer.open({
+                                type: 2,
+                                content: '机台绑定弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(processId)
+
+                                }
+
+                            })
+
+
+                        })
+
+                    }
+                });
+
+            });
+
+            layui.table.on('toolbar(nc)', function (obj) {
+                switch (obj.event) {
+                    case 'create':
+
+                        $.ajax({
+                            url: '/人员管理/session/Jurisdiction.ashx/',
+                            success: function (d) {
+
+
+                                var obj = JSON.parse(d)
+                                if (obj.id == null) {
+                                    parent.location.href = "/Login/Login.html"
+                                }
+                                var arr = obj.Limit
+
+                                for (var i = 0; i < arr.length; i++) {
+                                    if (arr[i] == "工程处理_工艺规划") {
+                                        layer.alert("您无此权限");
+                                        return;
+                                    }
+                                }
+
+                                $.ajax({
+                                    url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+                                    async: false,
+                                    success: function (d) {
+                                        if (d == "ok") {
+
+                                            layui.layer.open({
+                                                type: 2,
+                                                area: ['500px', '90%'],
+                                                content: '新建工序.html',
+                                                success: function (layero, index) {
+                                                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                                                    iframeWin.method(orderId)
+                                                }
+                                            })
+                                        } else {
+                                            layer.alert(d);
+                                        }
+                                    }
+
+                                })
+
+
+
+
+                            }
+                        })
+
+                        break;
+                }
+            })
+
+            layui.table.on('tool(nc)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+                if (layEvent === 'delete') {
+
+                    $.ajax({
+                        url: '/人员管理/session/Jurisdiction.ashx/',
+                        success: function (d) {
+                            var obj = JSON.parse(d)
+                            if (obj.id == null) {
+                                parent.location.href = "/Login/Login.html"
+                            }
+                            var arr = obj.Limit
+                            for (var i = 0; i < arr.length; i++) {
+                                if (arr[i] == "工程处理_删除") {
+                                    layer.alert("您无此权限");
+                                    return;
+                                }
+                            }
+
+
+                            $.ajax({
+                                url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+                                async: false,
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.confirm('是否删除', function (index) {
+                                            $.ajax({
+                                                url: 'processDel.ashx',
+                                                data: { "id": data.id },
+                                                success: function (d) {
+                                                    if (d == "ok") {
+                                                        layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                                            tableReload.reload({})
+                                                            tableReloadProcess.reload({})
+                                                        });
+
+                                                    }
+                                                    else {
+                                                        layer.alert(d)
+                                                    }
+
+                                                }
+                                            })
+                                        });
+
+                                    } else {
+                                        layer.alert(d);
+                                    }
+                                }
+
+                            })
+
+
+
+
+                        }
+                    })
+
+                }
+                else if (layEvent === 'edit') {
+                    $.ajax({
+                        url: '/人员管理/session/Jurisdiction.ashx/',
+                        success: function (d) {
+                            var obj = JSON.parse(d)
+                            if (obj.id == null) {
+                                parent.location.href = "/Login/Login.html"
+                            }
+                            var arr = obj.Limit
+                            for (var i = 0; i < arr.length; i++) {
+                                if (arr[i] == "工程处理_修改") {
+                                    layer.alert("您无此权限");
+                                    return;
+                                }
+                            }
+
+
+                            $.ajax({
+                                url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+                                async: false,
+                                success: function (d) {
+                                    if (d == "ok") {
+
+                                        layer.open({
+                                            type: 2,
+                                            area: ['500px', '600px'],
+                                            content: '修改工序弹窗.html'
+                                            , success: function (layero, index) {
+                                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                                iframeWin.method(data.id, data.flag)
+                                            }, cancel: function (index, layero) {
+                                                tableReloadProcess.reload({})
+                                                tableReload.reload({})
+                                            }
+                                        });
+                                    } else {
+                                        layer.alert(d);
+                                    }
+                                }
+
+                            })
+
+
+
+
+                        }
+                    })
+
+
+
+                }
+            });
+             layui.table.on('tool(process)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+                if (layEvent === 'toolPrepare') {
+                 
+                    $.ajax({
+                                url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+                                async: false,
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.confirm('是否下发备刀请求，刀具室可以备刀', function (index) {
+                                            $.ajax({
+                                                url: 'Controller/下发备刀请求.ashx',
+                                                data: { "id": data.id },
+                                                success: function (d) {
+                                                    if (d == "ok") {
+                                                        layer.msg("下发备刀请求成功", { icon: 1, time: 1000 }, function () {
+                                                            tableReload.reload({})
+                                                            tableReloadProcess.reload({})
+                                                        });
+
+                                                    }
+                                                    else {
+                                                        layer.alert(d)
+                                                    }
+
+                                                }
+                                            })
+                                        });
+
+                                    } else {
+                                        layer.alert(d);
+                                    }
+                                }
+
+                            })
+
+                }
+               
+            });
+        })
+    </script>
+    <script type="text/html" id="toolbar">
+        <div class="layui-btn-container" style="float:left">
+
+            <button id="createProcedure" lay-event="create" class="layui-btn layui-btn-sm "><i class="layui-icon">&#xe654;</i>工艺规划</button>
+            <button id="submit_Audit" class="layui-btn layui-btn-sm" onclick="submit_Audit()"><i class="layui-icon layui-icon-up"></i>提交审核</button>
+            <button id="audit_Result" class="layui-btn layui-btn-sm" onclick="audit_Result()"><i class="layui-icon layui-icon-notice"></i>审核结果</button>
+            <!--<button id="" class="layui-btn layui-btn-sm" onclick="production_Scheduling()">排产</button>-->
+            <button id="audit" class="layui-btn layui-btn-sm" onclick="audit()"><i class="layui-icon layui-icon-auz"></i>审核</button>
+
+
+        </div>
+
+
+        <p1 style="float:left">订单单号:</p1>
+        <p2 style="float:left"> </p2>
+    </script>
+    <script type="text/html" id="do">
+        <div class="">
+
+            <button title="编辑" type="button" class="layui-btn  layui-btn-sm edit" lay-event="edit">
+                <i class="layui-icon">&#xe642;</i>
+            </button>
+            <button title=" 删除" type="button" class="layui-btn  layui-btn-sm  layui-btn-danger del" lay-event="delete">
+                <i class="layui-icon">&#xe640;</i>
+            </button>
+
+        </div>
+    </script>
+    <script type="text/html" id="doProgram">
+        <div class="">
+
+            <button title="下发备刀请求，刀具室可以备刀" type="button" class="layui-btn  layui-btn-sm" lay-event="toolPrepare">
+                备刀
+            </button>
+
+
+        </div>
+    </script>
+    <script type="text/html" id="toolbarProcess">
+        <div class="layui-btn-container" style="float:left">
+
+            <button id="technologyProgramming" onclick="technologyProgramming()" class="layui-btn layui-btn-sm "><i class="layui-icon">&#xe654;</i>工艺编程</button>
+
+            <button id="program_Submit_Audit" class="layui-btn layui-btn-sm" onclick="program_Submit_Audit()"><i class="layui-icon layui-icon-up"></i>提交审核</button>
+            <button id="program_Audit_Result" class="layui-btn layui-btn-sm" onclick="program_Audit_Result()"><i class="layui-icon layui-icon-notice"></i>审核结果</button>
+            <button id="program_Audit" class="layui-btn layui-btn-sm" onclick="program_Audit()"><i class="layui-icon layui-icon-auz"></i>审核</button>
+
+            <!--<button id="manual" class="layui-btn layui-btn-sm" limit="工程处理_手动排产" onclick="manual()"><i class="layui-icon layui-icon-date"></i>手动排产</button>
+            <button id="start" class="layui-btn layui-btn-sm" onclick="start()"><i class="layui-icon layui-icon-chart"></i>自动排产</button>-->
+
+
+
+
+
+
+
+        </div>
+
+
+        <p1 style="float:left">订单单号:</p1>
+        <p2 style="float:left"> </p2>
+    </script>
+    <script type="text/html" id="doProcess">
+        <div class="">
+
+            <button title="编辑" type="button" class="layui-btn  layui-btn-sm edit" lay-event="edit">
+                <i class="layui-icon">&#xe642;</i>
+            </button>
+            <button title=" 删除" type="button" class="layui-btn  layui-btn-sm  layui-btn-danger del" lay-event="delete">
+                <i class="layui-icon">&#xe640;</i>
+            </button>
+
+        </div>
+    </script>
+
+
+
+    <div class="layui-layout layui-layout-admin" style="height:100%">
+
+
+        <div class="layui-side layui-bg-black" style="background-color:white;top:0;width:350px;border:solid 1px gray">
+            <div class="layui-side-scroll" style="width:100%;background-color:white">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+
+                <h1 style="margin-left:10px;margin-top:2px;color:black;float:left">订单</h1>
+                <button style="margin-left:210px;margin-top:7px;" class="layui-btn layui-btn-sm" onclick="location.reload()"><i class="layui-icon layui-icon-refresh-1"></i>刷新</button>
+                <table id="orderNumber" lay-filter="orderNumber"></table>
+            </div>
+        </div>
+
+        <div class="layui-body" style="bottom:0;top:70px;top:0;left:350px;">
+            <!-- 内容主体区域 -->
+            <div style="height:100%">
+
+                <div class="layui-row" style="height:50%;border:solid 1px gray">
+                    <div class="layui-col-md12">
+                        <h1 style="margin-top:2px;margin-left:10px">工艺规划</h1>
+                        <table id="nc" lay-filter="nc"></table>
+                    </div>
+
+                </div>
+                <div class="layui-row" style="height:50%;border-left:solid 1px gray;border-right:solid 1px gray;border-bottom:solid 1px gray;">
+                    <div class="layui-col-md12" style="height:100%">
+                        <h1 style="margin-top:2px;margin-left:10px">工程编程</h1>
+
+                        <table id="process" lay-filter="process"></table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <script>
+        function start() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_自动排产") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+                    $.ajax({
+                        url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+                                layui.use('layer', function () {
+
+                                    $.ajax({
+                                        url: 'Controller/判断编程审核.ashx?orderId=' + orderId,
+
+                                        success: function (d) {
+                                            if (d == "ok") {
+                                                layui.layer.confirm("提交后不可修改", function (index) {
+                                                    $.ajax({
+                                                        url: 'arrangement.ashx',
+                                                        data: { "orderNumberId": orderId },
+                                                        success: function (d) {
+                                                            if (d == "ok") {
+                                                                $.ajax({
+                                                                    url: '写治具数量.ashx',
+                                                                    data: { "orderId": orderId },
+                                                                    success: function (d) {
+                                                                        if (d == "ok") {
+                                                                            layer.msg("计算成功", { icon: 1, time: 1000 }, function () {
+                                                                                tableReload.reload({})
+                                                                            })
+                                                                        } else {
+                                                                            layer.alert(d)
+                                                                        }
+
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                layer.alert(d)
+                                                            }
+                                                        }
+                                                    })
+
+
+                                                })
+
+                                            } else {
+                                                layer.alert(d);
+                                                return;
+                                            }
+                                        }
+
+                                    })
+
+                                })
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+
+
+                }
+            })
+
+
+
+        }
+        function manual() {
+
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_手动排产") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+                    $.ajax({
+                        url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+                                $.ajax({
+                                    url: 'Controller/判断编程审核.ashx?orderId=' + orderId,
+
+                                    success: function (d) {
+                                        if (d == "ok") {
+
+                                            layer.open({
+                                                type: 2,
+                                                area: ['90%', '90%'],
+                                                content: '手动排产.html',
+                                                success: function (layero, index) {
+                                                    var body = layer.getChildFrame('body', index);
+                                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                                    iframeWin.method(orderId);
+                                                }
+                                            });
+                                        } else {
+                                            layer.alert(d);
+                                            return;
+                                        }
+                                    }
+
+                                })
+
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+
+
+                }
+            })
+
+        }
+        function production_Scheduling() {
+            layer.confirm("请选择", {
+                btn: ['手动排产', '自动排产'], //按钮
+                shade: false //不显示遮罩
+            }, function (index) {
+                layer.close(index)
+                manual()
+            }, function () {
+                start()
+            }
+            )
+        }
+        function submit_Audit() {
+
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_提交审核") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+                        async: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.confirm("是否提交", function () {
+                                    $.ajax({
+                                        url: '提交审核.ashx',
+                                        data: { "orderId": orderId },
+                                        success: function (d) {
+                                            if (d == "ok") {
+                                                layer.alert("提交审核成功");
+                                            } else {
+                                                layer.alert(d)
+                                            }
+                                        }
+                                    })
+                                })
+
+                            } else {
+                                layer.alert(d);
+                            }
+                        }
+
+                    })
+
+
+
+
+
+                }
+            })
+
+        }
+        function audit() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_审核") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    layer.open({
+                        type: 2,
+                        content: '审核弹窗.html',
+                        area: ["50%", "50%"],
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(orderId, '工艺审核')
+
+                        }
+                    });
+
+
+
+                }
+            })
+
+        }
+        function audit_Result() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_审核结果") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: 'Controller/判断工艺规划负责人.ashx?orderId=' + orderId,
+                        async: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.open({
+                                    type: 2,
+                                    content: '审核结果弹窗.html',
+                                    area: ["60%", "80%"],
+                                    success: function (layero, index) {
+
+                                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.method(orderId, '工艺审核')
+
+                                    }
+                                });
+
+                            } else {
+                                layer.alert(d);
+                            }
+                        }
+
+                    })
+
+
+
+
+
+
+                }
+            })
+
+        }
+        function technologyProgramming() {
+
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_工艺编程") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+
+                                $.ajax({
+                                    url: 'Controller/判断工艺审核.ashx?orderId=' + orderId,
+                                    success: function (d) {
+                                        if (d == "ok") {
+                                            layer.open({
+                                                type: 2,
+                                                content: '工艺编程弹窗.html',
+                                                area: ["80%", '80%'],
+                                                success: function (layero, index) {
+
+                                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                                    iframeWin.fun(orderId)
+                                                }, cancel: function () {
+                                                    tableReloadProcess.reload()
+                                                }
+                                            });
+                                        } else {
+                                            layer.alert(d)
+                                        }
+                                    }
+                                })
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+
+
+
+
+
+
+                }
+            })
+
+        }
+
+
+        function program_Submit_Audit() {
+
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_提交审核") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+
+                    $.ajax({
+                        url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+
+                                $.ajax({
+                                    url: 'Controller/判断工艺审核.ashx?orderId=' + orderId,
+                                    success: function (d) {
+                                        if (d == "ok") {
+
+                                            layer.confirm("是否提交", function () {
+                                                $.ajax({
+                                                    url: 'Controller/编程提交审核.ashx',
+                                                    data: { "orderId": orderId },
+                                                    success: function (d) {
+                                                        if (d == "ok") {
+                                                            layer.alert("提交审核成功");
+                                                        } else {
+                                                            layer.alert(d)
+                                                        }
+                                                    }
+                                                })
+                                            })
+
+
+                                        } else {
+                                            layer.alert(d)
+                                        }
+                                    }
+                                })
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+
+
+
+
+
+
+
+
+
+                }
+            })
+
+        }
+        function program_Audit_Result() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_审核结果") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    $.ajax({
+                        url: 'Controller/判断工程编程负责人.ashx?orderId=' + orderId,
+                        async: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.open({
+                                    type: 2,
+                                    content: '审核结果弹窗.html',
+                                    area: ["60%", "80%"],
+                                    success: function (layero, index) {
+
+                                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.method(orderId, '编程审核')
+
+                                    }
+                                });
+
+                            } else {
+                                layer.alert(d);
+                            }
+                        }
+
+                    })
+
+
+
+
+
+
+                }
+            })
+
+        }
+        function program_Audit() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+
+
+
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "工程处理_审核") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+
+
+                    layer.open({
+                        type: 2,
+                        content: '审核弹窗.html',
+                        area: ["50%", "50%"],
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(orderId, '编程审核')
+
+                        }
+                    });
+
+
+
+                }
+            })
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <script src="/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+        function fun(primaryKey1) {
+            primaryKey = primaryKey1
+            $.ajax({
+                url: '查看弹窗读数据.ashx',
+                data: { "primaryKey": primaryKey },
+                success: function (d) {
+                    var obj = JSON.parse(d)
+                    
+                  
+                    var li = ``;
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].remarks == null) {
+                            obj[i].remarks=""
+                        }
+                        if (obj[i].Operate == "装刀") {
+                            li += ` <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">`+ obj[i].time + `</h3>
+                <p>
+                    `+ obj[i].Person + ` ` +
+                                obj[i].Operate +` : 与`+obj[i].toolShank+`刀柄绑定`+
+                                obj[i].remarks + `
+                </p>
+               
+            </div>
+        </li>`
+                        }
+                        else if (obj[i].Operate == "机台处上刀" | obj[i].Operate == "机台处下刀") {
+                            li += ` <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">`+ obj[i].time + `</h3>
+                <p>
+                    `+ obj[i].Person +
+                                ` 从`+obj[i].cnc+ obj[i].Operate+
+                              
+                                obj[i].remarks + `
+                </p>
+               
+            </div>
+        </li>`
+                        } 
+                           else  if (obj[i].Operate == "拆刀") {
+                            li += ` <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">`+ obj[i].time + `</h3>
+                <p>
+                    `+ obj[i].Person + ` ` +
+                                obj[i].Operate +` : 与`+obj[i].toolShank+`刀柄解绑`+
+                                obj[i].remarks + `
+                </p>
+               
+            </div>
+        </li>`
+                        }
+                        else {
+                       li+=` <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">`+obj[i].time+`</h3>
+                <p>
+                    `+obj[i].Person+` `+
+                    obj[i].Operate+` `+
+                    obj[i].remarks+`
+                </p>
+               
+            </div>
+        </li>`
+                        }
+
+                    }
+                    $('ul').append(li)
+                }
+            })
+        }
+    </script>
+
+    <ul class="layui-timeline" style="margin-left:20px">
+        <!--<li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">8月18日</h3>
+                <p>
+                    layui 2.0 的一切准备工作似乎都已到位。发布之弦，一触即发。
+                    <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
+                   
+                </p>
+                <ul>
+                    <li>《登高》</li>
+                    <li>《茅屋为秋风所破歌》</li>
+                </ul>
+            </div>
+        </li>-->
+      
+
+        
+    </ul>
+</body>
+</html>

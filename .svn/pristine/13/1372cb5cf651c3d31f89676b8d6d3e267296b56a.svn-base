@@ -1,0 +1,568 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/echarts.js"></script>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+
+    <link href="../resource/layui.css" rel="stylesheet" />
+
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../../Resources/js/baidu_tts_cors.js"></script>
+    <script src="../../Resources/js/jquery.cookie.js"></script>
+
+       <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+    <style>
+     
+         ::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+            scrollbar-arrow-color:red;
+
+        }
+       ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.2);
+            scrollbar-arrow-color:red;
+        }
+        ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div class="layui-row" style="background-color:black;height:100%">
+        <div class="layui-col-md7" style="height:100%">
+            <div class="layui-row" style="height:30%">
+                <div class="layui-col-md12" style="width:100%;height:100%">
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">维修概况</div>
+                        <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3)">
+                            <div id="knifePreparationCake" style="height:100%;width:50%;float:left"></div>
+                            <div id="Cake2" style="height:100%;width:50%;float:left"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row" style="height:70%;margin-top:10px">
+                <div class="layui-col-md12" style="width:100%;height:100%">
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">维修状态</div>
+                        <div id="card-body1" class="layui-card-body scrollbar" style="position:absolute;top:30px;right:10px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                            <table id="table1" class="table" style="background-color:white">
+
+                                <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">编号</th>
+                                      <th :style="style">机床编号</th>
+                                      <th :style="style">内容</th>
+                                      <th :style="style">维修时长</th>
+                                      <th :style="style">维修时间</th>
+                                       <th :style="style">维修状态</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}" v-if="item.cncNum==''?false:true">
+                                    <td :style="style">
+                                        {{i+1}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.cncNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.content}}
+                                    </td>
+                                     <td :style="style">
+                      <div v-if="(item.progress==''|typeof(item.progress)=='undefined')?false:true" class="progress progress-striped active">
+	<div class="progress-bar progress-bar-success" role="progressbar"
+		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+		:style="{width:(item.progress*100).toString()+'%'}">
+		<span class="">{{item.time}}</span>
+	</div>
+</div>
+                                    </td>
+                                     <td :style="style">
+                                        {{item.time}}
+                                    </td>
+                                   <td :style="style">
+                                        {{item.state}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-col-md5" style="height:100%">
+            <div class="layui-col-md12" style="height:33%">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:30%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">TOP报警次数</div>
+                    <div id="card-body2" class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);">
+                        <table id="table2" lay-filter="test" class="table" style="background-color:white">
+
+                            <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">机床</th>
+                                      <th :style="style">报警次数</th>
+                                     
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}" v-if="item.cncNum==''?false:true">
+                                    <td :style="style">
+                                        {{item.cncNum}}
+                                    </td>
+                                     <td :style="style">
+                                                             <div v-if="item.process==''?false:true" class="progress progress-striped active">
+	<div class="progress-bar progress-bar-success" role="progressbar"
+		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+		:style="{width:(item.process*100).toString()+'%'}">
+		<span class="">{{item.num}}</span>
+	</div>
+</div>
+                                    </td>
+                                   
+                                   
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12" style="height:33%;margin-top:10px">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:30%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">TOP报警时长</div>
+                    <div id="card-body2" class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);">
+                        <table id="table3" lay-filter="test"  class="table" style="background-color:white">
+
+                            <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">机床</th>
+                                      <th :style="style">报警时长</th>
+                                     
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}" v-if="item.cncNum==''?false:true">
+                                  
+                                     <td :style="style">
+                                        {{item.cncNum}}
+                                    </td>
+                                     <td :style="style">
+                                       <div v-if="item.process==''?false:true" class="progress progress-striped active">
+	<div class="progress-bar progress-bar-success" role="progressbar"
+		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+		:style="{width:(item.process*100).toString()+'%'}">
+		<span class="">{{item.Time}}</span>
+	</div>
+</div>
+                                    </td>
+                                     
+                                   
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12" style="height:33%;margin-top:10px">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:30%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">TOP维修占用时长</div>
+                    <div id="card-body2" class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);">
+                        <table id="table4" lay-filter="test" class="table" style="background-color:white">
+
+
+                            <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">机床</th>
+                                      <th :style="style">维修占用时长</th>
+                                    
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}" v-if="item.cncNum==''?false:true">
+                                 
+                                     <td :style="style">
+                                        {{item.cncNum}}
+                                    </td>
+                                     <td :style="style">
+                                        <div v-if="item.process==''?false:true" class="progress progress-striped active">
+	<div class="progress-bar progress-bar-success" role="progressbar"
+		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+		:style="{width:(item.process*100).toString()+'%'}">
+		<span class="">{{item.Time}}</span>
+	</div>
+</div>
+                                    </td>
+                                   
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <script>
+     
+        var myChart1 = echarts.init(document.getElementById('knifePreparationCake'));
+         var myChart2 = echarts.init(document.getElementById('Cake2'));
+        option1 = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: '70%',
+
+                    label: {
+                        normal: {
+
+                            formatter: '{b}:{c}',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 15
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [
+
+                        { value: 10, name: '维修中机床数', itemStyle: { color: '#FF5722' } },
+
+                        { value: 20, name: '维修完成待确认数', itemStyle: { color: '#5FB878' } },
+
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+       option2 = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: '70%',
+
+                    label: {
+                        normal: {
+
+                            formatter: '{b}:{c}',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 15
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        var workId = $.cookie("workId")
+
+       
+      
+        if (typeof (EventSource) !== "undefined") {
+            var source = new EventSource("../维修/现场报修维修饼图1.ashx?workId=" + $.cookie("workId"));
+            source.onmessage = function (event) {
+                arr = event.data.split(',')
+                FixingNum = Number(arr[0])
+                FixOverWaitConfirmNum = Number(arr[1])
+                option1.series[0].data[0].value = FixingNum
+                option1.series[0].data[1].value = FixOverWaitConfirmNum
+                myChart1.setOption(option1);
+            }
+        } else {
+            alert("抱歉，你的浏览器不支持 server-sent 事件...");
+        }
+
+
+
+        
+        if (typeof (EventSource) !== "undefined") {
+            var source = new EventSource("../维修/报修内容分布.ashx?workId=" + $.cookie("workId"));
+            source.onmessage = function (event) {
+                var obj = JSON.parse(event.data);
+                option2.series[0].data = [];
+                for (var i = 0; i < obj.length; i++) {
+                    var arr = { value: obj[i].Num, name: obj[i].Content }
+                    option2.series[0].data.push(arr)
+                }
+                if (event.data == "[]") {
+                    var arr = { value: 0, name: '报修内容分布（无）', itemStyle: { color: '#FF5722' } }
+                    option2.series[0].data.push(arr)
+                }
+                myChart2.setOption(option2);
+            }
+        } else {
+            alert("抱歉，你的浏览器不支持 server-sent 事件...");
+        }
+       
+    </script>
+
+
+
+
+
+    <script>
+        var vm1 = new Vue({
+            el: "#table1",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('../维修/现场维修状态.ashx?workId=' + $.cookie("workId"));
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+                            if(data.data.length==0){
+                                data.data.push({cncNum:"无数据"})
+                            }
+                         
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+        var vm2 = new Vue({
+            el: "#table2",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('../维修/TOP报警次数.ashx?workId=' + $.cookie("workId"));
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+                          
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+        var vm3 = new Vue({
+            el: "#table3",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('../维修/TOP报警时长.ashx?workId=' + $.cookie("workId"));
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+                          
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+
+        var vm4= new Vue({
+            el: "#table4",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('../维修/TOP维修占用时长.ashx?workId=' + $.cookie("workId"));
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+                            if (data.data.length == 0) {
+                                data.dada.push({ cncNum: "无数据" })
+                            } else {
+                                if (data.data[0].cncNum == "") {
+                                    data.data[0].cncNum="无数据"
+                                }
+                            }
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+ 
+
+
+                        var i1 = 0;
+                        var old1 = -1;
+                        var new1 = -2;
+                        setInterval(function () {
+                            var table1 = $('#card-body1')
+                            if (table1.length == 0) {
+                                return;
+                            }
+                            $(table1).scrollTop(i1);
+                            new1 = $(table1).scrollTop();
+                            if (old1 == new1) {
+                                i1 = 0;
+                                old1 = -1;
+                                return;
+                            }
+                            i1 += 1.2;
+                            old1 = $(table1).scrollTop();
+                        }, 200);
+
+                        setInterval(function () {
+                            tableReload1.reload()
+                            tableReload2.reload()
+                            tableReload3.reload()
+                             tableReload4.reload()
+                        }, 60000)
+
+
+                    //    var i2 = 0;
+                    //    var old2 = -1;
+                    //    var new2 = -2;
+                    //    setInterval(function () {
+                    //        var table2 = $('#card-body2')
+                    //        if (table2.length == 0) {
+                    //            return;
+                    //        }
+                    //        $(table2).scrollTop(i2);
+                    //        new2 = $(table2).scrollTop();
+                    //        if (old2 == new2) {
+                    //            i2 = 0;
+                    //            old2 = -1;
+                    //            return;
+                    //        }
+                    //        i2 += 1.2;
+                    //        old2 = $(table1).scrollTop();
+                    //    }, 200);
+
+                    //    setInterval(function () {
+                    //        tableReload2.reload()
+                    //    }, 60000)
+
+
+                    
+    </script>
+   
+   
+  
+  
+    
+</body>
+</html>

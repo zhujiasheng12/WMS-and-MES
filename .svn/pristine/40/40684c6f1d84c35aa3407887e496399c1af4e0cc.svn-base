@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/echarts.js"></script>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+ 
+    <style>
+
+        ::-webkit-scrollbar { /*滚动条整体样式*/
+            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+            scrollbar-arrow-color: red;
+        }
+
+        ::-webkit-scrollbar-thumb:: { /*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.2);
+            scrollbar-arrow-color: red;
+        }
+
+        ::-webkit-scrollbar-track { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
+        }
+        tr{
+            background-color:black
+        }
+        
+        .layui-table-header{
+            background-color:black
+        }
+        thead tr{
+            background-color；rgba(0, 0, 0, 0.8)
+        }
+        .demoTd
+        {
+            height:0.5rem
+        }
+    </style>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div id="app"style="height:100%">
+
+   
+    <div class="layui-row" style="background-color:black;height:30%;margin-bottom:10px">
+        <div class="layui-col-md6" style="height:100%;">
+            <div class="layui-card" style="height:100%;background-color:black">
+              
+                <div class="layui-card-body" style="position:absolute;top:0px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="main1" style="width:100%;height:100%;"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-col-md6" style="height:100%;">
+            <div class="layui-card" style="height:100%;background-color:black">
+           
+                <div class="layui-card-body" style="position:absolute;top:0px;right:0px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="main2" style="width:100%;height:100%;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <div class="layui-row" style="background-color:black;height:35%">
+
+            <div class="layui-col-md6" style="height:100%">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:330px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">新订单备刀测刀需求TOP5</div>
+                    <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                        <!--<h2 style="color:white;display:inline">总数</h2>-->
+                        <h2 id="totalNumber1" style="color:white;display:inline"></h2>
+                        <table id="table1" lay-filter="knifeInstallationTable" class="table" style="background-color:white">
+                            <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">刀具名称</th>
+                                      <th :style="style">刀具规格</th>
+                                      <th :style="style">刀柄规格</th>
+                                      <th :style="style">装刀长度</th>
+                                      <th :style="style">数量</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list">
+                                    <td :style="style">
+                                        {{item.toolName}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolSpecification}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.hiltSpecification}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolLength}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolNumber}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6" style="height:100%">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:330px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">新订单机台上刀需求TOP5</div>
+                    <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                        <!--<h2 style="color:white;display:inline">总数</h2>-->
+                        <h2 id="totalNumber2" style="color:white;display:inline"></h2>
+                        <table id="table2" lay-filter="knifeInstallationTable" class="table" style="background-color:white">
+
+                                     <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">车间</th>
+                                      <th :style="style">机床编号</th>
+                                      <th :style="style">任务</th>
+                                      <th :style="style">刀位号</th>
+                                      <th :style="style">刀具名称</th>
+                                       <th :style="style">刀具规格</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list">
+                                    <td :style="style">
+                                        {{item.position}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.machNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.currentOrderTask}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolName}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolSpecification}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-row" style="background-color:black;height:35%;margin-top:10px">
+            <div class="layui-col-md6" style="height:100%">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:280px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">寿命到达换刀需求TOP5</div>
+                    <div id="card-body5" class="layui-card-body scrollbar" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                        <!--<h2 style="color:white;display:inline">总数</h2>-->
+                        <h2 id="totalNumber3" style="color:white;display:inline"></h2>
+                        <table id="table3" lay-filter="knifeInstallationTable" class="table" style="background-color:white">
+
+                                     <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">车间</th>
+                                      <th :style="style">机床编号</th>
+                                      <th :style="style">刀位号</th>
+                                      <th :style="style">刀具名称</th>
+                                      <th :style="style">当前寿命</th>
+                                     <th :style="style">最大寿命</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list">
+                                    <td :style="style">
+                                        {{item.Name}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.MachNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.ToolNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.KnifeName}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.ToolCurrLife}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.ToolMaxLife}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6" style="height:100%">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:280px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">刀具异常更换需求TOP5</div>
+                    <div id="card-body6" class="layui-card-body scrollbar" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                        <!--<h2 style="color:white;display:inline">总数</h2>-->
+                        <h2 id="totalNumber4" style="color:white;display:inline"></h2>
+                        <table id="table4" lay-filter="knifePreparationTable" class="table" style="background-color:white">
+
+                                     <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">车间</th>
+                                      <th :style="style">机床编号</th>
+                                      <th :style="style">刀位号</th>
+                                      <th :style="style">时间</th>
+                                      <th :style="style">原因</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list">
+                                    <td :style="style">
+                                        {{item.position}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.cncNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.toolNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.time}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.reason}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+     </div>
+
+
+
+
+    <script>
+          var myChart1 = echarts.init(document.getElementById('main1'));
+           var myChart2 = echarts.init(document.getElementById('main2'));
+      
+        option1 = {
+            title: {
+                text: '各规格需备刀总数',
+                  textStyle: {
+                    color: '#ffffff'
+                }
+            },
+            tooltip: {},
+             grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            legend: {
+                data: [''],
+                  textStyle: {
+                    color: '#ffffff'
+                }
+            },
+            xAxis: {
+                data: [],
+                axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 0.5,//这里是为了突出显示加上的
+                        }
+                    },
+            },
+            yAxis: {
+                type: 'value',
+                minInterval:1,
+                 axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 0.5,//这里是为了突出显示加上的
+                        }
+                },
+                     splitLine: {
+                        show: false
+                    },
+            },
+            series: [{
+                name: '',
+                type: 'bar',
+                data: [],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true, //开启显示
+									position: 'top', //在上方显示
+									textStyle: { //数值样式
+										color: 'white',
+										fontSize: 16
+									}
+
+                        },
+                           color: function (params){
+                    var colorList = ['rgb(227, 14, 56)','rgb(247, 152, 11)','rgb(247, 152, 11)','rgb(247, 152, 11)','rgb(247, 152, 11)','rgb(247, 152, 11)','rgb(158, 17, 239)','rgb(239, 17, 225)'];
+                    return colorList[params.dataIndex];
+                }
+                    }
+                }
+            }]
+        };
+   option2 = {
+    title: {
+        text: '机台处装刀总数',
+        subtext: '',
+           left: 'left',
+          textStyle: {
+                    color: '#ffffff'
+                }
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    legend: {
+        orient: 'vertical',
+        right: 'right',
+        data: ['新订单机台上刀需求', '寿命到达换刀需求', '刀具异常更换需求'],
+          textStyle: {
+                    color: '#ffffff'
+                }
+    },
+    series: [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+              label: {
+                        normal: {
+
+                            formatter: '{b}:{c} ({d}%)',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 17
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+            center: ['50%', '60%'],
+            data: [
+                {value: 0, name: '新订单机台上刀需求'},
+                {value: 0, name: '寿命到达换刀需求'},
+                {value: 0, name: '刀具异常更换需求'},
+             
+            ],
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+
+        
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+        if (typeof (EventSource) !== "undefined") {
+            var source = new EventSource("刀具/各规格需备刀总数.ashx");
+            source.onmessage = function (event) {
+                var obj = JSON.parse(event.data);
+                var x = [];
+                var y = [];
+                for (var i = 0; i < obj.length; i++) {
+                    x.push(obj[i].toolName)
+                     y.push(obj[i].count)
+                }
+                option1.xAxis.data=x
+                option1.series[0].data=y
+                  myChart1.setOption(option1);
+            }
+        } else {
+               alert("抱歉，你的浏览器不支持 server-sent 事件...");
+        }
+    </script>
+        <script>
+            var vm1 = new Vue({
+                el:"#table1",
+                data: {
+                    list: []
+                    , style: { color: 'white', padding: '0.3rem', border: 'none' }
+                
+
+                },
+                methods: {
+             
+                    fun: function () {
+                        var _this=this
+                        if (typeof (EventSource) !== "undefined") {
+                            var source = new EventSource("刀具/备刀请求.ashx");
+                            source.onmessage = function (event) {
+
+                                var data = JSON.parse(event.data);
+                                _this.list = data.data
+                              
+                            }
+                        }
+            }
+                },
+                created:function() {
+                   
+                  
+                    this.fun()
+                },
+                updated: function () {
+                   
+                    var trs = $("#table1").find('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+                   
+                }
+            })
+
+
+
+
+
+            var vm1 = new Vue({
+                el: "#table2",
+                data: {
+                    list: []
+                    , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+                },
+                methods: {
+
+                    fun: function () {
+                        var _this = this
+                        if (typeof (EventSource) !== "undefined") {
+                            var source = new EventSource("刀具/装刀信息.ashx");
+                            source.onmessage = function (event) {
+
+                                var data = JSON.parse(event.data);
+                                _this.list = data.data
+
+                            }
+                        }
+                    }
+                },
+                created: function () {
+
+
+                    this.fun()
+                },
+                updated: function () {
+
+                    var trs = $("#table2").find('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+
+                }
+            })
+
+
+
+
+
+            var vm1 = new Vue({
+                el: "#table3",
+                data: {
+                    list: []
+                    , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+                },
+                methods: {
+
+                    fun: function () {
+                        var _this = this
+                        if (typeof (EventSource) !== "undefined") {
+                            var source = new EventSource("刀具/刀具寿命.ashx");
+                            source.onmessage = function (event) {
+
+                                var data = JSON.parse(event.data);
+                                _this.list = data.data
+
+                            }
+                        }
+                    }
+                },
+                created: function () {
+
+
+                    this.fun()
+                },
+                updated: function () {
+
+                    var trs = $("#table3").find('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+
+                }
+            })
+
+
+
+
+
+            var vm1 = new Vue({
+                el: "#table4",
+                data: {
+                    list: []
+                    , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+                },
+                methods: {
+
+                    fun: function () {
+                        var _this = this
+                        if (typeof (EventSource) !== "undefined") {
+                            var source = new EventSource("刀具/异常换刀.ashx");
+                            source.onmessage = function (event) {
+
+                                var data = JSON.parse(event.data);
+                                _this.list = data.data
+
+                            }
+                        }
+                    }
+                },
+                created: function () {
+
+
+                    this.fun()
+                },
+                updated: function () {
+
+                    var trs = $("#table4").find('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+
+                }
+            })
+
+
+
+        </script>
+</body>
+</html>

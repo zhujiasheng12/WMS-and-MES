@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+
+    <!--<link href="../../Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />-->
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+        function fun(orderId1) {
+            orderId = orderId1
+            $.ajax({
+                url: '根据订单Id读工序.ashx?orderId=' + orderId,
+                success: function (d) {
+                    obj = JSON.parse(d)
+                    var li = ``;
+                    var div = ``;
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].processNum == "1") {
+                            li += `  <li class="layui-this">工序1</li>`
+                            div+=`  <div class="layui-tab-item layui-show">
+
+
+               
+
+
+                <div class="layui-form">
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">加工程序</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="ncFile`+obj[i].processNum+`" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">探测点个数</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="number" type="text" name="number`+obj[i].processNum+`" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">刀具表文件</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="toolChartFile`+obj[i].processNum+`" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">编程文件</label>
+                        <div class="layui-input-block">
+                            <input  style="margin-left:1%;" id="programmingFile`+obj[i].processNum+`" type="file" class="layui-input" multiple="multiple">
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <div class="layui-input-block">
+                            <button class="layui-btn " lay-submit processId="`+obj[i].processId+`" lay-filter="`+obj[i].processNum+`"><i class="layui-icon layui-icon-upload"></i>上传</button>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>`
+                        } else {
+                            li += `<li>工序` + obj[i].processNum + `</li>`
+                             div+=`  <div class="layui-tab-item">
+
+
+               
+
+
+                <div class="layui-form">
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">加工程序</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="ncFile`+obj[i].processNum+`" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">探测点个数</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="number" type="text" name="number`+obj[i].processNum+`" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">刀具表文件</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="toolChartFile`+obj[i].processNum+`" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">编程文件</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="programmingFile`+obj[i].processNum+`" type="file" class="layui-input" multiple="multiple">
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <div class="layui-input-block">
+                            <button class="layui-btn " lay-submit processId="`+obj[i].processId+`" lay-filter="`+obj[i].processNum+`"><i class="layui-icon layui-icon-upload"></i>上传</button>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>`
+                        }
+                       
+                    }
+                    var html = `
+ <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+          
+
+`+li+`
+           
+        </ul>
+        <div class="layui-tab-content">
+           
+        `+div+`
+
+        </div>
+    </div>
+`
+                    $('body').append(html)
+
+
+
+                       layui.use(['table', 'layer','form','element'], function () {
+                var table = layui.table, layer = layui.layer, $ = layui.$,form=layui.form,element = layui.element;
+                           for (var i = 0; i < obj.length; i++) {
+                                  form.on('submit('+obj[i].processNum+')', function (data) {
+                                      var processNum = $(data.elem).attr('lay-filter')
+                                      var processId=$(data.elem).attr('processId')
+                    var formData = new FormData();
+                    var ncFile = $("#ncFile"+processNum)[0].files[0]
+                    var toolChartFile = $("#toolChartFile"+processNum)[0].files[0]
+                     var programmingFile = $("#programmingFile"+processNum)[0].files
+                    formData.append('ncFile', ncFile)
+                    formData.append('toolChartFile', toolChartFile)
+                    for (var i = 0; i < programmingFile.length; i++) {
+                         formData.append('programmingFile'+i, programmingFile[i])
+                    }
+                                      formData.append('number', $("[name='number" + processNum + "']").val())
+                                 
+            formData.append('processId', processId)
+
+                 $.ajax({
+                url: '工艺编程上传.ashx',
+            data: formData,
+            type: 'post',
+            processData: false,
+            contentType: false,
+              success: function (d) {
+               if (d == "ok") {
+                layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+              
+                })
+            } else {
+                layer.alert(d)
+            }
+            }
+        })
+
+
+return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+});        
+                           }
+                         
+})
+
+
+
+                }
+            })
+        }
+    </script>
+    <!--<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">工序1</li>
+            <li>工序2</li>
+           
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+
+
+               
+
+
+                <div class="layui-form">
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">加工程序</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="ncFile" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">探测点个数</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="number" type="text" name="number" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">刀具表文件</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="toolChartFile" type="file" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">编程文件</label>
+                        <div class="layui-input-block">
+                            <input lay-verify="required" style="margin-left:1%;" id="programmingFile" type="file" class="layui-input" multiple="multiple">
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="layui-form-item ">
+                        <div class="layui-input-block">
+                            <button class="layui-btn " lay-submit lay-filter="*"><i class="layui-icon layui-icon-upload"></i>上传</button>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="layui-tab-item">
+                工序2
+            </div>
+          
+
+        </div>
+    </div>-->
+    <script>
+         
+   
+    </script>
+</body>
+</html>

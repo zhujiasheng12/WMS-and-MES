@@ -1,0 +1,75 @@
+﻿<html>
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Index</title>
+    <script src="../../jquery-3.3.1.js"></script>
+
+    <script type="text/javascript">
+        // 拖拽与发送实现
+
+        $(document).ready(function () {
+            //拖拽
+            var _move = false; //移动标记
+            var _x, _y;
+            var index_x, index_y;
+
+            $("#drag").bind("mousedown", downIndex); //div鼠标按下事件绑定
+            $(document).bind("mousemove", mmove); //鼠标移动事件绑定
+            $(document).bind("mouseup", mup); //鼠标弹起事件绑定
+            function mmove(e) {
+                if (_move) {
+                    var x = e.pageX - _x; //移动时根据鼠标位置计算控件左上角的绝对位置
+                    var y = e.pageY - _y;
+                    $("#drag").css({ top: y, left: x }); //div新位置
+                    show(x, y);
+                }
+            }
+            function mup() {
+                _move = false;
+            }
+            function downIndex(e) {
+                _move = true;
+                _x = e.pageX - parseInt($("#drag").css("left"));
+                _y = e.pageY - parseInt($("#drag").css("top"));
+
+            }
+            function show(x, y) {
+                document.getElementById("result").innerHTML = "x坐标为：" + x + "</br>" + "y坐标为：" + y + "</br>" + "(注：这是div左顶点的坐标)";
+            }
+        });
+    </script>
+    <style type="text/css">
+        .dragg {
+            border: 1px solid #aeeeee;
+            width: 400px;
+            height: 300px;
+            cursor: move;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="test">
+
+
+        <div class="dragg" id="drag">
+            <div id="result" style="background-color:#afffff; height:200px"></div>
+        </div>
+    </div>
+    <button onclick="fun()">110</button>
+    <script>
+    function fun() {
+        var dd = $('#test')[0].innerHTML
+        $.ajax({
+            url: 'Handler1.ashx',
+            data: {"str":dd}
+        })
+  
+        $('body').append(dd)
+    }
+    </script>
+</body>
+</html>

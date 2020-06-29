@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body >
+    <!--初始化-->
+    <script>
+        $.ajax({
+            url: '../../人员管理/session/Jurisdiction.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d);
+                var id = obj.id;
+               
+                layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#orderNumber'
+                
+                , where: { id:id}
+                , url: 'orderRead.ashx' //数据接口
+                , page: true //开启分页
+                , toolbar:'#order'
+                , cols: [[ //表头
+                    { field: 'number',type:'numbers', title: '序号', width: 35, }
+                    , { field: 'orderNumber', title: '订单',  }
+                   ,{
+                        field: 'Product_Drawing', title: '图纸', width:60, templet: function (d) {
+                            return '<span style="color: #c00;">点击</span>'
+                        }
+                    }
+                    , { field: 'orderId', title: 'id', width: 180, hide:true  }
+                  
+                ]],
+                done: function (d) {
+
+                    $('tr').mouseenter(function () {
+                        $(this).css('background-color','antiquewhite')
+                    })
+                    $('tr').mouseleave(function () {
+                        $(this).css('background-color','white')
+                    })
+
+                    $('td[data-field="orderNumber"]').css('color', 'blue')
+                    $('td[data-field="orderNumber"]')[0].click()
+
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+                    $('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="orderNumber"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '图纸.html',
+                            area: ['60%', '80%'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+
+                }
+            });
+
+
+        });
+            }
+        })
+    </script>
+    <!--事件-->
+     <script type="text/html" id="order">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i class=" layui-icon layui-icon-refresh"></i>刷新</button>
+    </script>
+    <script>
+        layui.use(['table','layer'], function () {
+            layui.table.on('row(orderNumber)', function (obj) {
+                $("#orderNumberId").val(obj.data.orderId)
+                $("#orderNum").val(obj.data.orderNumber)
+            tableReload=  layui.table.render({
+                elem: '#nc'
+
+                 , where: { id: obj.data.orderId }
+                , url: 'ncRead.ashx' //数据接口
+                 
+                ,toolbar:'#toolbar'
+                , cols: [[ //表头
+                    //{ field: 'number',type:'numbers', title: '序号', width: '6%', },
+                     { field: 'workNumber', title: '工序', width: 60}
+                    , { field: 'programName', title: '程序', width: 160 }
+                    , { field: 'programTime', title: '工序时间', width:90 }
+                    , {
+                        field: 'cnc', title: '机台绑定', width: 90, templet: function (d) {
+                            return '<x style="color:blue">点击查看</x>'
+                        }
+                    }
+                    , {
+                        field: 'toolChartName', title: '刀具表文件', width: 105}
+                     , { field: 'deviceType', title: '设备类型', width:160 }
+                    , { field: 'BlankType', title: '毛坯种类', width: 90 }
+                    , { field: 'BlankSpecification', title: '毛坯规格', width: 90 }
+                    , { field: 'BlankNumber', title: '毛坯数量', width:90, hide:true  }
+                    , { field: 'JigSpecification', title: '治具规格', width:90 }
+                    , { field: 'JigNumber', title: '治具数量', width: 90 }
+                     , { field: 'do', title: '操作',toolbar:'#do' }
+                    , { field: 'id', title: 'id', width: 180, hide:true  }
+                  
+                  ]],
+                done: function (d) {
+                    $('p').text($('#orderNum').val());
+                    $('td[data-field="programName"]').css('color', 'blue');
+                    $('td[data-field="toolChartName"]').css('color', 'blue');
+
+                    $('td[data-field="programName"]').click(function () {
+                        var orderNumber = $("#orderNum").val()
+                        var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                        var name = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area:['70%','70%'],
+                            content: '加工文件弹窗.html',
+                            success: function (layero, index) {
+                               
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderNumber,processId)
+                            },
+                            cancel: function (index, layero) {
+                                layer.close(index)
+                                tableReload.reload()
+                                return false;
+                            }    
+                        });     
+                       
+                    })
+                   
+                    //$('[data-field="programName"]').click(function () {
+                    //    var orderNumber = $("#orderNum").val()
+                    //    var name = $(this)[0].children[0].innerText
+                    //    $.ajax({
+                    //        url: '../downLoadPathRead.ashx',
+                    //        success: function (d) {
+                    //            var path = d + orderNumber + '/加工文件/' + name
+                    //            var html = '<a href="' + path + '" download="' + name + '"><button id="download" hidden>下载</button></a>'
+                    //            $("#download").remove()
+                    //            $('body').append(html)
+                    //            $("#download").click()
+                    //        }
+                    //    })
+
+                    //});
+
+                    $('td[data-field="toolChartName"]').click(function () {
+                          var orderNumber = $("#orderNum").val()
+                        var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                        var name = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area:['70%','70%'],
+                            content: '刀具表文件弹窗.html',
+                            success: function (layero, index) {
+                               
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderNumber,processId)
+                            },
+                            cancel: function (index, layero) {
+                                layer.close(index)
+                                tableReload.reload()
+                                return false;
+                            }    
+                        }); 
+                       
+                    })
+
+                    //         $('[data-field="toolChartName"]').click(function () {
+                    //    var orderNumber = $("#orderNum").val()
+                    //    var name = $(this)[0].children[0].innerText
+                    //    $.ajax({
+                    //        url: '../downLoadPathRead.ashx',
+                    //        success: function (d) {
+                    //    var path = d + orderNumber + '/刀具表/' + name
+                    //    var html = '<a href="' + path + '" download="' + name + '"><button id="download" hidden>下载</button></a>'
+                    //    $("#download").remove()
+                    //    $('body').append(html)
+                    //    $("#download").click()
+                    //        }
+                    //    })
+                       
+                    //})
+
+                    $('td[data-field="cnc"]').click(function () {
+                        var orderNumber = $("#orderNum").val()
+                        var processId = $(this).siblings('[data-field="id"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '机台绑定弹窗.html',
+                            area: ['50%', '90%'],
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(processId)
+
+                            }
+
+                        })
+
+
+                    })
+                }
+            });
+            });
+
+            layui.table.on('toolbar(nc)', function(obj){
+                switch (obj.event) {
+                    case 'create':
+                        layui.layer.open({
+                            type: 2,
+                            area: ['50%', '90%'],
+                            content: '新建工序.html',
+                            success: function (layero, index) {
+                                var iframeWin = window[layero.find('iframe')[0]['name']];
+                                iframeWin.method($("#orderNumberId").val())
+                            }
+                        })
+                        break;
+                }
+            })
+
+            layui.table.on('tool(nc)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的DOM对象
+ 
+ if(layEvent === 'delete'){ 
+     layer.confirm('是否删除', function (index) {
+         $.ajax({
+             url: 'processDel.ashx',
+             data: { "id": data.id },
+             success: function (d) {
+                 if (d == "ok") {
+                     layer.msg("删除成功", {icon:1,time:1000}, function () {
+                          tableReload.reload({})
+                     });
+                    
+                 }
+                 else{
+                 layer.alert(d)
+             }
+
+             }
+         })
+    });
+  } else if(layEvent === 'edit'){ 
+   
+     layer.open({
+         type: 2, 
+         area:['70%','70%'],
+         content: '修改工序弹窗.html' 
+         ,success: function(layero, index){
+             var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+             iframeWin.method(data.id)
+  }, cancel: function (index, layero) {
+                       
+                                tableReload.reload({})
+                              }    
+}); 
+   
+    
+  }
+});
+      
+        })
+    </script>
+    <script type="text/html" id="toolbar">
+        <div class="layui-btn-container" lay-event="create" style="float:left">
+            <div class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe654;</i>新建工序</div>
+
+        </div>
+        <div class="layui-btn-container" lay-event="" style="float:left">
+            <div class="layui-btn layui-btn-sm" onclick="start()"><i class="layui-icon layui-icon-chart"></i>纳入排产</div>
+
+        </div>
+       
+        <p1 style="float:left">订单单号:</p1>
+        <p style="float:left"> </p>
+    </script>
+    <script type="text/html" id="do">
+        <div class="">
+           
+            <button title="编辑" type="button" class="layui-btn  layui-btn-sm" lay-event="edit">
+                <i class="layui-icon">&#xe642;</i>
+            </button>
+            <button title=" 删除" type="button" class="layui-btn  layui-btn-sm  layui-btn-danger" lay-event="delete">
+                <i class="layui-icon">&#xe640;</i>
+            </button>
+            
+        </div>
+    </script>
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-md2">
+            <table id="orderNumber" lay-filter="orderNumber"></table>
+        </div>
+        <div class="layui-col-md10">
+            <table id="nc" lay-filter="nc"></table>
+        </div>
+    </div>
+    
+   <input id="orderNumberId" hidden />
+    <input id="orderNum" hidden />
+
+   
+    <script>
+    function start() {
+        layui.use('layer', function () {
+            layui.layer.confirm("提交后不可修改", function (index) {
+        $.ajax({
+            url: 'arrangement.ashx',
+            data: { "orderNumberId": $("#orderNumberId").val() },
+            success: function (d) {
+                if (d == "ok") {
+                    $.ajax({
+                        url: '写治具数量.ashx',
+                        data: { "orderId": $("#orderNumberId").val() },
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("计算成功", { icon: 1, time: 1000 }, function () {
+                                    tableReload.reload({})
+                                })
+                            } else {
+                                layer.alert(d)
+                            }
+
+                        }
+                    });
+                } else {
+                    layer.alert(d)
+                }
+            }
+        })
+
+
+            })
+        })
+
+        
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CNCINFOModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cnc">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachNum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MachState" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MachType" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CncType" Relationship="CNCINFOModel1.FK__Cnc__MachType__239E4DCF" FromRole="Cnc" ToRole="CncType" />
+    <NavigationProperty Name="MachTimesData" Relationship="CNCINFOModel1.FK__MachTimesDat__ID__29572725" FromRole="Cnc" ToRole="MachTimesData" />
+  </EntityType>
+  <EntityType Name="CncBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="CncType" Relationship="CNCINFOModel1.FK__CncType__BrandID__24927208" FromRole="CncBrand" ToRole="CncType" />
+  </EntityType>
+  <EntityType Name="CncType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BrandID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cnc" Relationship="CNCINFOModel1.FK__Cnc__MachType__239E4DCF" FromRole="CncType" ToRole="Cnc" />
+    <NavigationProperty Name="CncBrand" Relationship="CNCINFOModel1.FK__CncType__BrandID__24927208" FromRole="CncType" ToRole="CncBrand" />
+  </EntityType>
+  <EntityContainer Name="CNCINFOEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cnc" EntityType="Self.Cnc" />
+    <EntitySet Name="CncBrand" EntityType="Self.CncBrand" />
+    <EntitySet Name="CncType" EntityType="Self.CncType" />
+    <AssociationSet Name="FK__Cnc__MachType__239E4DCF" Association="CNCINFOModel1.FK__Cnc__MachType__239E4DCF">
+      <End Role="CncType" EntitySet="CncType" />
+      <End Role="Cnc" EntitySet="Cnc" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CncType__BrandID__24927208" Association="CNCINFOModel1.FK__CncType__BrandID__24927208">
+      <End Role="CncBrand" EntitySet="CncBrand" />
+      <End Role="CncType" EntitySet="CncType" />
+    </AssociationSet>
+    <EntitySet Name="MachTimesData" EntityType="CNCINFOModel1.MachTimesData" />
+    <AssociationSet Name="FK__MachTimesDat__ID__29572725" Association="CNCINFOModel1.FK__MachTimesDat__ID__29572725">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="MachTimesData" EntitySet="MachTimesData" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK__Cnc__MachType__239E4DCF">
+    <End Type="CNCINFOModel1.CncType" Role="CncType" Multiplicity="1" />
+    <End Type="CNCINFOModel1.Cnc" Role="Cnc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CncType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Cnc">
+        <PropertyRef Name="MachType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CncType__BrandID__24927208">
+    <End Type="CNCINFOModel1.CncBrand" Role="CncBrand" Multiplicity="1" />
+    <End Type="CNCINFOModel1.CncType" Role="CncType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CncBrand">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CncType">
+        <PropertyRef Name="BrandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="MachTimesData">
+    <Key>
+      <PropertyRef Name="IDNum" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="OpenTime" Type="Double" />
+    <Property Name="AllRunTime" Type="Double" />
+    <Property Name="NowRunTime" Type="Double" />
+    <Property Name="IDNum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Cnc" Relationship="CNCINFOModel1.FK__MachTimesDat__ID__29572725" FromRole="MachTimesData" ToRole="Cnc" />
+  </EntityType>
+  <Association Name="FK__MachTimesDat__ID__29572725">
+    <End Type="CNCINFOModel1.Cnc" Role="Cnc" Multiplicity="1" />
+    <End Type="CNCINFOModel1.MachTimesData" Role="MachTimesData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MachTimesData">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

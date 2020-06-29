@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div id="" style="height:100%;width:100%"></div>
+
+
+
+
+    <div class="layui-row" style="height:50%">
+
+    </div>
+
+
+
+
+    <div class="layui-col-md12" style="height:100%">
+        <div class="layui-card" style="height:100%;background-color:#141C1A">
+            <div class="layui-card-header" style="width:15%;height:30px;background-color:grey;border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:#141C1A">卡片面板</div>
+            <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:grey">
+                卡片式面板面板通常用于非白色背景色的主体内<br>
+                从而映衬出边框投影
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        var myChart = echarts.init(document.getElementById(''));
+
+        myChart.setOption(option);
+    </script>
+
+</body>
+</html>

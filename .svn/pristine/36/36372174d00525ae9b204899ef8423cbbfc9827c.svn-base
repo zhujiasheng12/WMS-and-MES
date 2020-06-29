@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+    <!--  <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>-->
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+</head>
+<body style="height:96%;background-color:black;margin:10px">
+    <div class="layui-row" style="height:20%">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">订单概况</div>
+                <div class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3)">
+                    <div style="position:absolute;width:80%;height:40%;top:30%;left:10%">
+
+                        <div style="float:left;width:20%">
+                            <div style="font-size:200%;text-align:center">
+                                订单总数
+                            </div>
+                            <div id="orderAllNum" style="font-size:200%;text-align:center;margin-top:10px">
+                                34
+                            </div>
+                        </div>
+                        <div style="float:left;width:20%">
+                            <div  style="font-size:200%;text-align:center">
+                                正在生产订单数
+                            </div>
+                            <div id="processingOrderNum" style="font-size:200%;color:green;margin-top:10px;text-align:center">
+                                20
+                            </div>
+
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div  style="font-size:200%;text-align:center">
+                                待生产订单数
+                            </div>
+                            <div id="processWillNum" style="font-size:200%;color:yellow;margin-top:10px;text-align:center">
+                                10
+                            </div>
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div  style="font-size:200%;text-align:center">
+                                当日成品数
+                            </div>
+                            <div id="NowadaysProductNum" style="font-size:200%;color:blue;margin-top:10px;text-align:center">
+                                3
+                            </div>
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div  style="font-size:200%;text-align:center">
+                                良品率
+                            </div>
+                            <div id="PassRate" style="font-size:200%;color:green;margin-top:10px;text-align:center">
+                                80%
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">订单状态</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3);color:white">
+                    <table id="table1" class="table" style="background-color:white">
+
+                                             <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">产品订单号</th>
+                                      <th :style="style">订单责任人</th>
+                                      <th :style="style">工程编程责任人</th>
+                                      <th :style="style">订单需求量</th>
+                                      <th :style="style">当前已加工总数</th>
+                                      <th :style="style">当前已加工良品数</th>
+                                      <th :style="style">当前良品率</th>
+                                      <th :style="style">目标产量占比</th>
+                                      <th :style="style">生产开始时间</th>
+                                      <th :style="style">生产结束时间</th>
+                                      <th :style="style">订单状态</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.orderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.orderUser}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.programUser}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.orderNeedNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.AllProcessedNumber}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.GoodProcessNumber}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.PassRate}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.TargetProductRatio}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.ProcessBeginTime}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.ProcessEndTime}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.OrderState}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">产量趋势</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3);color:white">
+                    <div id="lineChart" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script >
+          
+        var source = new EventSource('订单ashx/订单数目.ashx');
+        source.onmessage = function (event) {
+            var obj = JSON.parse(event.data)
+            $('#NowadaysProductNum').text(obj.NowadaysProductNum)
+            $('#orderAllNum').text(obj.orderAllNum)
+            $('#PassRate').text(obj.PassRate * 100 + '%')
+            $('#processingOrderNum').text(obj.processingOrderNum)
+            $('#processWillNum').text(obj.processWillNum)
+        }
+    </script>
+    <script>
+
+        var vm1 = new Vue({
+            el: "#table1",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('订单ashx/表格.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+      
+
+         {
+            var i1 = 0;
+            var old1 = -1;
+            var new1 = -2;
+            setInterval(function () {
+                if ($('.layui-table-body.layui-table-main').length == 0) {
+                    return;
+                }
+                $('.layui-table-body.layui-table-main').scrollTop(i1);
+                new1 = $('.layui-table-body.layui-table-main').scrollTop();
+                if (old1 == new1) {
+                    i1 = 0;
+                    old1= -1;
+                    new1 = -2;
+                    return;
+                }
+                i1 += 1.2;
+                old1 = $('.layui-table-body.layui-table-main').scrollTop();
+            }, 200);
+        }
+    </script>
+    <script>
+        var myChart = echarts.init(document.getElementById('lineChart'));
+       option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+               data: ['2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14', '2019-08-15'],
+         axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+             },
+      
+               },
+                                axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+             }
+
+
+    },
+    yAxis: {
+        type: 'value',
+         axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+        },
+           splitLine:{
+			                show:false
+        },
+            axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+    },
+    series: [{
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        type: 'line',
+        areaStyle: {}
+    }]
+};
+
+ 
+        var source = new EventSource('订单ashx/柱状图.ashx');
+        source.onmessage = function (event) {
+            var obj = JSON.parse(event.data);
+            option.xAxis.data = [];
+            option.series[0].data = [];
+            for (var i = 0; i < obj.length; i++) {
+                option.xAxis.data.push(obj[i].day)
+                option.series[0].data.push(obj[i].OutPut)
+            }
+            myChart.setOption(option);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body style="height:96%;background-color:black;margin:10px">
+    <div class="layui-row" style="height:20%">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">订单概况</div>
+                <div class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3)">
+                    <div style="position:absolute;width:80%;height:40%;top:30%;left:10%">
+
+                        <div style="float:left;width:20%">
+                            <div style="font-size:200%;text-align:center">
+                                订单总数
+                            </div>
+                            <div style="font-size:200%;text-align:center;margin-top:10px">
+                                34
+                            </div>
+                        </div>
+                        <div style="float:left;width:20%">
+                            <div style="font-size:200%;text-align:center">
+                                正在生产订单数
+                            </div>
+                            <div style="font-size:200%;color:green;margin-top:10px;text-align:center">
+                                20
+                            </div>
+
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div style="font-size:200%;text-align:center">
+                                待生产订单数
+                            </div>
+                            <div style="font-size:200%;color:yellow;margin-top:10px;text-align:center">
+                                10
+                            </div>
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div style="font-size:200%;text-align:center">
+                                当日成品数
+                            </div>
+                            <div style="font-size:200%;color:blue;margin-top:10px;text-align:center">
+                                3
+                            </div>
+                        </div>
+                        <div style="width:20%;float:left">
+                            <div style="font-size:200%;text-align:center">
+                                良品率
+                            </div>
+                            <div style="font-size:200%;color:green;margin-top:10px;text-align:center">
+                                80%
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">订单状态</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3);color:white">
+                    <table id="table1" style="background-color:black"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128, 128, 128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">产量趋势</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128, 128, 128,0.3);color:white">
+                    <div id="lineChart" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#table1'
+
+
+               
+                , cols: [[ //表头
+                    { field: 'orderNum', title: '产品订单号', width: 200, fixed: 'left' }
+                    , { field: 'orderUser', title: '订单责任人', width: 105 }
+                    , { field: 'programUser', title: '工程编程责任人', width: 150}
+                    , { field: 'orderNeedNumber', title: '订单需求量', width: 105}
+                    , { field: 'AllProcessedNumber', title: '当前已加工总数', width: 135}
+                    , { field: 'GoodProcessNumber', title: '当前已加工良品数', width: 150, }
+                    , { field: 'PassRate', title: '当前良品率', width: 105,  }
+                    , { field: 'TargetProductRatio', title: '目标产量占比', width: 120}
+                    , { field: 'ProcessBeginTime', title: '生产开始时间', width: 150 }
+                    , { field: 'ProcessEndTime', title: '生产结束时间',width: 150 }
+                      , { field: 'OrderState', title: '订单状态', }
+                ]],
+                data: [
+                    {'orderNum':201908140001,'orderUser':'胡帆帆','programUser':'朱家生','orderNeedNumber':100, 'AllProcessedNumber':50, 'GoodProcessNumber':40, 'PassRate':'80%','TargetProductRatio':'40%', 'ProcessBeginTime':'2019-08-14', 'ProcessEndTime':'2019-09-14', 'OrderState':'执行中'}
+                    ,{ 'orderNum': 201908140002, 'orderUser': '胡帆帆', 'programUser': '朱家生', 'orderNeedNumber': 200, 'AllProcessedNumber': 100, 'GoodProcessNumber': 80, 'PassRate': '80%', 'TargetProductRatio': '40%', 'ProcessBeginTime': '2019-07-14', 'ProcessEndTime': '2019-10-14', 'OrderState': '执行中' }
+                    ,{'orderNum':201908140001,'orderUser':'胡帆帆','programUser':'朱家生','orderNeedNumber':100, 'AllProcessedNumber':50, 'GoodProcessNumber':40, 'PassRate':'80%','TargetProductRatio':'40%', 'ProcessBeginTime':'2019-08-14', 'ProcessEndTime':'2019-09-14', 'OrderState':'执行中'}
+                    ,{ 'orderNum': 201908140002, 'orderUser': '胡帆帆', 'programUser': '朱家生', 'orderNeedNumber': 200, 'AllProcessedNumber': 100, 'GoodProcessNumber': 80, 'PassRate': '80%', 'TargetProductRatio': '40%', 'ProcessBeginTime': '2019-07-14', 'ProcessEndTime': '2019-10-14', 'OrderState': '执行中' }
+                ],
+                done: function () {
+                 var arr=$('[data-field="OrderState"]')
+                    for (var i = 0; i < arr.length; i++) {
+                           if (arr[i].children[0].innerText == '执行中') {
+                            $(arr[i]).css('color','green')
+                        }
+                    }
+
+
+                    $('tr').css('color', 'white')
+                  
+                    $('.layui-table-header').css('background-color', 'rgba(0, 0, 0, 0.8)')
+                   
+                     $('thead').find('tr').css('background-color', 'rgba(0, 0, 0, 0.8)')
+                    var trs = $('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                             $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+    <script>
+        var myChart = echarts.init(document.getElementById('lineChart'));
+       option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+               data: ['2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14', '2019-08-15'],
+         axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+             },
+      
+               },
+                                axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+             }
+
+
+    },
+    yAxis: {
+        type: 'value',
+         axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+        },
+           splitLine:{
+			                show:false
+        },
+            axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+    },
+    series: [{
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        type: 'line',
+        areaStyle: {}
+    }]
+};
+
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

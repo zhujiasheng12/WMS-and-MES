@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="/easyui/jquery.min.js"></script>
+    <script src="/easyui/jquery.easyui.min.js"></script>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+
+
+</head>
+<body class="layui-layout-body">
+    <input id="cncId" hidden />
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="background-color: white; height: 50px; border-bottom: solid 1px lightgray;">
+
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+
+
+
+
+        </div>
+
+        <div class="layui-side layui-bg-black" style="background-color: white; top: 57px">
+            <div class="layui-side-scroll" style="">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+
+                <table id="tt" style="width: 100%; height: 100%;"></table>
+            </div>
+        </div>
+
+        <div class="layui-body" style="bottom: 0; top: 90px">
+            <!-- 内容主体区域 -->
+            <div style="padding-left: 10px;">
+
+                <table id="demo" lay-filter="test"></table>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script type="text/html" id="toolbarDemo">
+
+   <div style="display:inline"><p style="display:inline">正在加工任务:</p><p style="display:inline;font-size:150%" id="task">无</p></div>
+    <button class="layui-btn layui-btn-sm" lay-event="submit" style="float:right;margin-left:10px">调整后提交</button>
+  <button class="layui-btn layui-btn-sm" lay-event="stop" style="float:right">暂停</button>
+       
+  
+         
+    </script>
+
+    <script>
+        fun()
+
+        function fun() {
+            $('#tt').treegrid({
+                url: '/刀具管理/刀具寿命管理/PositionHandler.ashx',
+                idField: 'id',
+                animate: true,
+                treeField: 'name',
+                method: 'get',
+                rownumbers: true,
+
+                columns: [[
+                    { title: '位置名称', field: 'name', width: '120%' },
+
+                    { field: 'id', title: 'id', width: 80, hidden: true },
+                    { field: 'CncID', title: 'CncID', width: 80, },
+                    { field: 'flag', title: 'flag', width: 80, }
+                ]],
+
+            });
+        }
+
+
+        $('#tt').treegrid({
+
+            onLoadSuccess: function (data) {
+                $('td').css('border', 'none')
+                $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                $('.tree-icon').removeClass('tree-icon tree-file')
+                $(".datagrid-header").find("span").css('font-size', '130%')
+                $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' });
+                var arr = $('[field="flag"]');
+                for (var i = 0; i < arr.length; i++) {
+                    var state = arr[i].children[0].innerText
+                    if (state == 1) {
+                        $(arr[i]).parent('tr').css('background-color', '#F8B62D')
+                        var fathers = $(arr[i]).parents('.treegrid-tr-tree')
+                        for (var ii = 0; ii < fathers.length; ii++) {
+                            var fatherPrev = $(fathers[ii]).prev().css('background-color')
+                            if (fatherPrev != "rgb(255, 0, 0)") {
+                                $(fathers[ii]).prev().css('background-color', '#F8B62D')
+                            }
+                        }
+
+
+                    }
+                    if (state == 2) {
+                        $(arr[i]).parent('tr').css('background-color', 'red')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().css('background-color', 'red')
+
+                    }
+
+                }
+                $('tr').click(function () {
+                    cncId = $(this)[0].children[2].children[0].innerText
+                    //$("#cncId").val(cncId)
+                    layui.use(['table', 'laypage'], function () {
+                        var table = layui.table, $ = layui.$, laypage = layui.laypage;
+
+                        //第一个实例
+                    table1=    table.render({
+                            elem: '#demo'
+
+                            , url: '读取机床未加工任务.ashx' //数据接口
+                            , where: { cncId: cncId }
+                           // , page: true //开启分页
+                           // , limit: 90
+                            , toolbar: '#toolbarDemo'
+                            , cols: [[ //表头
+                                { type: 'numbers',title:"序号" },
+                                { field: 'id', title: '加工单元主键ID', hide:true },
+                                 { field: 'orderNum', title: '订单号', },
+                                  { field: 'orderName', title: '产品名称', },
+                                   { field: 'projectName', title: '项目名称', },
+                                    { field: 'ProcessNum', title: '工序号', },
+                                     { field: 'deviceType', title: '机床类型', },
+                                      { field: 'jiaType', title: '治具类型', },
+                                       { field: 'cncNum', title: '机床编号', },
+                                        { field: 'startTimeStr', title: '加工预计开始时间', },
+                                         { field: 'endTimeStr', title: '加工预计结束时间', },
+                                          { field: 'nonCuttingTime', title: '辅助时间', },
+                                        
+                                           { field: 'taskIDs', title: 'taskIDs', hide:true },
+                                             { field: 'do', title: '操作', templet: '#barDemo', width:210 }
+
+                            ]],//
+                            done: function (dd) {
+                                $.ajax({
+                                    url: '读取机台当前加工任务.ashx',
+                                    type: 'post',
+                                    data: { cncId: cncId },
+                                    success: function (res) {
+                                        var obj = JSON.parse(res)
+                                        if (obj.data.length > 0) {
+                                           
+                                            document.getElementById('task').innerHTML = "&nbsp;&nbsp;&nbsp;项目名称:" + obj.data[0].projectName + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单号:" + obj.data[0].orderNum + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工序:" + obj.data[0].ProcessNum;
+                                      
+                                          
+                                        }
+                                    }
+                                })
+                                $(".layui-table-view").css('margin', 0)
+                          
+                                $('.layui-table-body').find('tr').mouseenter(function () {
+                                  
+                                    $(this).css('background-color', 'antiquewhite')
+                                })
+                                $('.layui-table-body').find('tr').mouseleave(function () {
+                                    $(this).css('background-color', 'white')
+                                });
+
+                                var max = $('td[data-field="toolMaxTime"]')
+                                var now = $('td[data-field="toolCurrTime"]')
+                                for (var i = 0; i < max.length; i++) {
+                                    var ma = new Number(max[i].children[0].innerText)
+                                    var no = new Number(now[i].children[0].innerText)
+                                    if (ma <= no) {
+                                        $(max[i]).parent('tr').css({ 'background-color': 'red', 'color': 'black' })
+                                    } else if (no > ma * 0.8 & ma > 0) {
+                                        $(max[i]).parent('tr').css('background-color', '#F8B62D')
+                                    }
+                                    if (ma == 0 & no == 0) {
+                                        $(max[i]).parent('tr').css('background-color', 'white')
+                                    }
+                                }
+                            }
+                        });
+                        //头工具栏事件
+                        table.on('toolbar(test)', function (obj) {
+                            var checkStatus = table.checkStatus(obj.config.id);
+                            switch (obj.event) {
+                                case 'submit':
+                                    var tds = $('.layui-table-body').find('td[data-field="taskIDs"]');
+                                    var taskIDss = "";
+                                    for (var i = 0; i < tds.length; i++) {
+                                        var taskIDs = $(tds[i]).children("div").text();
+                                        taskIDss += taskIDs + ",";
+                                    }
+                                    $.ajax({
+                                        url: '排序修改提交.ashx',
+                                        type: 'post',
+                                        data: { taskIDss: taskIDss },
+                                        success: function (res) {
+                                            if (res == "ok") {
+                                                layer.msg("修改成功", { icon: 1, time: 1000 }, function () {
+                                                    table1.reload()
+                                                })
+                                            } else {
+                                                layer.alert(res)
+                                            }
+                                 
+                                    }
+                                    })
+                                    console.log(taskIDss)
+                                    break;
+                         
+
+                                case 'stop':
+                                    layer.confirm("是否暂停改机床加工任务", function (index) { 
+                                    $.ajax({
+                                        url: '暂停机床当前加工任务.ashx',
+                                        type: 'post',
+                                        data: { machId: cncId },
+                                        success: function (res) {
+                                            if (res == "ok") {
+                                                layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                                    table1.reload()
+                                                })
+                                            } else {
+                                                layer.alert(res)
+                                            }
+
+                                        }
+                                    })
+                                    })
+                                    break;
+
+                            };
+                        });
+
+                        table.on('tool(test)', function (obj) {
+                            var data = obj.data;
+                            //console.log(obj)
+                            if (obj.event === 'up') {
+
+                                var tr = $(this).parents('tr');
+                                //var sign = $(tr).prev().find('[data-field="sign"]')[0].children[0].innerText;
+                                //if (sign == 0) {
+                                //    return;
+                                //}
+                                $(tr).insertBefore($(tr).prev())
+
+                            } else if (obj.event === 'down') {
+                                var tr = $(this).parents('tr');
+                                $(tr).insertAfter($(tr).next())
+                            } else if (obj.event === 'top') {
+                                var tr = $(this).parents('tr');
+                                var arr = $('.layui-table-body').find('tr')
+                              
+                                $(tr).insertBefore($(arr[0]))
+                                //for (var i = 0; i < arr.length; i++) {
+                                //    if ($(arr[i]).find('[data-field="sign"]')[0].children[0].innerText == 1) {
+                                //        $(tr).insertBefore($(arr[i]))
+                                //        return;
+                                //    }
+                                //}
+
+                            } else if (obj.event === 'OM') {
+                                layer.open({
+                                    type: 2,
+                                    area: ['300px', '500px'],
+                                    title:"换产到其他机床",
+                                    content: '换产到其他机床.html',
+                                    success: function (layero, index) {
+                                       
+                                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.fun(data.id)
+                                     
+                                    }
+                                });
+                            }
+                        });
+                    });
+                })
+                $('tr')[1].click();
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+
+            }
+        });
+
+    </script>
+     <script type="text/html" id="barDemo">
+        <button title="上移" class="layui-btn layui-btn-xs" lay-event="up"><i class="layui-icon layui-icon-up"></i> </button>
+        <button title="下移" class="layui-btn  layui-btn-xs" lay-event="down"><i class="layui-icon layui-icon-down"></i> </button>
+        <button title="置顶" class="layui-btn  layui-btn-xs" lay-event="top"><i class="layui-icon layui-icon-upload-circle"></i> </button>
+           <button title="换产到其它机床" class="layui-btn  layui-btn-xs" lay-event="OM">其它机床 </button>
+        
+    </script>
+</body>
+</html>

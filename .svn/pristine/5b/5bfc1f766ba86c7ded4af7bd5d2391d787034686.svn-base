@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <input id="searchContent" hidden />
+    <script>
+
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                    case 'create':
+
+                        layer.open({
+                            type: 2,
+                            title:'新建订单',
+                            area: ['500px', '700px'],
+                            content: '新建订单.html',
+                            cancel: function(index, layero){ 
+                               
+                                  
+                                    tableReload.reload({
+                                    })
+                             
+                               
+                            }
+                        })
+                        break;
+                    case'insertion':
+                        layer.open({
+                            type: 2,
+                            title: '插单管理',
+                            area: ['500px', '500px'],
+                            content: '插单管理.html'
+                        })
+                        break;
+                    case 'reload':
+                        $("#searchContent").val("")
+                        table.reload('idTest', function () {
+
+                        })
+                        break;
+                    case 'search':
+                        $("#searchContent").val($("#select").val())
+                       
+                    tableReload.reload({
+                        url: 'orderEntry.ashx',
+                        where: {
+                            key:$("#select").val()
+                        }
+                    })
+            
+                        break;
+                    case 'del':
+                       var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
+                        if (checkStatus.data.length == 0) {
+                            layer.alert("未勾选")
+                        } else {
+                            layer.confirm('是否删除', function (index) {
+                                var formData = new FormData();
+                                for (var i = 0; i < checkStatus.data.length; i++) {
+                                      formData.append(i, checkStatus.data[i].Order_ID)
+                                }
+                              
+                                $.ajax({
+                                    url: 'orderDelete.ashx',
+                                    data: formData,
+                                    type: 'post',
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (d) {
+                                        if (d == "ok") {
+                                            layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                                layer.close(index);
+                                                tableReload.reload({
+
+                                                })
+                                            })
+                                        } else {
+                                            layer.alert(d)
+                                        }
+                                    }
+                                })
+                                layer.close(index);
+                            });
+                        }
+                 
+                     
+                     
+                        break;
+                };
+            });
+        
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        var formData = new FormData();
+                        formData.append('del',data.Order_ID)
+                        $.ajax({
+                            url: 'orderDelete.ashx',
+                            data: formData,
+                            type:'post',
+                            contentType: false,
+                            processData: false,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index);
+                                        tableReload.reload({
+
+                                        })
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'edit') {
+
+                    layer.open({
+                        type: 2,
+                        content: 'orderEdit.html',
+                        area: ['50%', '80%'],
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.method(data.Order_ID)
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="create"><i class="layui-icon layui-icon-add-circle-fine"></i>创建</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="insertion"><ii class="layui-icon layui-icon-template-1"></ii>插单管理</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><ii class="layui-icon layui-icon-delete"></ii>删除</button>
+
+                </div>
+            </div>
+
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="search" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="reload" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </script>
+    <script>
+        layui.use(['table', 'form'], function () {
+            var table = layui.table, $ = layui.$, form = layui.form;
+
+            //第一个实例
+            tableReload = table.render({
+                elem: '#demo'
+                
+                , url: 'orderEntry.ashx' //数据接口
+                , page: true //开启分页
+                , toolbar: '#toolbarDemo'
+                , id: 'idTest'
+                , cols: [[ //表头
+                    { field: '', title: '', type: 'checkbox', width: 40, fixed: 'left' }
+                    ,{ field: 'number', title: '序号', type: 'numbers', width: 60, fixed: 'left' }
+                    , { field: 'Order_Number', title: '产品订单号', width: 120, fixed: 'left' }
+                     , { field: 'projectName', title: '项目名称', width: 100 }
+                    
+                    , { field: 'Order_Leader', title: '订单负责人', width: 105 }
+                    , { field: 'Product_Name', title: '产品名称', width:120 }
+                    , { field: 'Product_Material', title: '产品材料', width: 90 }
+                    , {
+                        field: 'Product_Drawing', title: '产品图纸', width: 90, templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        }
+                    }
+                    , { field: 'Product_Output', title: '订单数量', width: 90 }
+                    , { field: 'Order_Plan_Start_Time', title: '订单开始时间', width: 160, hide: true }
+                    , { field: 'Order_Plan_End_Time', title: '订单结束时间', width: 160, hide: true }
+                    , { field: 'Order_State', title: '订单状态', width: 90 }
+                     //, { field: 'craftPerson', title: '工程工艺责任人', width: 135 }
+                    , { field: 'Engine_Program_Manager', title: '工程编程责任人', width: 135 }
+                    //, { field: 'Engine_Technology_Manager', title: '工程技术责任人', width: 135 }
+                    //, { field: 'Engine_Status', title: '工程状态', width:90}
+                    , { field: 'operation', title: '操作', width: 150 , toolbar: '#barDemo' , fixed: 'right'}
+                    , { field: 'Order_ID', title: 'id', hide: true }
+                ]],
+                done: function () {
+                    
+                       var states = $('td[data-field="Order_State"]');
+                    for (var i = 0; i < states.length; i++) {
+                        if (states[i].children[0].innerText != "5"&states[i].children[0].innerText !="6")
+                        {
+                            // $(states[i]).siblings('[data-field="operation"]').find('[lay-event="edit"]').addClass('layui-btn-disabled').attr('disabled', true);
+                            //$(states[i]).siblings('[data-field="operation"]').find('[lay-event="submit"]').addClass('layui-btn-disabled').attr('disabled', true);
+                        }
+
+                       
+
+                         if (states[i].children[0].innerText == "1") {
+                            states[i].children[0].innerText="意向订单"
+                        }
+                        if (states[i].children[0].innerText == "2") {
+                            states[i].children[0].innerText="生产中"
+                        }
+                        if (states[i].children[0].innerText == "3") {
+                            states[i].children[0].innerText="已下推"
+                        }
+                        if (states[i].children[0].innerText == "4") {
+                            states[i].children[0].innerText="停止/完成"
+                        }
+                        if (states[i].children[0].innerText == "5") {
+                            states[i].children[0].innerText="意向未提交"
+                        }
+                        if (states[i].children[0].innerText == "1") {
+                            states[i].children[0].innerText="关联未提交"
+                        }
+                        
+                 
+
+
+                    }
+
+                    $.ajax({
+                        url: 'orderSearch.ashx',
+                        success: function (d) {
+                            var objs = JSON.parse(d);
+                            $.each(objs, function (i, obj) {
+                                if (obj.key == $("#searchContent").val()) {
+                                     $('#select').append('<option value="' + obj.key + '" selected>' + obj.key + '</option>')
+                                } else {
+                                     $('#select').append('<option value="' + obj.key + '">' + obj.key + '</option>')
+                                }
+                               
+                            })
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                form.render()
+                            })
+                        }
+                    });
+                   
+                    layui.form.render()
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+                    $('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '图纸.html',
+                            area: ['80%', '80%'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+                }
+            });
+
+        });
+    </script>
+
+        <table id="demo" lay-filter="test"></table>
+    <script>
+        
+        $(function () {
+            layui.use("table", function () {
+                var table = layui.table;
+            //    $("#search").click(function () {
+            //        tableReload.reload({
+            //            url: 'orderEntry.ashx',
+            //            where: {
+            //                key:$("#select").val()
+            //            }
+            //        })
+            //})
+                $("#reload").click(function () {
+                    table.reload('idTest', function(){
+                    })
+            })
+
+
+            })
+           
+        })
+
+    </script>
+</body>
+</html>

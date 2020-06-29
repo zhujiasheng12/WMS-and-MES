@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.工程部
+{
+    /// <summary>
+    /// 审核 的摘要说明
+    /// </summary>
+    public class 审核 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var form = context.Request.Form;
+           
+            var files = context.Request.Files;//审核文件
+            var orderId =Convert.ToInt32 ( form["orderId"]);//审核的订单
+            var result = form["result"];//结果
+            var text=form["text"];//审核的说明
+            var type = form["type"];
+            string orderNumber = "";
+            PathInfo pathInfo = new PathInfo();
+            int auditResult = 0;
+            if (result == "true")
+            {
+                auditResult = 1;
+            }
+            else
+            {
+                auditResult = -3;
+            }
+            using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
+            {
+                using (System.Data.Entity.DbContextTransaction mytran = entities.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var order = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).FirstOrDefault ();
+
+                        if (type == "工艺审核") {
+
+                            if (order != null)
+                            {
+                                orderNumber = order.Order_Number;
+                                for (int i = 0; i < files.Count; i++)
+                                {
+                                    var item = new FileInfo(files[i].FileName);
+                                    var pathblank = Path.Combine(pathInfo.upLoadPath(), orderNumber, "审核结果", item.Name);
+                                    DirectoryInfo directoryBlank = new DirectoryInfo(Path.Combine(pathInfo.upLoadPath(), orderNumber, "审核结果"));
+                                    if (!directoryBlank.Exists)
+                                    {
+                                        directoryBlank.Create();
+                                    }
+                                    files[i].SaveAs(pathblank);
+                                }
+                                string resu = "";
+                                if (order.audit_Result != null)
+                                {
+                                    resu = order.audit_Result;
+                                }
+                                if (text != null && text != "")
+                                {
+                                    order.audit_Result = resu + "。" + DateTime.Now.ToString() + ":" + text;
+                                }
+                                var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId && r.sign == -2);
+                                if (processes.Count() < 1)
+                                {
+                                    context.Response.Write("该订单暂无待审核工序");
+                                    return;
+                                }
+                                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId))
+                                {
+                                    item.sign = auditResult;
+                                    if (auditResult == 1)
+                                    {
+                                        item.BlankSpecification = item.BlankSpecification.Replace("#1#", "");
+                                        item.JigSpecification = item.JigSpecification.Replace("#1#", "");
+                                    }
+                                }
+                                if (auditResult == 1)
+                                {
+                                    var blankInfo = entities.JDJS_WMS_Order_Blank_Table.Where(r => r.OrderID == orderId);
+                                    foreach (var item in blankInfo)
+                                    {
+                                        item.BlankSpecification = item.BlankSpecification.Replace("#1#", "");
+                                    }
+                                }
+                                entities.SaveChanges();
+                            }
+                            else
+                            {
+                                context.Response.Write("该订单不存在");
+                                return;
+                            }
+                        } else if (type == "编程审核")
+                        {
+                            if (order != null)
+                            {
+                                orderNumber = order.Order_Number;
+                                for (int i = 0; i < files.Count; i++)
+                                {
+                                    var item = new FileInfo(files[i].FileName);
+                                    var pathblank = Path.Combine(pathInfo.upLoadPath(), orderNumber, "编程审核结果", item.Name);
+                                    DirectoryInfo directoryBlank = new DirectoryInfo(Path.Combine(pathInfo.upLoadPath(), orderNumber, "编程审核结果"));
+                                    if (!directoryBlank.Exists)
+                                    {
+                                        directoryBlank.Create();
+                                    }
+                                    files[i].SaveAs(pathblank);
+                                }
+                                string resu = "";
+                                if (order.program_audit_result!= null)
+                                {
+                                    resu = order.program_audit_result;
+                                }
+                                if (text != null && text != "")
+                                {
+                                    order.program_audit_result = resu + "。" + DateTime.Now.ToString() + ":" + text;
+                                }
+                                var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId && r.program_audit_sign == -2&r.sign==1);
+                                if (processes.Count() < 1)
+                                {
+                                    context.Response.Write("该订单暂无待审核工序");
+                                    return;
+                                }
+                                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId  & r.sign == 1))
+                                {
+                                    item.program_audit_sign = auditResult;
+                                    //if (auditResult == 1)
+                                    //{
+                                    //    item.BlankSpecification = item.BlankSpecification.Replace("#1#", "");
+                                    //    item.JigSpecification = item.JigSpecification.Replace("#1#", "");
+                                    //}
+                                }
+                                //if (auditResult == 1)
+                                //{
+                                //    var blankInfo = entities.JDJS_WMS_Order_Blank_Table.Where(r => r.OrderID == orderId);
+                                //    foreach (var item in blankInfo)
+                                //    {
+                                //        item.BlankSpecification = item.BlankSpecification.Replace("#1#", "");
+                                //    }
+                                //}
+                                entities.SaveChanges();
+                            }
+                            else
+                            {
+                                context.Response.Write("该订单不存在");
+                                return;
+                            }
+                        }
+                        
+                        entities.SaveChanges();
+                        mytran.Commit();
+                        context.Response.Write("ok");
+                    }
+                    catch (Exception ex)
+                    {
+                        mytran.Rollback();
+                        context.Response.Write(ex.Message);
+                    }
+                }
+            }
+           
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

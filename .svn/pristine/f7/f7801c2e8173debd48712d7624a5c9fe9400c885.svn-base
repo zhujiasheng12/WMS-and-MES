@@ -1,0 +1,430 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理
+{
+    /// <summary>
+    /// 工艺编程上传 的摘要说明
+    /// </summary>
+    public class 工艺编程上传 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var form = context.Request.Form;
+            var files = context.Request.Files;
+            var ncFile = files["ncFile"];
+            var toolChartFile = files["toolChartFile"];
+            var number =int.Parse(form["number"]);
+            var processId = int.Parse(context.Request.Form["processId"]);
+
+
+            using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
+            {
+                using(System.Data.Entity.DbContextTransaction db = entities.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var orderId = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == processId).First().OrderID;
+                        var orderNum = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).First().Order_Number;
+                        var processNum = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == processId).First().ProcessID;
+                        PathInfo pathInfo1 = new PathInfo();
+                        var directoryPath = Path.Combine(pathInfo1.upLoadPath(), orderNum, "工序" + processNum, "编程文件");
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                        var count = 0;
+                        while (files["programmingFile" + count] != null)
+                        {
+                            files["programmingFile" + count].SaveAs(Path.Combine(directoryPath, files["programmingFile" + count].FileName));
+                            count++;
+                        }
+                        var row = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == processId).First();
+                        var orderNumber = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == row.OrderID).First().Order_Number;
+                       
+                        var exten = Path.GetExtension(ncFile.FileName);
+                        var fileName = orderNumber + "-P" + row.ProcessID + exten;
+                        var oldFileName = row.programName;
+
+                        PathInfo pathInfo = new PathInfo();
+
+                        DirectoryInfo directoryP = new DirectoryInfo(Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件"));
+                        if (!directoryP.Exists)
+                        {
+                            directoryP.Create();
+                        }
+
+                        DirectoryInfo directoryT = new DirectoryInfo(Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表"));
+                        if (!directoryT.Exists)
+                        {
+                            directoryT.Create();
+                        }
+                        var path = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", fileName);
+
+                        if (oldFileName != null)
+                        {
+                            var oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", oldFileName);
+                            int i = 1;
+                            while (File.Exists(oldPath + "-" + i.ToString()))
+                            {
+                                i++;
+                            }
+                            File.Copy(oldPath, oldPath + "-" + i.ToString());
+                            File.Delete(oldPath);
+                        }
+
+                        ncFile.SaveAs(path);
+                        row.programName = fileName;
+                        entities.SaveChanges();
+                        db.Commit();
+                    }
+                    catch(Exception ex)
+                    {
+                        context.Response.Write(ex.Message);
+                        db.Rollback();
+                        return;
+                    }
+                }
+              
+   
+              
+
+
+            }
+
+
+
+            {
+               
+              
+                var time = number;//探测点个数
+
+                double ToolTime = 0.1666666666;//换刀时间
+                double ProcessTime = 0;//工序时间
+                double OnMachMea = 0.033333333333;//探测时间
+                int toolNum = 0;//换刀次数
+                string ToolNo = "0";
+                int toolFlag = 1;
+                using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
+                {
+                    using (System.Data.Entity.DbContextTransaction mytran = entities.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            var row = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == processId).First();
+                            var orderNumber = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == row.OrderID).First().Order_Number;
+                            int cncType = Convert.ToInt32(row.DeviceType);
+                            var exten = Path.GetExtension(toolChartFile.FileName);
+                            var fileName = "T-" + orderNumber + "-P" + row.ProcessID + exten;
+                            PathInfo pathInfo = new PathInfo();
+                            var paths = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", fileName);
+                            toolChartFile.SaveAs(paths);
+                            row.toolChartName = fileName;
+                            entities.SaveChanges();
+
+
+
+                            string FilePath = paths;
+                            string path = Path.GetFileNameWithoutExtension(FilePath);
+                            int ProcessID = processId;
+                            string[] str = path.Split('-');
+                            string OrderNum = str[1];
+                            string Process = str[2].Substring(1);
+                            List<int> ToolNum = new List<int>();
+                            List<工程部.ToolInfo> toolInfos = new List<工程部.ToolInfo>();
+                            string fileSuffix = System.IO.Path.GetExtension(FilePath);
+
+                            if (fileSuffix == ".xls")
+                            {
+                                #region 
+                                {
+                                    DataTable dt = getData(FilePath).Tables[0];
+                                    dt.Columns[0].ColumnName = "序号";
+                                    dt.Columns[1].ColumnName = "路径名";
+                                    dt.Columns[2].ColumnName = "刀号";
+                                    dt.Columns[3].ColumnName = "刀具";
+                                    dt.Columns[4].ColumnName = "刀柄";
+                                    dt.Columns[5].ColumnName = "刀具伸出长度";
+                                    dt.Columns[6].ColumnName = "刃长";
+                                    dt.Columns[7].ColumnName = "粗中光";
+                                    dt.Columns[8].ColumnName = "加工时间";
+                                    for (int i = 0; i < dt.Rows.Count; i++)
+                                    {
+                                        if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 8)
+                                        {
+                                            //dt.Rows.Remove(dt.Rows[0]);
+                                        }
+                                        else if (i == 7)
+                                        {
+
+                                            ProcessTime = 0;
+                                        }
+                                        else
+                                        {
+
+
+                                            string toolnum = dt.Rows[i]["刀号"].ToString();
+                                            double _toolnum = 0;
+                                            if (isNumberic(toolnum, out _toolnum))
+                                            {
+                                                if (toolnum != ToolNo)
+                                                {
+                                                    toolNum++;
+                                                    ToolNo = toolnum;
+                                                }
+
+                                                if (dt.Rows[i]["加工时间"].ToString() != "" && dt.Rows[i]["加工时间"] != null)
+                                                {
+                                                    if (dt.Rows[i]["加工时间"].ToString().Contains(':'))
+                                                    {
+                                                        var timeInfo = dt.Rows[i]["加工时间"].ToString().Split(':');
+                                                        int hT = Convert.ToInt32(timeInfo[0]);
+                                                        int minT = Convert.ToInt32(timeInfo[1]);
+                                                        int secT = Convert.ToInt32(timeInfo[2]);
+                                                        ProcessTime += (hT * 60 + minT + ((float)secT / 60));
+                                                    }
+                                                    else if (dt.Rows[i]["加工时间"].ToString() == "---")
+                                                    {
+                                                        ProcessTime += 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        ProcessTime += (Convert.ToDouble(dt.Rows[i]["加工时间"].ToString()) * 1440);
+                                                    }
+                                                }
+                                                if (!ToolNum.Contains(Convert.ToInt32(dt.Rows[i]["刀号"].ToString())))
+                                                {
+                                                    ToolNum.Add(Convert.ToInt32(dt.Rows[i]["刀号"].ToString()));
+                                                工程部.ToolInfo tool = new 工程部.ToolInfo();
+                                                    tool.PathName = dt.Rows[i]["路径名"].ToString();
+                                                    string toolno = dt.Rows[i]["刀号"].ToString();
+                                                    double _toolno = 0;
+                                                    if (isNumberic(toolno, out _toolno))
+                                                    {
+                                                        tool.ToolNO = Convert.ToInt32(dt.Rows[i]["刀号"].ToString());
+                                                    }
+                                                    tool.ToolName = dt.Rows[i]["刀具"].ToString();
+                                                    string tooll = dt.Rows[i]["刀具伸出长度"].ToString();
+                                                    double _tooll = 0;
+                                                    if (isNumberic(tooll, out _tooll))
+                                                    {
+                                                        tool.ToolLength = Convert.ToDouble(dt.Rows[i]["刀具伸出长度"].ToString());
+                                                    }
+                                                    string ToolD = dt.Rows[i]["刃长"].ToString();
+                                                    double _ToolD = 0;
+                                                    if (isNumberic(ToolD, out _ToolD))
+                                                    {
+                                                        tool.ToolAroidance = Convert.ToDouble(dt.Rows[i]["刃长"].ToString());
+                                                    }
+
+                                                    tool.Shank = dt.Rows[i]["刀柄"].ToString();
+                                                    toolInfos.Add(tool);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                                #endregion
+
+                                var toolInfo = entities.JDJS_WMS_Order_Process_Tool_Info_Table.Where(r => r.ProcessID == ProcessID);
+                                foreach (var item in toolInfo)
+                                {
+                                    entities.JDJS_WMS_Order_Process_Tool_Info_Table.Remove(item);
+
+                                }
+
+                                var toolStand = entities.JDJS_WMS_Tool_Standard_Table.Where(r => r.MachTypeID == cncType).ToList();
+                                var CETOU = toolStand.Where(r => r.Name == "测头");
+                                int cetouID = -1;
+                                if (CETOU.Count() > 0)
+                                {
+                                    cetouID = Convert.ToInt32(CETOU.First().ToolID.Substring(1));
+                                }
+                                List<string> toolStandNo = new List<string>();
+                                foreach (var real in toolStand)
+                                {
+                                    string strT = real.ToolID;
+                                    toolStandNo.Add(strT);
+                                }
+                                foreach (var item in toolInfos)
+                                {
+                                    //判断是否有特殊刀具，判断刀具是否在刀具标准表是否存在
+
+                                    if (!toolStandNo.Contains("T" + item.ToolNO.ToString()))
+                                    {
+                                        toolFlag = -1;
+                                        break;
+                                    }
+                                }
+                                entities.SaveChanges();
+                                foreach (var item in toolInfos)
+                                {
+
+                                    if (item.ToolNO != cetouID)
+                                    {
+                                        JDJS_WMS_Order_Process_Tool_Info_Table tool = new JDJS_WMS_Order_Process_Tool_Info_Table()
+                                        {
+                                            ProcessID = ProcessID,
+                                            PathName = item.PathName,
+                                            ToolNO = item.ToolNO,
+                                            ToolName = item.ToolName,
+                                            ToolLength = item.ToolLength,
+                                            ToolDiameter = item.ToolDiameter,
+                                            ToolAroidance = item.ToolAroidance,
+                                            Shank = item.Shank
+                                        };
+                                        entities.JDJS_WMS_Order_Process_Tool_Info_Table.Add(tool);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                mytran.Rollback();
+                                context.Response.Write("刀具表请输入xls格式文件");
+                                return;
+
+                            }
+
+                            double times = Math.Ceiling(OnMachMea * time + ToolTime * toolNum + ProcessTime);
+                            var order = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_Number == OrderNum);
+                            if (order.Count() > 0)
+                            {
+                                int orderid = order.First().Order_ID;
+                                double pros = 0;
+                                if (isNumberic(Process, out pros))
+                                {
+                                    int prose = Convert.ToInt32(Process);
+                                    var pro = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderid && r.ProcessID == prose);
+
+                                    foreach (var item in pro)
+                                    {
+                                        item.ProcessTime = times;
+                                        item.toolPreparation = toolFlag;
+                                    }
+
+                                }
+                            }
+
+
+
+                            entities.SaveChanges();
+                            mytran.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            mytran.Rollback();
+                            context.Response.Write(ex.Message);
+                            return;
+                        }
+                        context.Response.Write("ok");
+                    }
+                }
+            }
+
+
+
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        protected static bool isNumberic(string message, out double result)
+        {
+            //判断是否为整数字符串
+            //是的话则将其转换为数字并将其设为out类型的输出值、返回true, 否则为false
+            result = -1;   //result 定义为out 用来输出值
+            try
+            {
+                //当数字字符串的为是少于4时，以下三种都可以转换，任选一种
+                //如果位数超过4的话，请选用Convert.ToInt32() 和int.Parse()
+
+                //result = int.Parse(message);
+                //result = Convert.ToInt16(message);
+                result = Convert.ToDouble(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public static DataSet getData(string path)
+
+        {
+
+            string fileSuffix = System.IO.Path.GetExtension(path);
+
+            if (string.IsNullOrEmpty(fileSuffix))
+
+                return null;
+
+            using (DataSet ds = new DataSet())
+
+            {
+
+                //判断Excel文件是2003版本还是2007版本
+
+                string connString = "";
+
+                if (fileSuffix == ".xls")
+
+                    connString = "Provider=Microsoft.Jet.OLEDB.4.0;" + "Data Source=" + path + ";" + ";Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\"";
+
+                else
+                    // connString = "Provider=Microsoft.Jet.OLEDB.4.0;" + "Data Source=" + path + ";" + ";Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\"";
+                    connString = "Provider=Microsoft.ACE.OLEDB.12.0;" + "Data Source=" + path + ";" + ";Extended Properties=\"Excel 12.0;HDR=YES;IMEX=1\"";
+
+                //读取文件
+
+                //string sql_select = "select * from [sheet1$]";
+                string tableName;
+                using (OleDbConnection conn = new OleDbConnection(connString))
+                {
+
+                    //DataTable table = conn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, null);
+                    //string tableName = table.Rows[0]["Table_Name"].ToString();
+                    //string sql_select = "select * from " + "[" + tableName + "]";
+                    //string sql_select = "select * from [sheet1$]";
+
+
+
+                    conn.Open();
+
+                    DataTable table = conn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, null);
+                    tableName = table.Rows[0]["Table_Name"].ToString();
+                    string strExcel = "select * from " + "[" + tableName + "]";
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(strExcel, connString);
+
+                    adapter.Fill(ds, tableName);
+                    conn.Close();
+
+
+                }
+
+                if (ds == null)
+                {
+
+                }
+                return ds;
+
+            }
+
+        }
+
+    }
+}

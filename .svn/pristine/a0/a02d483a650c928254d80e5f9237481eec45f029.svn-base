@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CNCINFOModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BorrowInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="MachID" Type="int" />
+  </EntityType>
+  <EntityType Name="Cnc">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachNum" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IP" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="MachState" Type="varchar" MaxLength="50" />
+    <Property Name="MachType" Type="int" Nullable="false" />
+    <Property Name="Position" Type="int" />
+  </EntityType>
+  <EntityType Name="CncBrand">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Brand" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CncType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="BrandID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JDMachRealTimeData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachCoord_X" Type="float" />
+    <Property Name="MachCoord_Y" Type="float" />
+    <Property Name="MachCoord_Z" Type="float" />
+    <Property Name="MachCoord_A" Type="float" />
+    <Property Name="MachCoord_B" Type="float" />
+    <Property Name="MachCoord_C" Type="float" />
+    <Property Name="AbsCoord_X" Type="float" />
+    <Property Name="AbsCoord_Y" Type="float" />
+    <Property Name="AbsCoord_Z" Type="float" />
+    <Property Name="AbsCoord_A" Type="float" />
+    <Property Name="AbsCoord_B" Type="float" />
+    <Property Name="AbsCoord_C" Type="float" />
+    <Property Name="RelCoord_X" Type="float" />
+    <Property Name="RelCoord_Y" Type="float" />
+    <Property Name="RelCoord_Z" Type="float" />
+    <Property Name="RelCoord_A" Type="float" />
+    <Property Name="RelCoord_B" Type="float" />
+    <Property Name="RelCoord_C" Type="float" />
+    <Property Name="ProgState" Type="int" />
+    <Property Name="CurrWCoord" Type="int" />
+    <Property Name="FeedRate" Type="float" />
+    <Property Name="SpindleSpeed" Type="int" />
+    <Property Name="ToolNo" Type="int" />
+    <Property Name="MachTime" Type="float" />
+    <Property Name="CurrO" Type="int" />
+    <Property Name="CurrOMainO" Type="int" />
+    <Property Name="CountNum" Type="int" />
+    <Property Name="SpindleRate" Type="int" />
+    <Property Name="Rate" Type="int" />
+    <Property Name="SInfo_A" Type="float" />
+    <Property Name="SInfo_NM" Type="float" />
+    <Property Name="SInfo_W" Type="float" />
+    <Property Name="CurLineNo" Type="int" />
+    <Property Name="CurLineText" Type="text" />
+    <Property Name="Time_Y" Type="int" />
+    <Property Name="Time_M" Type="int" />
+    <Property Name="Time_D" Type="int" />
+    <Property Name="Time_H" Type="int" />
+    <Property Name="Time_MIT" Type="int" />
+    <Property Name="Time_S" Type="int" />
+    <Property Name="Time_zone" Type="int" />
+    <Property Name="Mode" Type="int" />
+    <Property Name="CncID" Type="int" />
+  </EntityType>
+  <EntityType Name="MachProgStateInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CncID" Type="int" />
+    <Property Name="ProgState" Type="int" />
+    <Property Name="StartTime" Type="datetime" />
+    <Property Name="EndTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="MachStartEndRunTime">
+    <Key>
+      <PropertyRef Name="TimeID" />
+    </Key>
+    <Property Name="TimeID" Type="datetime" Nullable="false" />
+    <Property Name="StartTime" Type="float" />
+    <Property Name="EndTime" Type="datetime" />
+    <Property Name="RunTime" Type="float" />
+    <Property Name="CncID" Type="int" />
+  </EntityType>
+  <EntityType Name="MachTimesData">
+    <Key>
+      <PropertyRef Name="IDNum" />
+    </Key>
+    <Property Name="IDNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ID" Type="int" />
+    <Property Name="OpenTime" Type="float" />
+    <Property Name="AllRunTime" Type="float" />
+    <Property Name="NowRunTime" Type="float" />
+  </EntityType>
+  <EntityType Name="OrderInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="NowTime" Type="datetime" />
+    <Property Name="MachId" Type="int" />
+  </EntityType>
+  <EntityType Name="ReturnInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="datetime" Nullable="false" />
+    <Property Name="MachNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Person" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+    <Property Name="Team" Type="varchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="MachId" Type="int" />
+  </EntityType>
+  <EntityType Name="Staff">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="staff" Type="varchar" MaxLength="50" />
+    <Property Name="position" Type="varchar" MaxLength="50" />
+    <Property Name="tel" Type="varchar" MaxLength="50" />
+    <Property Name="parentId" Type="int" />
+    <Property Name="users" Type="varchar" MaxLength="50" />
+    <Property Name="password" Type="varchar" MaxLength="50" />
+    <Property Name="limit" Type="varchar" MaxLength="500" />
+    <Property Name="remark" Type="varchar" MaxLength="50" />
+    <Property Name="mailbox" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TestWEIZHIXINXI">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="size" Type="varchar" MaxLength="50" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EndDate" Type="varchar" MaxLength="50" />
+    <Property Name="parentId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserPassWord">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Users" Type="varchar" MaxLength="50" />
+    <Property Name="PassWords" Type="varchar" MaxLength="50" />
+    <Property Name="Limit" Type="int" />
+  </EntityType>
+  <Association Name="FK__BorrowInf__MachI__3D5E1FD2">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="BorrowInfo" Type="Self.BorrowInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BorrowInfo">
+        <PropertyRef Name="MachID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cnc__Position__534D60F1">
+    <End Role="TestWEIZHIXINXI" Type="Self.TestWEIZHIXINXI" Multiplicity="0..1" />
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestWEIZHIXINXI">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Cnc">
+        <PropertyRef Name="Position" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CncType__BrandID__24927208">
+    <End Role="CncBrand" Type="Self.CncBrand" Multiplicity="1" />
+    <End Role="CncType" Type="Self.CncType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CncBrand">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CncType">
+        <PropertyRef Name="BrandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MachProgS__CncID__5CD6CB2B">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="MachProgStateInfo" Type="Self.MachProgStateInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MachProgStateInfo">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MachRealT__CncID__2E1BDC42">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="JDMachRealTimeData" Type="Self.JDMachRealTimeData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="JDMachRealTimeData">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MachStart__CncID__45F365D3">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="MachStartEndRunTime" Type="Self.MachStartEndRunTime" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MachStartEndRunTime">
+        <PropertyRef Name="CncID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MachTimesDat__ID__619B8048">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="MachTimesData" Type="Self.MachTimesData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MachTimesData">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderInfo__MachI__5812160E">
+    <End Role="Cnc" Type="Self.Cnc" Multiplicity="0..1" />
+    <End Role="OrderInfo" Type="Self.OrderInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cnc">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OrderInfo">
+        <PropertyRef Name="MachId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CNCINFOModel1StoreContainer">
+    <EntitySet Name="BorrowInfo" EntityType="Self.BorrowInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cnc" EntityType="Self.Cnc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CncBrand" EntityType="Self.CncBrand" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CncType" EntityType="Self.CncType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JDMachRealTimeData" EntityType="Self.JDMachRealTimeData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MachProgStateInfo" EntityType="Self.MachProgStateInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MachStartEndRunTime" EntityType="Self.MachStartEndRunTime" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MachTimesData" EntityType="Self.MachTimesData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderInfo" EntityType="Self.OrderInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ReturnInfo" EntityType="Self.ReturnInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestWEIZHIXINXI" EntityType="Self.TestWEIZHIXINXI" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserPassWord" EntityType="Self.UserPassWord" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__BorrowInf__MachI__3D5E1FD2" Association="Self.FK__BorrowInf__MachI__3D5E1FD2">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="BorrowInfo" EntitySet="BorrowInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cnc__Position__534D60F1" Association="Self.FK__Cnc__Position__534D60F1">
+      <End Role="TestWEIZHIXINXI" EntitySet="TestWEIZHIXINXI" />
+      <End Role="Cnc" EntitySet="Cnc" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CncType__BrandID__24927208" Association="Self.FK__CncType__BrandID__24927208">
+      <End Role="CncBrand" EntitySet="CncBrand" />
+      <End Role="CncType" EntitySet="CncType" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MachProgS__CncID__5CD6CB2B" Association="Self.FK__MachProgS__CncID__5CD6CB2B">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="MachProgStateInfo" EntitySet="MachProgStateInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MachRealT__CncID__2E1BDC42" Association="Self.FK__MachRealT__CncID__2E1BDC42">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="JDMachRealTimeData" EntitySet="JDMachRealTimeData" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MachStart__CncID__45F365D3" Association="Self.FK__MachStart__CncID__45F365D3">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="MachStartEndRunTime" EntitySet="MachStartEndRunTime" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MachTimesDat__ID__619B8048" Association="Self.FK__MachTimesDat__ID__619B8048">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="MachTimesData" EntitySet="MachTimesData" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderInfo__MachI__5812160E" Association="Self.FK__OrderInfo__MachI__5812160E">
+      <End Role="Cnc" EntitySet="Cnc" />
+      <End Role="OrderInfo" EntitySet="OrderInfo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

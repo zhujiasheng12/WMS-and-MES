@@ -1,0 +1,9 @@
+﻿var http = require('http')
+
+var server = http.createServer(function (request, response) {
+    response.end('这是页面内容，你请求的路径是：' + request.url)
+})
+
+server.listen(8080, function () {
+    console.log("正在监听 %s 端口", 8080);
+});

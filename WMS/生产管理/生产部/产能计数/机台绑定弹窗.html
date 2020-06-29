@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        function method(d) {
+           layui.use('table', function(){
+  var table = layui.table,$=layui.jquery;
+  
+  //第一个实例
+  table1=table.render({
+    elem: '#demo'
+  
+      , url: '根据工序读取机床产能信息.ashx'
+      , where: { processId: d }
+      , toolbar: true
+    ,cols: [[ //表头
+      {field: '', type:'numbers',title: '序号', }
+      ,{field: 'cncNum', title: '机床编号',}
+      ,{field: 'startTimeStr', title: '工序开始时间', }
+      , { field: 'endTimeStr', title: '工序结束时间', }
+        , { field: 'systemCount', title: '系统统计产能', }
+     , { field: 'workCount', title: '人工修正产能', edit: 'text', }
+      , { title: '操作', toolbar: '#barDemo' }
+    ]]
+  });
+               //监听行工具事件 
+  table.on('tool(test)', function (obj) {
+      var data = obj.data;
+      //console.log(obj)
+      if (obj.event === 'sub') {
+          layer.confirm('是否提交保存修改后的工件计数？', function (index) {
+              $.ajax({
+                  url: '修改机床工件计数.ashx',
+                  type: 'post',
+                  data: { id: data.id, num: data.workCount },
+                  success: function (res) {
+                      if (res == "ok") {
+                          layer.msg("修改成功", { icon: 1, time: 1000 }, function () {
+                              table1.reload()
+                              parent.tableReloadProcess.reload()
+                          })
+                      } else { layer.alert(res)}
+                  }
+
+              })
+          });
+      } 
+  });
+});
+        }
+    </script>
+    <script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="sub">提交</a>
+
+</script>
+</body>
+</html>

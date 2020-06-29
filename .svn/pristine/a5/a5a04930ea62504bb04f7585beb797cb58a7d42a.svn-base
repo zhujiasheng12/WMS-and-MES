@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../easyui/demo/demo.css" rel="stylesheet" />
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <script src="../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../layer-v3.1.1/layer/layer.js"></script>
+
+</head>
+<body style="background-color:#F0F0F0;padding:0.8%">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="easyui-panel" style="position:relative;overflow:hidden;width:100%;height:100%">
+                <div class="easyui-draggable" data-options="onDrag:onDrag" style="width:110px;height:140px;background:#fafafa;border:0">
+                    <img src="../图片/机床.png" style="width:100px;height:100px">
+                    <p style="text-align:center">3-16#</p>
+                </div>
+                <div class="easyui-draggable" data-options="onDrag:onDrag" style="width:110px;height:140px;background:#fafafa;border:0">
+                    <img src="../图片/机床.png" style="width:100px;height:100px">
+                    <p style="text-align:center">3-17#</p>
+                </div>
+                <div class="easyui-draggable" data-options="onDrag:onDrag" style="width:110px;height:140px;background:#fafafa;border:0">
+                    <img src="../图片/机床.png" style="width:100px;height:100px">
+                    <p style="text-align:center">3-18#</p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2" >
+            11177
+        </div>
+        </div>
+
+        <script>
+
+            function onDrag(e) {
+                var d = e.data;
+                if (d.left < 0) { d.left = 0 }
+                if (d.top < 0) { d.top = 0 }
+                if (d.left + $(d.target).outerWidth() > $(d.parent).width()) {
+                    d.left = $(d.parent).width() - $(d.target).outerWidth();
+                }
+                if (d.top + $(d.target).outerHeight() > $(d.parent).height()) {
+                    d.top = $(d.parent).height() - $(d.target).outerHeight();
+                }
+            }
+        </script>
+
+
+</body>
+</html>

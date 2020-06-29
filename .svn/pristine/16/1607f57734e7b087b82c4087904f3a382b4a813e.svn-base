@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.工程部
+{
+    /// <summary>
+    /// 弹窗提醒 的摘要说明
+    /// </summary>
+    public class 弹窗提醒 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            //安排编程技术人员弹窗
+            using (JDJS_WMS_DB_USEREntities wms = new  JDJS_WMS_DB_USEREntities ())
+            {
+                string str = "";
+                var orders = wms.JDJS_WMS_Order_Entry_Table;
+                foreach (var order in orders)
+                {
+                    if (order.Engine_Program_Manager == null)
+                    {
+                        str += order.Order_Number.ToString() + "请尽快安排编程人员" ;
+                    }
+                }
+                context.Response.Write(str);
+            }
+           
+
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

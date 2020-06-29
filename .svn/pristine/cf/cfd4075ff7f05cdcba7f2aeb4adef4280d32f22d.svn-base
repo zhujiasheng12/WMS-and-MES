@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d7685f193ba4427c84add54b6d78b894" Name="Diagram1" ZoomLevel="10">
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Blank_Additional_History_Table" Width="1.5" PointX="5.25" PointY="104.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Blank_Table" Width="1.5" PointX="7.5" PointY="82" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Chuck_Borrow_History" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Chuck_Scrap_History" Width="1.5" PointX="2.75" PointY="3.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Chuck_Stock_Info" Width="1.5" PointX="0.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Chuck_Storage_History" Width="1.5" PointX="2.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Alarm_Description" Width="1.5" PointX="6" PointY="38.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Alarm_History_Table" Width="1.5" PointX="5.25" PointY="16.375" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Alarm_Repair" Width="1.5" PointX="8.25" PointY="36.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Borrow_Info" Width="1.5" PointX="5.25" PointY="34.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Brand_Info" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Info" Width="1.5" PointX="3" PointY="40.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Maintenance_Status" Width="1.5" PointX="6" PointY="32.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_ProgState_Info" Width="1.5" PointX="5.25" PointY="23.25" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_RealTime_Data" Width="1.5" PointX="5.25" PointY="63.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Reserve_Info" Width="1.5" PointX="5.25" PointY="19.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Return_Info" Width="1.5" PointX="5.25" PointY="47.375" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_RunTime_Data" Width="1.5" PointX="5.25" PointY="73.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Status_Table" Width="1.5" PointX="8.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Times_Data" Width="1.5" PointX="5.25" PointY="60.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Tool_History_Table" Width="1.5" PointX="5.25" PointY="55.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Type_Info" Width="1.5" PointX="11" PointY="3.625" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_UtilizationRate" Width="1.5" PointX="5.25" PointY="57.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Device_Working_Process_Table" Width="1.5" PointX="0.75" PointY="11.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Finished_Product_In_History_Manager" Width="1.5" PointX="5.25" PointY="97.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Finished_Product_Manager" Width="1.5" PointX="5.25" PointY="121.25" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Finished_Product_OutPut_History_Manager" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Additional_History_Table" Width="1.5" PointX="8.25" PointY="18.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Borrow_History" Width="1.5" PointX="2.75" PointY="11.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Scrap_History" Width="1.5" PointX="10.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Stock_Info" Width="1.5" PointX="10.75" PointY="11.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Storage_History" Width="1.5" PointX="12.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Hilt_Borrow_History" Width="1.5" PointX="12.75" PointY="11.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Hilt_Scrap_History" Width="1.5" PointX="0.75" PointY="16.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Hilt_Stock_History" Width="1.5" PointX="14.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Hilt_Storage_History" Width="1.5" PointX="14.75" PointY="11.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Location_Info" Width="1.5" PointX="0.75" PointY="42.625" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Maintenance_Confirm_Table" Width="1.5" PointX="7.5" PointY="85.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Maintenance_Plan_Table" Width="1.5" PointX="5.25" PointY="85.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Alter_History_Table" Width="1.5" PointX="10.75" PointY="16.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Blank_Table" Width="1.5" PointX="5.25" PointY="114.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_DelayTime_Table" Width="1.5" PointX="12.75" PointY="16.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Entry_Table" Width="1.5" PointX="3" PointY="30" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Fixture_Manager_Table" Width="1.5" PointX="8.25" PointY="16" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Guide_Schedu_Table" Width="1.5" PointX="5.25" PointY="118.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Intention_History_Table" Width="1.5" PointX="5.25" PointY="93.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Process_Info_Table" Width="1.5" PointX="6" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Process_Information_Table" Width="1.5" PointX="8.25" PointY="10" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Process_Scheduling_Table" Width="1.5" PointX="8.25" PointY="47.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Process_Tool_Info_Table" Width="1.5" PointX="8.25" PointY="21.625" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Queue_Table" Width="1.5" PointX="5.25" PointY="107.25" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Schedule_Table" Width="1.5" PointX="14.75" PointY="15.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Tool_Prepare_History_table" Width="1.5" PointX="8.25" PointY="13.25" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Confirmation_History_Table" Width="1.5" PointX="7.5" PointY="60" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Confirmation_Table" Width="1.5" PointX="5.25" PointY="100.25" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_ManualInput_Measurement_Table" Width="1.5" PointX="5.25" PointY="110.375" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Onmachine_Measurement_Data" Width="1.5" PointX="5.25" PointY="42" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quickchangbaseplate_Table" Width="1.5" PointX="5.25" PointY="82.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Scan_Operate_History_Table" Width="1.5" PointX="15.75" PointY="2.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Secondary_Tooling_Table" Width="1.5" PointX="10.5" PointY="82.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Staff_Info" Width="1.5" PointX="5.25" PointY="89.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Borrow_History" Width="1.5" PointX="16.75" PointY="7.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_LB_History" Width="1.5" PointX="16.75" PointY="12.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_LifeTime_Management" Width="1.5" PointX="5.25" PointY="26.125" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_LifeTimeOver_History_Table" Width="1.5" PointX="5.25" PointY="76.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Machine_Replaace_History_Table" Width="1.5" PointX="16.75" PointY="15.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Measurement_Table" Width="1.5" PointX="17.75" PointY="2.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Replace_Reason_Table" Width="1.5" PointX="10.75" PointY="19.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Scrap_History" Width="1.5" PointX="12.75" PointY="19.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Shank_Table" Width="1.5" PointX="8.25" PointY="41.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Shanks_Specification_Table" Width="1.5" PointX="6" PointY="51.375" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Standard_Table" Width="1.5" PointX="13.25" PointY="2.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Stock_History" Width="1.5" PointX="14.75" PointY="19.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Storage_History" Width="1.5" PointX="16.75" PointY="19.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_TypeName_Table" Width="1.5" PointX="0.75" PointY="20.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Users_Login_Info" Width="1.5" PointX="18.75" PointY="6.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Tool_Verdor_Table" Width="1.5" PointX="18.75" PointY="9.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_ToolChangeMessage_Issued_Table" Width="1.5" PointX="5.25" PointY="79.625" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_ToolHolder_Table" Width="1.5" PointX="18.75" PointY="12.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_ToolHolder_Tool_Table" Width="1.5" PointX="6" PointY="10.875" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_ToolHolder_ToolLife_History_Table" Width="1.5" PointX="8.25" PointY="26.5" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Users_Login_Info" Width="1.5" PointX="18.75" PointY="15.5" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Blank_Additional_History_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Blank_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Blank_Table_JDJS_WMS_Quickchangbaseplate_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Description" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___CncID__09746778" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Alarm_Repair" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Alarm_Repair_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Borrow_Info_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Brand_Info_JDJS_WMS_Device_Brand_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Type_Info_JDJS_WMS_Device_Brand_Info" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___CncID__1CBC4616" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Info_JDJS_WMS_Location_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_ProgState_Info_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_RealTime_Data_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Reserve_Info_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Return_Info_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_RunTime_Data_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Times_Data_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_Tool_History_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Device_UtilizationRate_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Maintenance_Plan_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Process_Scheduling_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Quickchangbaseplate_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_LifeTime_Management_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_LifeTimeOver_History_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_Shank_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_ToolChangeMessage_Issued_Table_JDJS_WMS_Device_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_Standard_Table_JDJS_WMS_Device_Type_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Finished_Product_In_History_Manager_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__1A9EF37A" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Finished_Product_OutPut_History_Manager_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Fixture_Additional_History_Table_JDJS_WMS_Order_Process_Info_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Maintenance_Confirm_Table_JDJS_WMS_Maintenance_Plan_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Maintenance_Confirm_Table_JDJS_WMS_Staff_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Blank_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__1DB06A4F" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__2AD55B43" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__4B7734FF" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__7C1A6C5A" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Guide_Schedu_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Intention_History_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Process_Info_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Queue_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Quality_Confirmation_History_Table_JDJS_WMS_Order_Entry_Table" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Proce__14E61A24" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Proce__03BB8E22" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Process_Information_Table_JDJS_WMS_Order_Process_Info_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Process_Scheduling_Table_JDJS_WMS_Order_Process_Info_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Order_Tool_Prepare_History_table_JDJS_WMS_Order_Process_Info_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Secondary_Tooling_Table_JDJS_WMS_Order_Process_Info_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Quality_Confirmation_History_Table_JDJS_WMS_Staff_Info" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Secondary_Tooling_Table_JDJS_WMS_Quickchangbaseplate_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_Shank_Table_JDJS_WMS_Tool_Shanks_Specification_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_Tool_Shank_Table_JDJS_WMS_ToolHolder_Tool_Table" />
+        <AssociationConnector Association="Model.FK_JDJS_WMS_ToolHolder_ToolLife_History_Table_JDJS_WMS_ToolHolder_Tool_Table" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Finished_Defective_Product_In_History_Manager" Width="1.5" PointX="7.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

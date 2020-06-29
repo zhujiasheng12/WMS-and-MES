@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <pages validateRequest="false" />
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <iframe style="width:100%;height:400px" src="60.svg"></iframe>
+    <test style="zoom:1">
+        <!--<svg id="svg" style="width:100%;height:500px">
+            <image xlink:href="绿红.png" id="svg_3" height="100" width="100" y="50" x="50" />
+            <image xlink:href="绿红.png" id="svg_4" height="100" width="100" y="150" x="150" />
+        </svg>-->
+    </test>
+    <button onclick="fun()">保存布局</button>
+    <script type="text/javascript">
+    $.ajax({
+        url: '../../Kanban/现场/机台状态.ashx',
+       
+        success: function (d) {
+            var obj = JSON.parse(d)
+            for (var i = 0; i < obj.length; i++) {
+                var id = obj[i].MachNum.replace("#", "")
+                switch (obj[i].state) {
+                    case 1:
+                        $($("iframe")[0].contentDocument).find("#"+id).attr('href',"绿红.png")
+                        break;
+                    case -1:
+                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/red.png")
+                        break;
+
+                }
+                
+
+
+                  var obj = JSON.parse(d)
+                    for (var i = 0; i < obj.length; i++) {
+                        var id = obj[i].MachID.replace("#", "")
+
+                        switch (obj[i].flag) {
+                            case 0:
+                                switch (obj[i].state) {
+                                    case -1:
+                                        $('#' + id).attr('grayGreenRed', 'grayGreenRed')
+                                        break;
+                                    case 0:
+                                        $('#' + id).attr('yellowGreenRed', 'yellowGreenRed')
+                                        break;
+                                    case 1:
+                                        $('#' + id).attr('greenGreenRed', 'greenGreenRed')
+                                        break;
+                                    case 2:
+                                        $('#' + id).attr('greenGreenRed', 'greenGreenRed')
+                                        break;
+                                    case 3:
+                                        $('#' + id).attr('yellowGreenRed', 'yellowGreenRed')
+                                        break;
+                                    case 4:
+                                        $('#' + id).attr('redGreenRed', 'redGreenRed')
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch (obj[i].state) {
+                                    case -1:
+                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/灰绿.png")
+                                       
+                                        break;
+                                    case 0:
+                                     $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/黄绿.png")
+
+                                       
+                                        break;
+                                    case 1:
+                                     $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/绿绿.png")
+
+                                       
+                                        break;
+                                    case 2:
+                                   $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/绿绿.png")
+
+                                       
+                                        break;
+                                    case 3:
+                                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/黄绿.png")
+
+                                        break;
+                                    case 4:
+                                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/红绿.png")
+
+                                        break;
+                                }
+                                break;
+                            case -1:
+                                switch (obj[i].state) {
+                                    case -1:
+                                        $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/灰红.png")
+
+                                        break;
+                                    case 0:
+                                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/黄红.png")
+                                     
+                                        break;
+                                    case 1:
+                                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/绿红.png")
+                                
+                                        break;
+                                    case 2:
+                                         $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/绿红.png")
+                              
+                                        break;
+                                    case 3:
+                                        $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/黄红.png")
+                                       
+                                        break;
+                                    case 4:
+                                        $($("iframe")[0].contentDocument).find("#"+id).attr('href',"../../Kanban/resource/机床图片/红红.png")
+                                       
+                                        break;
+                                }
+                                break;
+                        }
+                    }
+
+
+            }
+        }
+    })
+
+    //$("test").on('mousewheel DOMMouseScroll', onMouseScroll);
+    setTimeout('fun1()', 100)
+    function fun1() {
+         $($("iframe")[0].contentDocument).find("#svg").on('mousewheel DOMMouseScroll', iframeZoom);
+    }
+   
+
+    function onMouseScroll(e) {
+   
+    e.preventDefault();
+    var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+    var delta = Math.max(-1, Math.min(1, wheel) );
+    if (delta < 0) {//向下滚动
+        $("test").css("zoom", Number($("test").css("zoom"))-0.05)
+       
+    }else{//向上滚动
+        $("test").css("zoom", Number($("test").css("zoom"))+0.05)
+    }    
+}
+    function cncZoom(e) {
+    var id=this.id
+    e.preventDefault();
+    var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+    var delta = Math.max(-1, Math.min(1, wheel) );
+        if (delta < 0) {//向下滚动
+
+            $("#" + id).attr("height", Number($("#" + id).attr("height")) - 10).attr("width", Number($("#" + id).attr("width")) - 10)
+            $("#" + id).siblings("text").attr("y", Number($("#" + id).siblings("text").attr("y")) - 10)
+            $("#" + id).siblings("text").attr("x", Number($("#" + id).siblings("text").attr("x")))
+       
+        } else {//向上滚动
+            $("#" + id).attr("height", Number($("#" + id).attr("height")) + 10).attr("width", Number($("#" + id).attr("width")) + 10)
+            $("#" + id).siblings("text").attr("y", Number($("#" + id).siblings("text").attr("y")) + 10)
+            $("#" + id).siblings("text").attr("x", Number($("#" + id).siblings("text").attr("x")))
+    }    
+    }
+    function iframeZoom(e) {
+            var id=this.id
+    e.preventDefault();
+    var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+    var delta = Math.max(-1, Math.min(1, wheel) );
+        if (delta < 0) {//向下滚动
+           //var ss= $($("iframe")[0].contentDocument).find("#svg")
+            var zoom = $($("iframe")[0].contentDocument).find("#svg").css('zoom')
+            $($("iframe")[0].contentDocument).find("#svg").css('zoom', Number(zoom)-0.1)
+            
+       
+        } else {//向上滚动
+            var zoom = $($("iframe")[0].contentDocument).find("#svg").css('zoom')
+            $($("iframe")[0].contentDocument).find("#svg").css('zoom', Number(zoom)+0.1)
+    } 
+    }
+    $.ajax({
+        url: '读svg.ashx?workId='+60,
+        success: function (d) {
+            try {
+                var obj = JSON.parse(d)
+                x = 0
+                y = 100
+                xmax = 0
+                ymax=0
+                text = ""
+                for (var i = 0; i < obj.length; i++) {
+                    if (x > 1500) {
+                        if (x > xmax) {
+                            xmax = x
+                        } 
+                        x = 0
+                        y += 150
+                       ymax=y
+                         x += 150
+                    text += ` <g> <image xlink:href="gray.png" id="` + obj[i].ID + `" height="100" width="100" y="`+(y)+`" x="` + x + `"></image>
+         <text xml:space="preserve" fill="white" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="" y="`+(y+120)+`" x="`+ x + `" stroke-width="0" stroke="#000" fill="#000000">` + obj[i].MachNum + `</text></g>`
+                    } else { 
+                        x += 150
+                        xmax = x
+                    text += ` <g> <image xlink:href="gray.png" id="` + obj[i].ID + `" height="100" width="100" y="`+(y)+`" x="` + x + `"></image>
+         <text xml:space="preserve" fill="white" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="" y="`+(y+120)+`" x="`+ x + `" stroke-width="0" stroke="#000" fill="#000000">` + obj[i].MachNum + `</text></g>`
+                    //drap($("#"+obj[i].ID)[0]);
+                }
+            }
+               
+                $("test").append(`
+<svg id="svg" style="background-color:black" width="`+ (xmax + 200) + `" height="` + (ymax+200) + `" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
+            + text +
+                    `</svg>`)
+
+                     for (var i = 0; i < obj.length; i++) {
+                   
+                         drap($("#" + obj[i].ID)[0]);
+                          $($("#" + obj[i].ID)[0]).on('mousewheel DOMMouseScroll', cncZoom);
+                }
+
+            } catch
+            {
+                $("test").append(d)
+                $.ajax({
+                    url: '获取机床Id.ashx?workId='+60,
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        for (var i = 0; i < obj.length; i++) {
+                            drap($("#" + obj[i].ID)[0]);
+                            $($("#" + obj[i].ID)[0]).on('mousewheel DOMMouseScroll', cncZoom);
+                        }
+                    }
+                })
+           
+            }
+           
+
+           
+        }
+    })
+
+
+  //dom（obj）可拖拽
+        function drap(obj) {
+            obj.addEventListener('mousedown', start);
+
+            function start(event) {
+              //p=  Number($("test").css("zoom"))
+                // 鼠标左键
+                if (event.button == 0) {
+                    // getComputedStyle(obj)['margin-left'] return XXpx需要转成整型
+                    // 如果有obj有margin值而不加这个数组拖拽会出现位置偏移
+
+                   
+                    offsetX = event.pageX - $(obj).attr("x") + parseInt(getComputedStyle(obj)['margin-left']);
+                    offsetY = event.pageY - $(obj).attr("y") + parseInt(getComputedStyle(obj)['margin-top']);
+
+                    textX = event.pageX - $(obj).siblings("text").attr("x") + parseInt(getComputedStyle(obj)['margin-left']);
+                    textY= event.pageY - $(obj).siblings("text").attr("y") + parseInt(getComputedStyle(obj)['margin-top']);
+                    // 绑定事件，同样unbind解绑定，此效果的实现最后必须要解绑定，否则鼠标松开后拖拽效果依然存在
+                    //movemove事件必须绑定到$(document)上，鼠标移动是在整个屏幕上的
+                    document.addEventListener('mousemove', move);
+                    //此处的$(document)可以改为obj
+                    document.addEventListener('mouseup', stop);
+                }
+                return false;//阻止默认事件或冒泡
+            }
+
+            function move(event) {
+
+              
+                if ((event.pageY - offsetY) > 0&(event.pageX - offsetX)>0) {
+                
+                $(obj).attr("x", (event.pageX - offsetX))
+                $(obj).attr("y", (event.pageY - offsetY))
+                    $(obj).siblings("text").attr("x", (event.pageX - textX)).attr("y", (event.pageY - textY))
+                }
+
+                 var arr = $('image');
+                maxHeight = 0;
+                maxWidth = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    var height = Number($(arr[i]).attr('y'))
+                    var width=Number($(arr[i]).attr('x'))
+                    if (height > maxHeight) {
+                        maxHeight = height
+                    }
+                    if (width > maxWidth) {
+                        maxWidth=width
+                    }
+                }
+                $("svg").attr("height", Number(maxHeight) + 150)
+                $("svg").attr("width", Number(maxWidth) + 150)
+
+                return false;//阻止默认事件或冒泡
+            }
+
+            function stop(envet) {     
+                document.removeEventListener('mousemove', move);
+                document.removeEventListener('mouseup', stop);
+            }
+        }
+       
+    </script>
+    <script>
+    function fun() {
+        var dd = $("#svg")[0].innerHTML
+        var width = $("svg").attr("width")
+        var height=$("svg").attr("height")
+        var svg = `
+<svg id="svg"  style="background-color:black;zoom:1" width="`+ (maxWidth+150) + `" height="` + (maxHeight+150) + `" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
+            + dd +
+        `</svg>`
+        var form = new FormData();
+        form.append('form', svg)
+        
+         $.ajax({
+            url: 'test.ashx?workId='+60,
+            type: 'post',
+            data: form,
+            contentType: false,
+            processData: false
+
+        })
+
+        //download("data.svg",svg);
+    }
+    </script>
+   
+</body>
+</html>

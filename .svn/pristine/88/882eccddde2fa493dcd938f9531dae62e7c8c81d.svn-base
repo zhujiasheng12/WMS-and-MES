@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.Model.生产管理.工程部
+{
+    /// <summary>
+    /// processRead 的摘要说明
+    /// </summary>
+    public class processRead : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var id = int.Parse(context.Request["id"]);
+            using(JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
+            {
+                var row = from process in entities.JDJS_WMS_Order_Process_Info_Table
+                           where process.ID == id
+                           select new
+                           {
+                               process.ProcessID,process.ProcessTime,process.programName,
+                               process.toolChartName,process.OrderID,process.JigSpecification,process.BlankNumber,
+                               process.BlankSpecification,process.BlankType,process.DeviceType,process.JigType,
+                               process.Modulus,
+                           };
+                int jig = 0;
+                if (entities.JDJS_WMS_Order_Fixture_Manager_Table.Where(r => r.ProcessID == id).FirstOrDefault() != null)
+                {
+                     jig =Convert.ToInt32 ( entities.JDJS_WMS_Order_Fixture_Manager_Table.Where(r => r.ProcessID == id).First().FixtureNumber);
+                }
+                int fixID = Convert.ToInt32(row.First().JigType);
+                string fixName="";
+                var fixTable = entities.JDJS_WMS_Device_Status_Table.Where(r => r.ID == fixID).FirstOrDefault();
+                if (fixTable != null)
+                {
+                    fixName = fixTable.Status + "(" + fixTable.explain + ")";
+                }
+                var model = new
+                {
+                    ProcessID = row.First().ProcessID,
+                    ProcessTime=row.First().ProcessTime,
+                    BlankType = row.First().BlankType,
+                    BlankSpecification =row.First().BlankSpecification,
+                    blankNumber=row.First().BlankNumber,
+                    fixName =fixName ,
+                    fixtureType = row.First().JigType,
+                    JigSpecification =row.First().JigSpecification.Replace ("#1#",""),
+                    jigNumber = jig,
+                    DeviceType =row.First().DeviceType,
+                    coefficient=row.First().Modulus
+
+
+
+                };
+
+                System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                var json = serializer.Serialize(model);
+                context.Response.Write(json);
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

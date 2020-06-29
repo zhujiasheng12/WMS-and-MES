@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <upLoadPath>E:\JDJS_WMS_File_三车间\</upLoadPath>
+  <downLoadPath>http://192.168.15.110:9001/</downLoadPath>
+  <DaMaMachName>Gprinter GP-3150TN-enetprint</DaMaMachName>
+<ftpUrl>ftp://106.12.40.102/</ftpUrl>
+<ftpUser>FTPUSER</ftpUser>
+  <ftpPassword>@ftp123456789</ftpPassword>
+</root>

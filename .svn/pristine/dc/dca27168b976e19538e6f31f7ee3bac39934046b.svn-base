@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/echarts.js"></script>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    <script src="/Resources/js/jquery.cookie.js"></script>
+
+    <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+    <style>
+        ::-webkit-scrollbar
+        { /*滚动条整体样式*/
+            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+            scrollbar-arrow-color: red;
+        }
+
+        ::-webkit-scrollbar-thumb
+        { /*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.2);
+            scrollbar-arrow-color: red;
+        }
+
+        ::-webkit-scrollbar-track
+        { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div class="layui-row" style="background-color:black;height:33%">
+        <div class="layui-col-md6" style="height:100%">
+          
+              
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:300px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">意向订单评估任务统计</div>
+                    <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3)">
+                        <div id="cake1" style="height:100%;width:100%;float:left"></div>
+                       
+                    </div>
+                    </div>
+               
+           
+           
+          
+        </div>
+     <div class="layui-col-md6" style="height:100%">
+          
+              
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="width:300px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">生产订单编程任务统计</div>
+                    <div class="layui-card-body" style="position:absolute;top:30px;right:0px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3)">
+                        <div id="cake2" style="height:100%;width:100%;float:left"></div>
+                       
+                    </div>
+                    </div>
+               
+           
+           
+          
+        </div>
+    </div>
+
+
+
+
+     <div class="layui-row" style="background-color:black;height:33%;margin-top:10px">
+        <div class="layui-col-md6" style="height:100%">
+          
+             
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:300px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">实时意向订单评估任务</div>
+                        <div id="Div1" class="layui-card-body " style="position:absolute;top:30px;right:10px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                            <table id="table1" class="table" style="background-color:white">
+                           
+
+                             <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">订单号</th>
+                                      <th :style="style">项目名称</th>
+                                      <th :style="style">产品名称</th>
+                                      <th :style="style">订单责任人</th>
+                                      <th :style="style">评估责任人</th>
+                                      <th :style="style">优先级</th>
+                                      <th :style="style">订单数量</th>
+                                      <th :style="style">任务状态</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    
+                                     <td :style="style">
+                                       {{item.orderNum}}
+                                    </td>
+                                    <td :style="style">
+                                       {{item.projectName}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.orderName}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.orderLeader}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.virtualPerson}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.priority}}
+
+                                    </td>
+                                    <td :style="style">
+                                       {{item.orderNumber}}
+                                    </td>
+                                    <td :style="style">
+                                      
+                                    </td>
+                                </tr>
+                            </tbody>
+</table>
+                        </div>
+                    </div>
+         
+        </div>
+      <div class="layui-col-md6" style="height:100%">
+          
+             
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:250px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">TOP周评估量</div>
+                        <div id="Div2" class="layui-card-body" style="position:absolute;top:30px;right:0px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                            <table id="table2" class="table" style="background-color:white">
+                           
+
+                             <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">序号</th>
+                                      <th :style="style">姓名</th>
+                                      <th :style="style">数量</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    
+                                     <td :style="style">
+                                       {{i+1}}
+                                    </td>
+                                      <td :style="style">
+                                       {{item.name}}
+                                    </td>
+                                      <td :style="style">
+                                       {{item.numStr}}
+                                    </td>
+                                </tr>
+                            </tbody>
+</table>
+                        </div>
+                    </div>
+         
+        </div>
+    </div>
+     <div class="layui-row" style="background-color:black;height:33%;margin-top:10px">
+        <div class="layui-col-md6" style="height:100%">
+          
+             
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:300px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">实时生产订单编程任务</div>
+                        <div id="Div3" class="layui-card-body " style="position:absolute;top:30px;right:10px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                            <table id="table3" class="table" style="background-color:white">
+                           
+
+                             <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">订单号</th>
+                                      <th :style="style">项目名</th>
+                                      <th :style="style">产品名</th>
+                                      <th :style="style">订单责任人</th>
+                                      <th :style="style">编程责任人</th>
+                                      <th :style="style">优先级</th>
+                                      <th :style="style">订单数量</th>
+                                      <th :style="style">任务状态</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    
+                                     <td :style="style">
+                                       {{item.orderNum}}
+                                    </td>
+                                    <td :style="style">
+                                       {{item.projectName}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.orderName}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.orderLeader}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.ProgramPerson}}
+                                    </td>
+                                     <td :style="style">
+                                       {{item.priority}}
+
+                                    </td>
+                                    <td :style="style">
+                                       {{item.orderNumber}}
+                                    </td>
+                                    <td :style="style">
+                                      
+                                    </td>
+                                </tr>
+                            </tbody>
+</table>
+                        </div>
+                    </div>
+         
+        </div>
+      <div class="layui-col-md6" style="height:100%">
+          
+             
+                    <div class="layui-card" style="height:100%;background-color:black">
+                        <div class="layui-card-header" style="width:250px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">TOP周编程量</div>
+                        <div id="Div4" class="layui-card-body" style="position:absolute;top:30px;right:0px;bottom:0px;left:0;background-color:rgba(128,128,128,0.3);overflow-y:scroll">
+                            <table id="table4" class="table" style="background-color:white">
+                           
+
+                             <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">序号</th>
+                                      <th :style="style">姓名</th>
+                                      <th :style="style">数量</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    
+                                     <td :style="style">
+                                       {{i+1}}
+                                    </td>
+                                      <td :style="style">
+                                       {{item.name}}
+                                    </td>
+                                      <td :style="style">
+                                       {{item.numStr}}
+                                    </td>
+                                </tr>
+                            </tbody>
+</table>
+                        </div>
+                    </div>
+         
+        </div>
+    </div>
+    
+    <script>
+
+        var myChart1 = echarts.init(document.getElementById('cake1'));
+        var myChart2 = echarts.init(document.getElementById('cake2'));
+        option1 = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: '70%',
+
+                    label: {
+                        normal: {
+
+                            formatter: '{b}:{c}',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 17
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [
+
+                          { value: 0, name: '未评估', itemStyle: { color: 'red' } },
+
+                        { value: 0, name: '评估中', itemStyle: { color: 'orange' } },
+                         { value: 0, name: '已评估', itemStyle: { color: 'green' } },
+
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option2 = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: '70%',
+
+                    label: {
+                        normal: {
+
+                            formatter: '{b}:{c}',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 17
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    data: [
+
+                          { value: 0, name: '未编程', itemStyle: { color: 'red' } },
+
+                        { value: 0, name: '编程中', itemStyle: { color: 'orange' } },
+                         { value: 0, name: '已编程', itemStyle: { color: 'green' } },
+
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        if (typeof (EventSource) !== "undefined") {
+            var source1 = new EventSource("工程中心Method/看板意向订单评估状态.ashx?workId=" + $.cookie("workId"));
+            source1.onmessage = function (event) {
+                var obj = JSON.parse(event.data);
+                option1.series[0].data[0].value = obj.noAssessment
+                option1.series[0].data[1].value = obj.underWay
+                option1.series[0].data[2].value = obj.hasAssessed
+                myChart1.setOption(option1);
+            }
+
+            var source2 = new EventSource("工程中心Method/生产中心编程状态.ashx?workId=" + $.cookie("workId"));
+            source2.onmessage = function (event) {
+                var obj = JSON.parse(event.data);
+                option2.series[0].data[0].value = obj.noAssessment
+                option2.series[0].data[1].value = obj.underWay
+                option2.series[0].data[2].value = obj.hasAssessed
+                myChart2.setOption(option2);
+            }
+
+        } else {
+            alert("抱歉，你的浏览器不支持 server-sent 事件...");
+        }
+    </script>
+  
+    <script>
+        var vm1 = new Vue({
+            el: "#table1",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('工程中心Method/订单评估航班表.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data
+                     
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+
+        var vm2 = new Vue({
+            el: "#table2",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('工程中心Method/TOP评估量.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data
+                         
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+        var vm3 = new Vue({
+            el: "#table3",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('工程中心Method/生产订单编程任务.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data
+                          
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+        var vm4 = new Vue({
+            el: "#table4",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('工程中心Method/TOP编程量.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data
+                         
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+        var i1 = 0;
+        var old1 = -1;
+        var new1 = -2;
+        setInterval(function () {
+            var table1 = $('#card-body1')
+            if (table1.length == 0) {
+                return;
+            }
+            $(table1).scrollTop(i1);
+            new1 = $(table1).scrollTop();
+            if (old1 == new1) {
+                i1 = 0;
+                old1 = -1;
+                return;
+            }
+            i1 += 1.2;
+            old1 = $(table1).scrollTop();
+        }, 200);
+
+
+
+
+        var i2 = 0;
+        var old2 = -1;
+        var new2 = -2;
+        setInterval(function () {
+            var table2 = $('#card-body2')
+            if (table2.length == 0) {
+                return;
+            }
+            $(table2).scrollTop(i2);
+            new2 = $(table2).scrollTop();
+            if (old2 == new2) {
+                i2 = 0;
+                old2 = -1;
+                return;
+            }
+            i2 += 1.2;
+            old2 = $(table2).scrollTop();
+        }, 200);
+
+
+
+
+    </script>
+</body>
+</html>

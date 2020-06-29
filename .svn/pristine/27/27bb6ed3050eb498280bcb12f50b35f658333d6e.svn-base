@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    
+    <script>
+        function method(d) {
+            $.ajax({
+                url: '意向订单编辑读数据.ashx?orderId=' + d,
+                success: function (d) {
+                    var obj = JSON.parse(d)[0];
+                    if (obj.Intention == 5) {
+                        $('[name="orderId"]').val(obj.Order_ID);
+                        $('[name="intention"]').val(obj.Intention);
+                        $('[name="Order_Number"]').val(obj.Order_Number);
+                        $('[name="Order_Leader"]').val(obj.Order_Leader);
+                        $('[name="Product_Name"]').val(obj.Product_Name);
+                        $('[name="Product_Material"]').val(obj.Product_Material);
+                        $('[name="Product_Output"]').val(obj.Product_Output);
+
+                    } else if (obj.Intention == 6) {
+                         $('[name="orderId"]').val(obj.Order_ID);
+                        $('[name="intention"]').val(obj.Intention);
+                        $('[name="Order_Number"]').val(obj.Order_Number);
+                        $('[name="Order_Leader"]').val(obj.Order_Leader);
+                        $('[name="Product_Name"]').val(obj.Product_Name).attr('readonly',true);
+                        $('[name="Product_Material"]').val(obj.Product_Material).attr('readonly',true);
+                        $('[name="Product_Output"]').val(obj.Product_Output);
+
+                    }
+                }
+            })
+        }
+    </script>
+    <form class="layui-form">
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">订单ID</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="orderId" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">intention</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="intention" placeholder="请输入" autocomplete="off" class="layui-input" >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">意向订单号</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Order_Number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单负责人</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Order_Leader" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品名称</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Product_Name" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品材料</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Product_Material" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+
+        <div class="layui-form-item" Product_Output="Product_Output">
+            <label class="layui-form-label">产品产量</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Product_Output" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+
+        <!--<div class="layui-form-item">
+        <label class="layui-form-label">订单结束时间</label>
+        <div class="layui-input-block">
+            <input lay-verify="required" id="endDate" type="text" name="Order_Plan_End_Time" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>-->
+        <!--<div class="layui-form-item">
+        <label class="layui-form-label">订单状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="Order_State" value="执行" title="执行" checked>
+            <input type="radio" name="Order_State" value="停止" title="停止">
+        </div>
+    </div>-->
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submit">确定</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+
+    </form>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(submit)', function (data) {
+                if ($('[name="intention"]').val() == 5) {
+                    var formDate = new FormData();
+                    formDate.append('intention', 5)
+                    formDate.append('orderId', data.field.orderId)
+                    formDate.append('Order_Number', data.field.Order_Number)
+                    formDate.append('Order_Leader', data.field.Order_Leader)
+                    formDate.append('Product_Name', data.field.Product_Name)
+                    formDate.append('Product_Material', data.field.Product_Material)
+                    formDate.append('Product_Output', data.field.Product_Output)
+              
+                } else if($('[name="intention"]').val() == 6){
+                    var formDate = new FormData();
+                   formDate.append('intention', 6)
+                    formDate.append('orderId', data.field.orderId)
+                    formDate.append('Order_Number', data.field.Order_Number)
+                    formDate.append('Order_Leader', data.field.Order_Leader)
+                    formDate.append('Product_Name', data.field.Product_Name)
+                    formDate.append('Product_Material', data.field.Product_Material)
+                    formDate.append('Product_Output', data.field.Product_Output)
+              
+                }
+
+
+
+
+                $.ajax({
+                    url: '意向订单编辑提交.ashx',
+                    type: 'POST',
+                    data: formDate,
+                    processData: false,
+                    contentType: false,
+                    success: function (d) {
+                        if (d == "ok") {
+                            layer.msg('编辑成功', { icon: 1, time: 1000 }, function (index) {
+                             
+                              
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index); //再执行关闭
+                                parent.tableReload.reload({
+                                })
+                            })
+
+
+                        }
+                        else {
+                           
+                            layer.alert(d)
+
+                        }
+                    },
+                    error: function (d) {
+                        $(".layui-progress-bar").attr('lay-percent',0)
+                         element.render()
+                        layer.alert(d.responseText)
+
+
+                    }
+                    
+                })
+                return false;
+            });
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+﻿
+<!doctype html>
+<script src="../../Resources/js/zrender.js"></script>
+<script src="../../Resources/js/jquery-3.3.1.js"></script>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+        canvas5
+    </title>
+</head>
+<body>
+    <div id="test">
+
+
+        <div id="container">
+            <div id="imgDiv" style="width:30%;border:1px solid red;min-height:600px;float:left;">
+                <div style="float:left;">
+                    <img id="img1" class="imgs" src="https://img.zcool.cn/community/01205956a1ca9b6ac7256cb04025c6.png@2o.png" style="height:50px;width:50px;" title="img1">
+                </div>
+                <div style="float:left;">
+                    <img id="img2" class="imgs" src="https://img.zcool.cn/community/01205956a1ca9b6ac7256cb04025c6.png@2o.png" style="height:50px;width:50px;" title="img2">
+                </div>
+            </div>
+            <div id="canvasDiv" style="border:1px solid red;width:40%;float:left;">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="comment" style="border:1px solid red;min-height:600px;width:9%;float:left;">
+                <button id="btn">添加说明</button>
+            </div>
+            <div id="text" style="width:254px;height: 50px;position: absolute;left:0;top:0;right:0;bottom: 0;margin: auto;display: none;">
+                <input type="text" id="input" style="width:250px;">
+                <button id="yes" style="float:left;">确定</button>
+                <button id="no" style="float:right;">取消</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var container = document.getElementById('canvas');
+            //用canvas属性设置宽高，如果在样式设置宽高，图片会变形
+            container.width = document.body.clientWidth * 0.4;
+            container.height = document.documentElement.clientHeight * 0.75;
+            var zr = zrender.init(container);
+            var width;
+            var height;
+            var src;
+            var temp = -99999;
+            var idCount = 1;
+            var group = new zrender.Group();
+            //添加说明输入框
+            $("#btn").click(function () {
+                $("#text").show();
+                $("#input").val("");
+                $("#text").attr("z-index", temp + 99);
+            });
+            //输入说明后点击确认
+            $("#yes").click(function () {
+                var input = $("#input").val();
+                if (input == undefined || input.trim() == "") {
+                    alert("输入为空！");
+                    return;
+                }
+                if (input.length > 32) {
+                    alert("最多支持32个字符！");
+                    return;
+                }
+                if (input.length > 16) {
+                    input = input.substring(0, 16) + '\n' + input.substring(16, input.length + 1);
+                }
+                //输入说明符合要求后 创建Text 将说明赋值Text
+                var text = new zrender.Text({
+                    style: {
+                        x: 200,
+                        y: 200,
+                        text: input
+                    },
+                    id: 100,
+                    draggable: true
+                }).on('mousedown', function () {
+                    this.attr('zlevel', ++temp);
+                });
+                group.add(text);
+                $("#text").hide();
+            })
+            //点击取消
+            $("#no").click(function () {
+                $("#text").hide();
+            });
+            //点击左侧图片默认在右侧框左上角显示该图片
+            $("#imgDiv div img").click(function () {
+                src = this.src;
+                width = this.width;
+                height = this.height;
+                //绘画图片
+                var img = new zrender.Image({
+                    style: {
+                        image: src,
+                        x: 0,
+                        y: 0,
+                        width: width,
+                        height: height
+                    },
+                    zlevel: temp,
+                    id: idCount,
+                    draggable: true
+                }).on('mousedown', function () {
+                    this.attr('zlevel', ++temp);
+                }).on('mousewheel', function (ev) {
+                    var e = (ev || event).wheelDelta / 20;
+                    //设置缩放大小
+                    this.attr('scale', [this.scale[0] += e, this.scale[1] += e]);
+                    //设置缩放中心
+                    this.attr('origin', [this.style.x + this.style.width / 2, this.style.y + this.style.height / 2]);
+                }).on('dblclick', function (ev) {
+                    //设置旋转角度
+                    this.attr('rotation', [this.rotation - Math.PI / 12]);
+                    //设置旋转中心
+                    this.attr('origin', [this.style.x + this.style.width / 2, this.style.y + this.style.height / 2]);
+                });
+                group.add(img);
+                idCount++;
+            });
+            zr.add(group);
+        }
+
+    </script>
+    <button onclick="fun()">110</button>
+    <script>
+    function fun() {
+        var dd = $('#test')[0].innerHTML
+        $('body').append(dd)
+    }
+    </script>
+</body>
+</html>
+

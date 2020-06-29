@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html >
+<html style=" height:100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <script src="../layer-v3.1.1/layer/layer.js"></script>
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    
+</head>
+<body style="background-color:#F0F0F0;padding:0.8%;height:100%">
+
+    
+    <div class="layui-row" style="background-color:white;padding:0.6%">
+        <div class="layui-col-md12">
+           
+            <button class="layui-btn layui-btn-sm" type="submit" id="create">创建车间</button>
+            <!--<button class="but1" type="submit" id="create">创建</button>-->
+        </div>
+    </div>
+    <div style="margin:20px 0;"></div>
+    <table id="tt" style="width:100%;height:100%">
+    </table>
+    <script>
+        $('#tt').treegrid({
+            url: '../工厂管理/PositionHandler.ashx',
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+            rownumbers: true,
+            
+            columns: [[
+                { title: '位置名称', field: 'name', width: '92%' },
+                //{ field: 'hierarchy', title: '位置层级', width: 60, align: 'right' },
+                //{ field: 'team', title: '组织机构名称', width: 150 },
+                //{ field: 'state1', title: '状态', width: 80 },
+                { field: 'id', title: 'id', width: 80,hidden:'true' },
+                {
+                    field: 'action', title: '操作', width:'11%', formatter: function (value, row, index) {
+                        return '<div ><img title="删除"  data-id="' + row.id + '"  border="0" src="../Resources/icon/delete_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create">' +
+                            '<img title="详情"  details1="' + row.name + '"  details2="' + row.hierarchy + '" details3="' + row.team + '" id="' + row.id + '" border="0" src="../Resources/icon/detail_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create">' +
+                            '<img title="修改" name="' + row.name + '"  team="' + row.team + '" id="' + row.id + '" border="0" src="../Resources/icon/edit_blue.png" style="width:20px;margin-right:20px;cursor:pointer" lay-event="create"></div>'
+                    }}
+            ]],
+            
+        });
+        
+        $('#tt').treegrid({
+           
+            onLoadSuccess: function (data) {
+                $('.panel-body').css('border-color','white')
+                 $(".tree-icon,.tree-file").removeClass("tree-file");
+		$(".tree-icon,.tree-folder").removeClass("tree-folder-open tree-folder");
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+                $('[data-id]').click(function () {
+                    var id = $(this).attr("data-id");
+                    layer.confirm("是否删除", function (index) {
+                        $.ajax({
+                            url: "PositionDeleteHandler1.ashx", data: { "id": id }, success: function (res) {
+                                if (res == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index);
+                                        location.reload();
+                                        parent.location.close(index);
+                                    });
+                                } else {
+                                    layer.alert(res);
+                                }
+                            }
+                        })
+                    })
+
+                });
+                $('[details2]').click(function () {
+                    var name = $(this).attr("details1");
+                    var hierarchy = $(this).attr("details2");
+                    var team = $(this).attr("details3");
+                    var id = $(this).attr("id");
+                    $.ajax({
+                        url: "DetailsHandler1.ashx", data: { "id": id }, success: function (res) {
+                            
+                            layer.open({
+                                type: 2,
+                                area: ['50%', '85%'],
+                                fixed: false, //不固定
+                                maxmin: true,
+                                content: '位置管理详情弹窗.html',
+                                success: function (layero, index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    console.log(body.html()) //得到iframe页的body内容
+                                    // body.find('input').val('Hi，我是从父页来的')
+                                    body.find('#hierarchy').val(hierarchy)
+                                    body.find('#team').val(team)
+                                    body.find('#name').val(name)
+                                    body.find('#father').val(res)
+
+                                }
+                            });
+                        }
+                    })
+                    
+                });
+                $('[name]').click(function () {
+                    var name = $(this).attr("name");
+                    var team = $(this).attr("team");
+                    var id = $(this).attr("id");
+                    $.ajax({
+                        url: "DetailsHandler1.ashx", data: { "id": id }, success: function (res) {
+
+                            layer.open({
+                                type: 2,
+                                area: ['50%', '85%'],
+                                fixed: false, //不固定
+                                maxmin: true,
+                                content: '位置管理修改弹窗.html',
+                                success: function (layero, index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    console.log(body.html()) //得到iframe页的body内容
+                                     //body.find('input').val('Hi，我是从父页来的')
+                                    body.find('#name').val(name)
+                                    body.find('#team').val(team)
+                                    body.find('#father').val(res)
+                                    body.find('#id').val(id)
+                                }
+                            });
+                        }
+                    })
+
+                });
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+
+            }
+        });
+        $(function () {
+           
+            $('#create').click(function () {
+                layer.open({
+                    type: 2,
+                    area: ['50%', '85%'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    content: '位置管理创建弹窗.html',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                        console.log(body.html()) //得到iframe页的body内容
+                        //body.find('input').val('Hi，我是从父页来的')
+                        body.find('#brand').val(brand)
+                        body.find('#number').val(number)
+                        body.find('#ip').val(ip)
+                        body.find('#model').val(model)
+                    }
+                });
+            })
+        })
+    </script>
+
+</body>
+</html>

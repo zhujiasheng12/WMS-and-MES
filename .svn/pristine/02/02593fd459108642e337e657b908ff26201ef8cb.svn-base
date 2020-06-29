@@ -1,0 +1,1148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="JDJS_WMS_DB_USEREntities">
+    <EntitySetMapping Name="JDJS_WMS_Blank_Additional_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Blank_Additional_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Blank_Additional_History_Table">
+          <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+          <ScalarProperty Name="BlankAddNum" ColumnName="BlankAddNum" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Blank_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Blank_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Blank_Table">
+          <ScalarProperty Name="emptyFlag" ColumnName="emptyFlag" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="FormatBlankID" ColumnName="FormatBlankID" />
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="plateID" ColumnName="plateID" />
+          <ScalarProperty Name="flag" ColumnName="flag" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Chuck_Borrow_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Chuck_Borrow_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Chuck_Borrow_History">
+          <ScalarProperty Name="project" ColumnName="project" />
+          <ScalarProperty Name="NewOldKnife" ColumnName="NewOldKnife" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="ReturnNumber" ColumnName="ReturnNumber" />
+          <ScalarProperty Name="BorrowNumber" ColumnName="BorrowNumber" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Chuck_Scrap_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Chuck_Scrap_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Chuck_Scrap_History">
+          <ScalarProperty Name="BadTime" ColumnName="BadTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Chuck_Stock_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Chuck_Stock_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Chuck_Stock_Info">
+          <ScalarProperty Name="OldKnife" ColumnName="OldKnife" />
+          <ScalarProperty Name="NewKnife" ColumnName="NewKnife" />
+          <ScalarProperty Name="AllKnife" ColumnName="AllKnife" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Chuck_Storage_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Chuck_Storage_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Chuck_Storage_History">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="KnifeNumber" ColumnName="KnifeNumber" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Alarm_Description">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Alarm_Description">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Alarm_Description">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="AlarmID" ColumnName="AlarmID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Alarm_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Alarm_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Alarm_History_Table">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ErrDesc" ColumnName="ErrDesc" />
+          <ScalarProperty Name="ErrCode" ColumnName="ErrCode" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Alarm_Repair">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Alarm_Repair">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Alarm_Repair">
+          <ScalarProperty Name="MaintenanceDesc" ColumnName="MaintenanceDesc" />
+          <ScalarProperty Name="MaintenanceStaff" ColumnName="MaintenanceStaff" />
+          <ScalarProperty Name="AlarmStateID" ColumnName="AlarmStateID" />
+          <ScalarProperty Name="AlarmDescID" ColumnName="AlarmDescID" />
+          <ScalarProperty Name="CncNum" ColumnName="CncNum" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Receptiontime" ColumnName="Receptiontime" />
+          <ScalarProperty Name="RepairTime" ColumnName="RepairTime" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Borrow_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Borrow_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Borrow_Info">
+          <ScalarProperty Name="MachID" ColumnName="MachID" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Brand_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Brand_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Brand_Info">
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Info">
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="MachType" ColumnName="MachType" />
+          <ScalarProperty Name="MachState" ColumnName="MachState" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="MachNum" ColumnName="MachNum" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Maintenance_Status">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Maintenance_Status">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Maintenance_Status">
+          <ScalarProperty Name="DescID" ColumnName="DescID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_ProgState_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_ProgState_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_ProgState_Info">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ProgState" ColumnName="ProgState" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_RealTime_Data">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_RealTime_Data">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_RealTime_Data">
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="Time_zone" ColumnName="Time_zone" />
+          <ScalarProperty Name="Time_S" ColumnName="Time_S" />
+          <ScalarProperty Name="Time_MIT" ColumnName="Time_MIT" />
+          <ScalarProperty Name="Time_H" ColumnName="Time_H" />
+          <ScalarProperty Name="Time_D" ColumnName="Time_D" />
+          <ScalarProperty Name="Time_M" ColumnName="Time_M" />
+          <ScalarProperty Name="Time_Y" ColumnName="Time_Y" />
+          <ScalarProperty Name="CurLineText" ColumnName="CurLineText" />
+          <ScalarProperty Name="CurLineNo" ColumnName="CurLineNo" />
+          <ScalarProperty Name="SInfo_W" ColumnName="SInfo_W" />
+          <ScalarProperty Name="SInfo_NM" ColumnName="SInfo_NM" />
+          <ScalarProperty Name="SInfo_A" ColumnName="SInfo_A" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="SpindleRate" ColumnName="SpindleRate" />
+          <ScalarProperty Name="CountNum" ColumnName="CountNum" />
+          <ScalarProperty Name="CurrOMainO" ColumnName="CurrOMainO" />
+          <ScalarProperty Name="CurrO" ColumnName="CurrO" />
+          <ScalarProperty Name="MachTime" ColumnName="MachTime" />
+          <ScalarProperty Name="ToolNo" ColumnName="ToolNo" />
+          <ScalarProperty Name="SpindleSpeed" ColumnName="SpindleSpeed" />
+          <ScalarProperty Name="FeedRate" ColumnName="FeedRate" />
+          <ScalarProperty Name="CurrWCoord" ColumnName="CurrWCoord" />
+          <ScalarProperty Name="ProgState" ColumnName="ProgState" />
+          <ScalarProperty Name="RelCoord_C" ColumnName="RelCoord_C" />
+          <ScalarProperty Name="RelCoord_B" ColumnName="RelCoord_B" />
+          <ScalarProperty Name="RelCoord_A" ColumnName="RelCoord_A" />
+          <ScalarProperty Name="RelCoord_Z" ColumnName="RelCoord_Z" />
+          <ScalarProperty Name="RelCoord_Y" ColumnName="RelCoord_Y" />
+          <ScalarProperty Name="RelCoord_X" ColumnName="RelCoord_X" />
+          <ScalarProperty Name="AbsCoord_C" ColumnName="AbsCoord_C" />
+          <ScalarProperty Name="AbsCoord_B" ColumnName="AbsCoord_B" />
+          <ScalarProperty Name="AbsCoord_A" ColumnName="AbsCoord_A" />
+          <ScalarProperty Name="AbsCoord_Z" ColumnName="AbsCoord_Z" />
+          <ScalarProperty Name="AbsCoord_Y" ColumnName="AbsCoord_Y" />
+          <ScalarProperty Name="AbsCoord_X" ColumnName="AbsCoord_X" />
+          <ScalarProperty Name="MachCoord_C" ColumnName="MachCoord_C" />
+          <ScalarProperty Name="MachCoord_B" ColumnName="MachCoord_B" />
+          <ScalarProperty Name="MachCoord_A" ColumnName="MachCoord_A" />
+          <ScalarProperty Name="MachCoord_Z" ColumnName="MachCoord_Z" />
+          <ScalarProperty Name="MachCoord_Y" ColumnName="MachCoord_Y" />
+          <ScalarProperty Name="MachCoord_X" ColumnName="MachCoord_X" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Reserve_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Reserve_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Reserve_Info">
+          <ScalarProperty Name="MachId" ColumnName="MachId" />
+          <ScalarProperty Name="NowTime" ColumnName="NowTime" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Return_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Return_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Return_Info">
+          <ScalarProperty Name="MachId" ColumnName="MachId" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="Team" ColumnName="Team" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MachNumber" ColumnName="MachNumber" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_RunTime_Data">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_RunTime_Data">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_RunTime_Data">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="RunTime" ColumnName="RunTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="TimeID" ColumnName="TimeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Status_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Status_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Status_Table">
+          <ScalarProperty Name="explain" ColumnName="explain" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Times_Data">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Times_Data">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Times_Data">
+          <ScalarProperty Name="NowRunTime" ColumnName="NowRunTime" />
+          <ScalarProperty Name="AllRunTime" ColumnName="AllRunTime" />
+          <ScalarProperty Name="OpenTime" ColumnName="OpenTime" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="IDNum" ColumnName="IDNum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Tool_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Tool_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Tool_History_Table">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="ToolNum" ColumnName="ToolNum" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Type_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Type_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Type_Info">
+          <ScalarProperty Name="tool_Location_Number" ColumnName="tool_Location_Number" />
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_UtilizationRate">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_UtilizationRate">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_UtilizationRate">
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="UtilizationRate" ColumnName="UtilizationRate" />
+          <ScalarProperty Name="DayID" ColumnName="DayID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Device_Working_Process_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Device_Working_Process_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Device_Working_Process_Table">
+          <ScalarProperty Name="Flag" ColumnName="Flag" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="BlankID" ColumnName="BlankID" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Finished_Product_In_History_Manager">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Finished_Product_In_History_Manager">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Finished_Product_In_History_Manager">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Finished_Product_Manager">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Finished_Product_Manager">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Finished_Product_Manager">
+          <ScalarProperty Name="outputTime" ColumnName="outputTime" />
+          <ScalarProperty Name="outputNumber" ColumnName="outputNumber" />
+          <ScalarProperty Name="stock" ColumnName="stock" />
+          <ScalarProperty Name="waitForWarehousing" ColumnName="waitForWarehousing" />
+          <ScalarProperty Name="warehousingTime" ColumnName="warehousingTime" />
+          <ScalarProperty Name="warehousingNumber" ColumnName="warehousingNumber" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Finished_Product_OutPut_History_Manager">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Finished_Product_OutPut_History_Manager">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Finished_Product_OutPut_History_Manager">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="OutPutNum" ColumnName="OutPutNum" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Fixture_Additional_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Additional_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Additional_History_Table">
+          <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+          <ScalarProperty Name="AddNum" ColumnName="AddNum" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Fixture_Borrow_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Borrow_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Borrow_History">
+          <ScalarProperty Name="project" ColumnName="project" />
+          <ScalarProperty Name="NewOldKnife" ColumnName="NewOldKnife" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="ReturnNumber" ColumnName="ReturnNumber" />
+          <ScalarProperty Name="BorrowNumber" ColumnName="BorrowNumber" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Fixture_Scrap_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Scrap_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Scrap_History">
+          <ScalarProperty Name="BadTime" ColumnName="BadTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Fixture_Stock_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Stock_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Stock_Info">
+          <ScalarProperty Name="OldKnife" ColumnName="OldKnife" />
+          <ScalarProperty Name="NewKnife" ColumnName="NewKnife" />
+          <ScalarProperty Name="AllKnife" ColumnName="AllKnife" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Fixture_Storage_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Storage_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Storage_History">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="KnifeNumber" ColumnName="KnifeNumber" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Hilt_Borrow_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Hilt_Borrow_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Hilt_Borrow_History">
+          <ScalarProperty Name="project" ColumnName="project" />
+          <ScalarProperty Name="NewOldKnife" ColumnName="NewOldKnife" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="ReturnNumber" ColumnName="ReturnNumber" />
+          <ScalarProperty Name="BorrowNumber" ColumnName="BorrowNumber" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Hilt_Scrap_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Hilt_Scrap_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Hilt_Scrap_History">
+          <ScalarProperty Name="BadTime" ColumnName="BadTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Hilt_Stock_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Hilt_Stock_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Hilt_Stock_History">
+          <ScalarProperty Name="OldKnife" ColumnName="OldKnife" />
+          <ScalarProperty Name="NewKnife" ColumnName="NewKnife" />
+          <ScalarProperty Name="AllKnife" ColumnName="AllKnife" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Hilt_Storage_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Hilt_Storage_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Hilt_Storage_History">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="KnifeNumber" ColumnName="KnifeNumber" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Location_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Location_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Location_Info">
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="size" ColumnName="size" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Maintenance_Confirm_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Maintenance_Confirm_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Maintenance_Confirm_Table">
+          <ScalarProperty Name="ConfirmTime" ColumnName="ConfirmTime" />
+          <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Maintenance_Plan_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Maintenance_Plan_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Maintenance_Plan_Table">
+          <ScalarProperty Name="TimeStr" ColumnName="TimeStr" />
+          <ScalarProperty Name="isFlag" ColumnName="isFlag" />
+          <ScalarProperty Name="Cycle" ColumnName="Cycle" />
+          <ScalarProperty Name="MaintenanceTime" ColumnName="MaintenanceTime" />
+          <ScalarProperty Name="MaintenanceContence" ColumnName="MaintenanceContence" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Alter_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Alter_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Alter_History_Table">
+          <ScalarProperty Name="AlterDecs" ColumnName="AlterDecs" />
+          <ScalarProperty Name="CreatTime" ColumnName="CreatTime" />
+          <ScalarProperty Name="CreatPersonID" ColumnName="CreatPersonID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Blank_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Blank_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Blank_Table">
+          <ScalarProperty Name="Expected_Completion_Time" ColumnName="Expected_Completion_Time" />
+          <ScalarProperty Name="BlankAddition" ColumnName="BlankAddition" />
+          <ScalarProperty Name="BlanktotalPreparedNumber" ColumnName="BlanktotalPreparedNumber" />
+          <ScalarProperty Name="BlankState" ColumnName="BlankState" />
+          <ScalarProperty Name="BlackNumber" ColumnName="BlackNumber" />
+          <ScalarProperty Name="BlankSpecification" ColumnName="BlankSpecification" />
+          <ScalarProperty Name="BlankType" ColumnName="BlankType" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_DelayTime_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_DelayTime_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_DelayTime_Table">
+          <ScalarProperty Name="Fixture" ColumnName="Fixture" />
+          <ScalarProperty Name="BlankTime" ColumnName="BlankTime" />
+          <ScalarProperty Name="ToolTime" ColumnName="ToolTime" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Entry_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Entry_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Entry_Table">
+          <ScalarProperty Name="CreatePersonID" ColumnName="CreatePersonID" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="CtratPersonID" ColumnName="CtratPersonID" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="program_audit_result" ColumnName="program_audit_result" />
+          <ScalarProperty Name="ProofingORProduct" ColumnName="ProofingORProduct" />
+          <ScalarProperty Name="audit_Result" ColumnName="audit_Result" />
+          <ScalarProperty Name="craftPerson" ColumnName="craftPerson" />
+          <ScalarProperty Name="craftPersonId" ColumnName="craftPersonId" />
+          <ScalarProperty Name="virtualReturnTime" ColumnName="virtualReturnTime" />
+          <ScalarProperty Name="virtualProgPersId" ColumnName="virtualProgPersId" />
+          <ScalarProperty Name="Intention" ColumnName="Intention" />
+          <ScalarProperty Name="Engine_Technology_ManagerId" ColumnName="Engine_Technology_ManagerId" />
+          <ScalarProperty Name="Engine_Program_ManagerId" ColumnName="Engine_Program_ManagerId" />
+          <ScalarProperty Name="Order_State" ColumnName="Order_State" />
+          <ScalarProperty Name="Engine_Status" ColumnName="Engine_Status" />
+          <ScalarProperty Name="Engine_Technology_Manager" ColumnName="Engine_Technology_Manager" />
+          <ScalarProperty Name="Engine_Program_Manager" ColumnName="Engine_Program_Manager" />
+          <ScalarProperty Name="Order_Actual_End_Time" ColumnName="Order_Actual_End_Time" />
+          <ScalarProperty Name="Order_Plan_End_Time" ColumnName="Order_Plan_End_Time" />
+          <ScalarProperty Name="Order_Actual_Start_Time" ColumnName="Order_Actual_Start_Time" />
+          <ScalarProperty Name="Order_Plan_Start_Time" ColumnName="Order_Plan_Start_Time" />
+          <ScalarProperty Name="Product_Output" ColumnName="Product_Output" />
+          <ScalarProperty Name="Product_Material" ColumnName="Product_Material" />
+          <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+          <ScalarProperty Name="Order_Leader" ColumnName="Order_Leader" />
+          <ScalarProperty Name="Order_Number" ColumnName="Order_Number" />
+          <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Fixture_Manager_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Fixture_Manager_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Fixture_Manager_Table">
+          <ScalarProperty Name="FixtureAdditionNumber" ColumnName="FixtureAdditionNumber" />
+          <ScalarProperty Name="FixtureFinishPerpareNumber" ColumnName="FixtureFinishPerpareNumber" />
+          <ScalarProperty Name="FixtureNumber" ColumnName="FixtureNumber" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Guide_Schedu_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Guide_Schedu_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Guide_Schedu_Table">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="ExpectEndTime" ColumnName="ExpectEndTime" />
+          <ScalarProperty Name="FileDownTime" ColumnName="FileDownTime" />
+          <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Intention_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Intention_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Intention_History_Table">
+          <ScalarProperty Name="CraftPersonID" ColumnName="CraftPersonID" />
+          <ScalarProperty Name="LastAlterTime" ColumnName="LastAlterTime" />
+          <ScalarProperty Name="LastAlterPersonID" ColumnName="LastAlterPersonID" />
+          <ScalarProperty Name="CreatTime" ColumnName="CreatTime" />
+          <ScalarProperty Name="CreatPersonID" ColumnName="CreatPersonID" />
+          <ScalarProperty Name="examineResult" ColumnName="examineResult" />
+          <ScalarProperty Name="flag" ColumnName="flag" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Process_Info_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Process_Info_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Process_Info_Table">
+          <ScalarProperty Name="MachNumber" ColumnName="MachNumber" />
+          <ScalarProperty Name="program_audit_sign" ColumnName="program_audit_sign" />
+          <ScalarProperty Name="Jig_Expected_Completion_Time" ColumnName="Jig_Expected_Completion_Time" />
+          <ScalarProperty Name="JigType" ColumnName="JigType" />
+          <ScalarProperty Name="Modulus" ColumnName="Modulus" />
+          <ScalarProperty Name="toolPreparation" ColumnName="toolPreparation" />
+          <ScalarProperty Name="sign" ColumnName="sign" />
+          <ScalarProperty Name="toolChartName" ColumnName="toolChartName" />
+          <ScalarProperty Name="programName" ColumnName="programName" />
+          <ScalarProperty Name="JigSpecification" ColumnName="JigSpecification" />
+          <ScalarProperty Name="BlankNumber" ColumnName="BlankNumber" />
+          <ScalarProperty Name="BlankSpecification" ColumnName="BlankSpecification" />
+          <ScalarProperty Name="BlankType" ColumnName="BlankType" />
+          <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+          <ScalarProperty Name="ProcessTime" ColumnName="ProcessTime" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Process_Information_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Process_Information_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Process_Information_Table">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="ZPoint" ColumnName="ZPoint" />
+          <ScalarProperty Name="YPoint" ColumnName="YPoint" />
+          <ScalarProperty Name="XPoint" ColumnName="XPoint" />
+          <ScalarProperty Name="WorkMaterial" ColumnName="WorkMaterial" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Process_Scheduling_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Process_Scheduling_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Process_Scheduling_Table">
+          <ScalarProperty Name="WorkCount" ColumnName="WorkCount" />
+          <ScalarProperty Name="isFlag" ColumnName="isFlag" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Process_Tool_Info_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Process_Tool_Info_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Process_Tool_Info_Table">
+          <ScalarProperty Name="BladeLenth" ColumnName="BladeLenth" />
+          <ScalarProperty Name="EffectiveLength" ColumnName="EffectiveLength" />
+          <ScalarProperty Name="isFine" ColumnName="isFine" />
+          <ScalarProperty Name="ToolAroidance" ColumnName="ToolAroidance" />
+          <ScalarProperty Name="ToolDiameter" ColumnName="ToolDiameter" />
+          <ScalarProperty Name="ToolLength" ColumnName="ToolLength" />
+          <ScalarProperty Name="Shank" ColumnName="Shank" />
+          <ScalarProperty Name="ToolName" ColumnName="ToolName" />
+          <ScalarProperty Name="ToolNO" ColumnName="ToolNO" />
+          <ScalarProperty Name="PathName" ColumnName="PathName" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Queue_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Queue_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Queue_Table">
+          <ScalarProperty Name="isFlag" ColumnName="isFlag" />
+          <ScalarProperty Name="PlanEndTime" ColumnName="PlanEndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Schedule_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Schedule_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Schedule_Table">
+          <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
+          <ScalarProperty Name="Cuee_Total_GoodProducts" ColumnName="Cuee_Total_GoodProducts" />
+          <ScalarProperty Name="Cuee_Total_Processing" ColumnName="Cuee_Total_Processing" />
+          <ScalarProperty Name="Schedule_ID" ColumnName="Schedule_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Order_Tool_Prepare_History_table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Tool_Prepare_History_table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Order_Tool_Prepare_History_table">
+          <ScalarProperty Name="PrepareTime" ColumnName="PrepareTime" />
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Quality_Confirmation_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_Confirmation_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Quality_Confirmation_History_Table">
+          <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+          <ScalarProperty Name="OperateTime" ColumnName="OperateTime" />
+          <ScalarProperty Name="PoolNum" ColumnName="PoolNum" />
+          <ScalarProperty Name="GoodNum" ColumnName="GoodNum" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Quality_Confirmation_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_Confirmation_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Quality_Confirmation_Table">
+          <ScalarProperty Name="PassRate" ColumnName="PassRate" />
+          <ScalarProperty Name="PefectiveProductNumber" ColumnName="PefectiveProductNumber" />
+          <ScalarProperty Name="QualifiedProductNumber" ColumnName="QualifiedProductNumber" />
+          <ScalarProperty Name="PendingNumber" ColumnName="PendingNumber" />
+          <ScalarProperty Name="DetectionNumber" ColumnName="DetectionNumber" />
+          <ScalarProperty Name="CurrFinishedProductNumber" ColumnName="CurrFinishedProductNumber" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Quality_ManualInput_Measurement_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_ManualInput_Measurement_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Quality_ManualInput_Measurement_Table">
+          <ScalarProperty Name="Classification" ColumnName="Classification" />
+          <ScalarProperty Name="OutOfTolerance" ColumnName="OutOfTolerance" />
+          <ScalarProperty Name="Measurements" ColumnName="Measurements" />
+          <ScalarProperty Name="ToleranceRangeMax" ColumnName="ToleranceRangeMax" />
+          <ScalarProperty Name="ToleranceRangeMin" ColumnName="ToleranceRangeMin" />
+          <ScalarProperty Name="StandardValue" ColumnName="StandardValue" />
+          <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+          <ScalarProperty Name="SizeNumber" ColumnName="SizeNumber" />
+          <ScalarProperty Name="WorkpieceNumber" ColumnName="WorkpieceNumber" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Quality_Onmachine_Measurement_Data">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_Onmachine_Measurement_Data">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Quality_Onmachine_Measurement_Data">
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="blankID" ColumnName="blankID" />
+          <ScalarProperty Name="Measurements" ColumnName="Measurements" />
+          <ScalarProperty Name="ToleranceRangeMax" ColumnName="ToleranceRangeMax" />
+          <ScalarProperty Name="ToleranceRangeMin" ColumnName="ToleranceRangeMin" />
+          <ScalarProperty Name="StandardValue" ColumnName="StandardValue" />
+          <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+          <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Quickchangbaseplate_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Quickchangbaseplate_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Quickchangbaseplate_Table">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="flag" ColumnName="flag" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Scan_Operate_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Scan_Operate_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Scan_Operate_History_Table">
+          <ScalarProperty Name="MachToolNum" ColumnName="MachToolNum" />
+          <ScalarProperty Name="remarks" ColumnName="remarks" />
+          <ScalarProperty Name="ShankID" ColumnName="ShankID" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="QuackPlateID" ColumnName="QuackPlateID" />
+          <ScalarProperty Name="machID" ColumnName="machID" />
+          <ScalarProperty Name="BlankID" ColumnName="BlankID" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Operate" ColumnName="Operate" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Secondary_Tooling_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Secondary_Tooling_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Secondary_Tooling_Table">
+          <ScalarProperty Name="plateID" ColumnName="plateID" />
+          <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Staff_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Staff_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Staff_Info">
+          <ScalarProperty Name="orderNumberId" ColumnName="orderNumberId" />
+          <ScalarProperty Name="mailbox" ColumnName="mailbox" />
+          <ScalarProperty Name="remark" ColumnName="remark" />
+          <ScalarProperty Name="limit" ColumnName="limit" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="users" ColumnName="users" />
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="tel" ColumnName="tel" />
+          <ScalarProperty Name="position" ColumnName="position" />
+          <ScalarProperty Name="staff" ColumnName="staff" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Borrow_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Borrow_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Borrow_History">
+          <ScalarProperty Name="project" ColumnName="project" />
+          <ScalarProperty Name="NewOldKnife" ColumnName="NewOldKnife" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="ReturnNumber" ColumnName="ReturnNumber" />
+          <ScalarProperty Name="BorrowNumber" ColumnName="BorrowNumber" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_LB_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_LB_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_LB_History">
+          <ScalarProperty Name="BackTime" ColumnName="BackTime" />
+          <ScalarProperty Name="LendTime" ColumnName="LendTime" />
+          <ScalarProperty Name="IsLended" ColumnName="IsLended" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_LifeTime_Management">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_LifeTime_Management">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_LifeTime_Management">
+          <ScalarProperty Name="ToolCurrDistance" ColumnName="ToolCurrDistance" />
+          <ScalarProperty Name="ToolMaxDistance" ColumnName="ToolMaxDistance" />
+          <ScalarProperty Name="ToolCurrNum" ColumnName="ToolCurrNum" />
+          <ScalarProperty Name="ToolMaxNum" ColumnName="ToolMaxNum" />
+          <ScalarProperty Name="ToolCurrTime" ColumnName="ToolCurrTime" />
+          <ScalarProperty Name="ToolMaxTime" ColumnName="ToolMaxTime" />
+          <ScalarProperty Name="ToolD" ColumnName="ToolD" />
+          <ScalarProperty Name="ToolR" ColumnName="ToolR" />
+          <ScalarProperty Name="ToolH" ColumnName="ToolH" />
+          <ScalarProperty Name="ToolL" ColumnName="ToolL" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_LifeTimeOver_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_LifeTimeOver_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_LifeTimeOver_History_Table">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Machine_Replaace_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Machine_Replaace_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Machine_Replaace_History_Table">
+          <ScalarProperty Name="isOver" ColumnName="isOver" />
+          <ScalarProperty Name="AcceptPersonTime" ColumnName="AcceptPersonTime" />
+          <ScalarProperty Name="AcceptPersonID" ColumnName="AcceptPersonID" />
+          <ScalarProperty Name="Flag" ColumnName="Flag" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
+          <ScalarProperty Name="ToolNum" ColumnName="ToolNum" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Measurement_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Measurement_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Measurement_Table">
+          <ScalarProperty Name="ToolRAddress" ColumnName="ToolRAddress" />
+          <ScalarProperty Name="ToolLengthAddress" ColumnName="ToolLengthAddress" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="MachType" ColumnName="MachType" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="MachNum" ColumnName="MachNum" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Replace_Reason_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Replace_Reason_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Replace_Reason_Table">
+          <ScalarProperty Name="ReasonNum" ColumnName="ReasonNum" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Scrap_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Scrap_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Scrap_History">
+          <ScalarProperty Name="BadTime" ColumnName="BadTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Shank_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Shank_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Shank_Table">
+          <ScalarProperty Name="ToolInfoFlag" ColumnName="ToolInfoFlag" />
+          <ScalarProperty Name="ToolJump" ColumnName="ToolJump" />
+          <ScalarProperty Name="ToolTheoryR" ColumnName="ToolTheoryR" />
+          <ScalarProperty Name="ToolRealR" ColumnName="ToolRealR" />
+          <ScalarProperty Name="ToolStateFlag" ColumnName="ToolStateFlag" />
+          <ScalarProperty Name="ToolLength" ColumnName="ToolLength" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ToolNum" ColumnName="ToolNum" />
+          <ScalarProperty Name="ShankNum" ColumnName="ShankNum" />
+          <ScalarProperty Name="ShankSpecificationID" ColumnName="ShankSpecificationID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Shanks_Specification_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Shanks_Specification_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Shanks_Specification_Table">
+          <ScalarProperty Name="ToolShankSpecificationNum" ColumnName="ToolShankSpecificationNum" />
+          <ScalarProperty Name="ToolShankSpecification" ColumnName="ToolShankSpecification" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Standard_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Standard_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Standard_Table">
+          <ScalarProperty Name="MachTypeID" ColumnName="MachTypeID" />
+          <ScalarProperty Name="Shank" ColumnName="Shank" />
+          <ScalarProperty Name="Knife" ColumnName="Knife" />
+          <ScalarProperty Name="Feed" ColumnName="Feed" />
+          <ScalarProperty Name="RotatingSpeed" ColumnName="RotatingSpeed" />
+          <ScalarProperty Name="ToolLength" ColumnName="ToolLength" />
+          <ScalarProperty Name="ToolDiameter" ColumnName="ToolDiameter" />
+          <ScalarProperty Name="RazorDiameter" ColumnName="RazorDiameter" />
+          <ScalarProperty Name="ProcessStage" ColumnName="ProcessStage" />
+          <ScalarProperty Name="Specification" ColumnName="Specification" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Stock_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Stock_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Stock_History">
+          <ScalarProperty Name="num" ColumnName="num" />
+          <ScalarProperty Name="OldKnife" ColumnName="OldKnife" />
+          <ScalarProperty Name="NewKnife" ColumnName="NewKnife" />
+          <ScalarProperty Name="AllKnife" ColumnName="AllKnife" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Storage_History">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Storage_History">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Storage_History">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="KnifeNumber" ColumnName="KnifeNumber" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_TypeName_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_TypeName_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_TypeName_Table">
+          <ScalarProperty Name="ToolTypeNameEditor" ColumnName="ToolTypeNameEditor" />
+          <ScalarProperty Name="ToolTypeNmae" ColumnName="ToolTypeNmae" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Users_Login_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Users_Login_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Users_Login_Info">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Limit" ColumnName="Limit" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Tool_Verdor_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Tool_Verdor_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Tool_Verdor_Table">
+          <ScalarProperty Name="VerdorNum" ColumnName="VerdorNum" />
+          <ScalarProperty Name="VerdorName" ColumnName="VerdorName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_ToolChangeMessage_Issued_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_ToolChangeMessage_Issued_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_ToolChangeMessage_Issued_Table">
+          <ScalarProperty Name="Flag" ColumnName="Flag" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_ToolHolder_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_ToolHolder_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_ToolHolder_Table">
+          <ScalarProperty Name="flag" ColumnName="flag" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="ToolHolderName" ColumnName="ToolHolderName" />
+          <ScalarProperty Name="ToolHolderNum" ColumnName="ToolHolderNum" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_ToolHolder_Tool_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_ToolHolder_Tool_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_ToolHolder_Tool_Table">
+          <ScalarProperty Name="EffectiveLength" ColumnName="EffectiveLength" />
+          <ScalarProperty Name="RAngle" ColumnName="RAngle" />
+          <ScalarProperty Name="TheoryR" ColumnName="TheoryR" />
+          <ScalarProperty Name="BladeLength" ColumnName="BladeLength" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="BladesNum" ColumnName="BladesNum" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="VerdorID" ColumnName="VerdorID" />
+          <ScalarProperty Name="ToolSpecifications" ColumnName="ToolSpecifications" />
+          <ScalarProperty Name="flag" ColumnName="flag" />
+          <ScalarProperty Name="ToolLength" ColumnName="ToolLength" />
+          <ScalarProperty Name="ToolName" ColumnName="ToolName" />
+          <ScalarProperty Name="ToolNum" ColumnName="ToolNum" />
+          <ScalarProperty Name="ToolHolderID" ColumnName="ToolHolderID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_ToolHolder_ToolLife_History_Table">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_ToolHolder_ToolLife_History_Table">
+        <MappingFragment StoreEntitySet="JDJS_WMS_ToolHolder_ToolLife_History_Table">
+          <ScalarProperty Name="UseTime" ColumnName="UseTime" />
+          <ScalarProperty Name="CncID" ColumnName="CncID" />
+          <ScalarProperty Name="ToolLength" ColumnName="ToolLength" />
+          <ScalarProperty Name="ToolMaxLife" ColumnName="ToolMaxLife" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="ToolFlag" ColumnName="ToolFlag" />
+          <ScalarProperty Name="ToolCurrLife" ColumnName="ToolCurrLife" />
+          <ScalarProperty Name="ToolID" ColumnName="ToolID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JDJS_WMS_Users_Login_Info">
+      <EntityTypeMapping TypeName="Model.JDJS_WMS_Users_Login_Info">
+        <MappingFragment StoreEntitySet="JDJS_WMS_Users_Login_Info">
+          <ScalarProperty Name="Limit" ColumnName="Limit" />
+          <ScalarProperty Name="PassWords" ColumnName="PassWords" />
+          <ScalarProperty Name="Users" ColumnName="Users" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+
+    <table id="demo" lay-filter="test"></table>
+    <input id="judge" hidden/>
+   
+    <script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+   
+    ,url: '读订单队列.ashx' //数据接口
+    
+      , cols: [[ //表头
+         {field: '',type:'numbers', title: '序号', }
+      ,{field: 'OrderNum', title: '订单队列', }
+        , { field: 'OrderState', title: '状态',}
+        ,{field: 'OrderID', title: '订单ID', width:180,hide:true  }
+
+        , { field: 'sign', title: '使能', width: 80, hide: true }
+        , { field: 'do', title: '操作', templet: '#barDemo',width: 150 }
+
+      ]], done: function (d) {
+        var judge = [];
+        var orderIds = $('[data-field="OrderID"]')
+        for (var i = 0; i < orderIds.length; i++) {
+            judge.push(orderIds[i].children[0].innerText)
+        }
+        var json = JSON.stringify(judge)
+        $("#judge").val(json)
+
+          $('.layui-table-body').find('tr').mouseenter(function () {
+            $(this).css('background-color', 'antiquewhite')
+          })
+        $('.layui-table-body').find('tr').mouseleave(function () {
+            $(this).css('background-color', 'white')
+        });
+        var arr = $('td[data-field="sign"]')
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].children[0].innerText == 0) {
+                $(arr[i]).siblings('[data-field="do"]').find('button').addClass('layui-btn-disabled').attr('disabled', true)
+            }
+        }
+      }
+  });
+
+    table.on('tool(test)', function(obj){
+    var data = obj.data;
+    //console.log(obj)
+    if(obj.event === 'up'){
+
+        var tr = $(this).parents('tr');
+        var sign = $(tr).prev().find('[data-field="sign"]')[0].children[0].innerText;
+        if (sign == 0) {
+            return;
+        }
+        $(tr).insertBefore($(tr).prev())
+       
+    } else if(obj.event === 'down'){
+        var tr = $(this).parents('tr');
+        $(tr).insertAfter($(tr).next())
+    }else if(obj.event === 'top'){
+        var tr = $(this).parents('tr');
+        var arr = $('tr')
+        for (var i = 0; i < arr.length; i++) {
+            if ($(arr[i]).find('[data-field="sign"]')[0].children[0].innerText == 1) {
+                $(tr).insertBefore($(arr[i]))
+                return;
+            }
+        }
+      
+    }
+  });
+
+});
+    </script>
+    <script type="text/html" id="barDemo">
+        <button title="上移" class="layui-btn layui-btn-xs" lay-event="up"><i class="layui-icon layui-icon-up"></i> </button>
+        <button title="下移" class="layui-btn  layui-btn-xs" lay-event="down"><i class="layui-icon layui-icon-down"></i> </button>
+        <button title="置顶" class="layui-btn  layui-btn-xs" lay-event="top"><i class="layui-icon layui-icon-upload-circle"></i> </button>
+
+        
+    </script>
+    <div style="width:100%;text-align:center">
+
+         <button class="layui-btn layui-btn-sm"  onclick="fun()">提交</button>
+    </div>
+   
+    <script>
+    function fun() {
+
+
+         var judge = [];
+        var orderIds = $('[data-field="OrderID"]')
+        for (var i = 0; i < orderIds.length; i++) {
+            judge.push(orderIds[i].children[0].innerText)
+        }
+        var json = JSON.stringify(judge)
+        if (json == $("#judge").val()) {
+            layer.msg("未调整", { icon: 2, time: 1000 }, function () {
+               
+            })
+             return;
+        }
+
+        var trs = $('tr')
+        var formData = new FormData();
+        for (var i = 1; i < trs.length; i++) {
+            var tds = $(trs[i]).find('td')
+          
+                var orderId = tds[3].children[0].innerText;
+            var flag = tds[4].children[0].innerText;
+            formData.append(i, orderId);
+             formData.append(i, flag);
+           
+        }
+        $.ajax({
+            url: '插单管理提交.ashx',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (d) {
+                if (d == "ok") {
+                    layer.msg("修改成功", { icon: 1, time: 1000 }, function () {
+                        location.reload()
+                    });
+            
+                   
+                }
+            }
+        })
+    }
+    </script>
+</body>
+
+</html>

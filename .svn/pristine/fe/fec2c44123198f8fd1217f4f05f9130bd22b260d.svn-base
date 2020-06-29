@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <table id="toolInstallation" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+
+
+           
+            table.render({
+                elem: '#toolInstallation',
+                toolbar: '#toolbar',
+                url: '装刀管理读数据.ashx',
+                cols: [
+                    [
+                        { field: 'machNum', width: 100, title: '机台号', rowspan: 2 },
+                        { field: 'currentOrderTask', width: 120, title: '当前订单任务', rowspan: 2 },
+                        { width: 90, align: 'center', title: '刀具需求', colspan: 3 },
+                        { field: 'currentTaskCompletionDegree', width: 135, title: '当前任务完成度', rowspan: 2 },
+                        { field: 'nextOrderTask', width: 120, title: '下个订单任务', rowspan: 2 },
+                        { width: 90, align: 'center', title: '刀具需求', colspan: 3 },
+                        { field: 'remind', width: 90, title: '装刀提醒', rowspan: 2 },
+                           //{ field: 'nextRemind',  title: '装刀提醒', rowspan: 2 },
+                        
+                    ],
+                    [
+                        { field: 'toolNum', width: 60, title: '刀号' },
+                        { field: 'toolName', width: 120, title: '刀具名称' },
+                        { field: 'toolSpecification', width: 120, title: '刀具规格' },
+                        { field: 'nextToolNum', width: 120, title: '刀号' },
+                        { field: 'nextToolName', width: 120, title: '刀具名称' },
+                        { field: 'nextToolSpecification', width: 120, title: '刀具规格' },
+                    ]
+                ]
+
+
+                , done: function (d) {
+                    $.ajax({
+                        url: 'cncRead.ashx',
+                        success: function (d) {
+                            var obj = JSON.parse(d)
+                            for (var j = 0; j < obj.length; j++) {
+
+                                {
+                        var count = 0;
+                        var dd = $('td[data-field="machNum"]')
+                        for (var i = 0; i < dd.length; i++) {
+
+                            if (dd[i].children[0].innerText == obj[j].MachNum) {
+                                count++;
+                                if (count == 1) {
+                                    var start = dd[i]
+                                }
+                                if (count > 1) {
+                                    $(dd[i]).hide()
+                                    $(dd[i]).siblings('td[data-field="currentOrderTask"]').hide()
+                                    $(dd[i]).siblings('td[data-field="currentTaskCompletionDegree"]').hide()
+                                    $(dd[i]).siblings('td[data-field="nextOrderTask"]').hide();
+                                    $(dd[i]).siblings('td[data-field="remind"]').hide();
+                                    $(dd[i]).siblings('td[data-field="nextRemind"]').hide();
+
+                                }
+
+                            }
+
+                        }
+
+                        $(start).attr('rowspan', count);
+                        $(start).siblings('td[data-field="currentOrderTask"]').attr('rowspan', count);
+                      $(start).siblings('td[data-field="currentTaskCompletionDegree"]').attr('rowspan', count);
+                        $(start).siblings('td[data-field="nextOrderTask"]').attr('rowspan', count);
+                        $(start).siblings('td[data-field="remind"]').attr('rowspan', count);
+                        $(start).siblings('td[data-field="nextRemind"]').attr('rowspan', count);
+
+                    }
+                            }
+                        }
+                    })
+                    
+
+                    
+                }
+            });
+
+        });
+    </script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn" onclick="window.print()">打印</button>
+    </script>
+</body>
+</html>

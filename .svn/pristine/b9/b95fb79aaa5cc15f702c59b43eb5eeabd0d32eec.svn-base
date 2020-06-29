@@ -1,0 +1,450 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="resource/layui.css" rel="stylesheet" />
+
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div class="layui-row" style="background-color:#D53A35;height:25%">
+        <div class="layui-col-md5" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">备刀需求</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="knifePreparationCake" style="height:100%;width:60%;float:left"></div>
+                    <div id="" style="height:100%;width:40%;float:left;color:white;">
+                        <div style="margin-top:30%"><div style="float:left;font-size:150%">备刀需求量：</div><div style="float:left;font-size:150%">30</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md7" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">备刀历史</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="knifePreparationColumn" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="background-color:green;height:25%;margin-top:10px">
+        <div class="layui-col-md5" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">装刀需求</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="knifeInstallationCake" style="height:100%;width:60%;float:left"></div>
+                    <div id="" style="height:100%;width:40%;float:left;color:white;">
+                        <div style="margin-top:30%"><div style="float:left;font-size:150%">当前装刀需求量：</div><div style="float:left;font-size:150%">30</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md7" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">装刀历史</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="knifeInstallationColumn" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="background-color:#D53A35;height:25%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">装刀请求</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="knifeInstallationTable" lay-filter="knifeInstallationTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="background-color:yellow;height:25%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">备刀请求</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="knifePreparationTable" lay-filter="knifePreparationTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var myChart = echarts.init(document.getElementById('knifePreparationCake'));
+       option = {
+         
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+    
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '60%',
+                  
+                     label : {
+              normal: {
+         
+          formatter: '{b}:{c}',
+       textStyle : {
+             fontWeight : 'normal',
+                fontSize: 15
+                  }
+              },
+               emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+                    data: [
+                        { value: 10, name: '未备固定刀具数', itemStyle: { color: '#D53A35' } },
+                          { value:10, name: '未备特殊刀具数', itemStyle: {color:'orangered'} },
+                        { value: 20, name: '已备固定刀具数', itemStyle: { color: 'green' } },
+                        { value: 20, name: '已备特殊刀具数', itemStyle: {color:'lawngreen'} },
+                     
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    </script>
+    <div style="color:orangered "></div>
+    <script>
+        var myChart = echarts.init(document.getElementById('knifePreparationColumn'));//
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+          legend: {
+                data: ['备刀需求'],
+                    textStyle: {
+                                color: '#ffffff'
+                            }
+            },
+            title: {
+                show: true,
+                text:1
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['2019-08-08', '2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14'],
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                     axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            yAxis: [
+                {
+                  
+                    type: 'value',
+                          axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                    
+                 splitLine:{
+			                show:false
+                    },
+                  axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            series: [
+
+                {
+                    name: '备刀需求',
+                    type: 'bar',
+                    barWidth: '30%',
+                   
+                    stack: '设备',
+                    data: [100, 200, 150, 300, 400, 200, 50],
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                formatter: "{c}" ,
+                                show: true,
+                                position: "top",
+                                textStyle: {
+                                    fontWeight: "bolder",
+                                    fontSize: "12",
+                                    color: "#fff"
+                                }
+                            }
+                        }
+                    },
+
+                }
+
+
+
+
+
+            ],
+          
+           
+        };
+        myChart.setOption(option);
+    </script>
+
+    <script>
+        var myChart = echarts.init(document.getElementById('knifeInstallationCake'));
+        option = {
+         
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+    
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '60%',
+                  
+                     label : {
+              normal: {
+         
+          formatter: '{b}:{c} ',
+       textStyle : {
+             fontWeight : 'normal',
+                fontSize: 15
+                  }
+              },
+               emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+                    data: [
+                        { value: 20, name: '未装固定刀具数', itemStyle: { color: '#D53A35' } },
+                          { value: 20, name: '未装特殊刀具数' , itemStyle: {color:'orangered'}},
+                        { value: 10, name: '已装固定刀具数', itemStyle: { color: 'green' } },
+                         { value: 10, name: '已装特殊刀具数', itemStyle: {color:'lawngreen'} },//
+                     
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    </script>
+    <script>
+        var myChart = echarts.init(document.getElementById('knifeInstallationColumn'));//
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['换刀装刀量', '备刀装刀量'],
+                    textStyle: {
+                                color: '#ffffff'
+                            }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14', '2019-08-15'],
+                     axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                          axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                     splitLine:{
+			                show:false
+                    },
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            series: [
+
+                {
+                    name: '换刀装刀量',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [150, 200, 300, 100, 200, 100, 300]
+                },
+                {
+                    name: '备刀装刀量',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [100, 50, 50, 200, 100, 100, 100]
+                },
+   
+
+
+
+
+
+            ],
+            barWidth: '30%'
+        };
+      
+        myChart.setOption(option)
+    </script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#knifeInstallationTable'
+               
+                
+               
+                , cols: [[ //表头
+                    { field: 'cncNum', title: '需求机台编号', width:200 }
+                    , { field: 'toolType', title: '需求装刀类型',}
+                    , { field: 'toolNumber', title: '需求装刀数量', }
+                      , { field: 'toolNum', title: '需求装刀刀号', }
+                    , { field: 'toolState', title: '装刀状态',  }
+                    , { field: 'ReleaseTime', title: '装刀请求下达时间', }
+                    , { field: 'completeTime', title: '装刀请求完成时间',  }
+
+                ]], data: [
+                    { 'cncNum': '1A-01', 'toolType': '换刀装刀', 'toolNumber': 2, 'toolNum': 1, 'toolState': 'T1,T2', 'ReleaseTime': 1, 'completeTime': 1, }
+                      ,{ 'cncNum': '1A-01', 'toolType':'换刀装刀', 'toolNumber':2, 'toolNum': 1, 'toolState': 'T1,T2', 'ReleaseTime': 1, 'completeTime': 1, }
+                ], done: function () {
+                  //$('tr').css('color', 'white')
+                 
+                  //  $('.layui-table-header').css('background-color', 'red')
+                 
+                 
+                  //   $('thead').find('tr').css('background-color', 'red')
+                    //var trs = $('tbody').find('tr')
+                    //for (var i = 0; i < trs.length; i++) {
+                    //    if (i % 2 == 0) {
+                    //        $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.8)')
+                    //    } else {
+                    //         $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                    //    }
+                    //}
+                }
+            });
+
+
+             table.render({
+                elem: '#knifePreparationTable'
+               
+              
+             
+                , cols: [[ //表头
+                    { field: 'orderNum', title: '需求订单号', width: 180,  }
+                    , { field: 'processNum', title: '需求订单工序号',}
+                    , { field: 'toolSpecif', title: '需求特殊刀规格',  }
+                    , { field: 'toolNum', title: '刀具号', }
+                    , { field: 'hiltSpecif', title: '刀柄规格', }
+                    , { field: 'length', title: '装刀深出长度',  }
+                    , { field: 'number', title: '需求数量',   }
+                    , { field: 'state', title: '备刀状态',}
+                    , { field: 'requestTime', title: '备刀请求时间',  }
+                      , { field: 'completeTime', title: '备刀完成时间',   }
+                 ]], data: [
+                    {'orderNum':'20190814001', 'processNum':'1','toolSpecif':'平2','toolNum':'24','hiltSpecif':'BT30','length':'20','number':'10','state':'','requestTime':'', 'completeTime':'', }
+                     ,{'orderNum':'20190814001', 'processNum':'1','toolSpecif':'平2','toolNum':'24','hiltSpecif':'BT30','length':'20','number':'10','state':'','requestTime':'', 'completeTime':'', }
+
+                 ],
+                 done: function () {
+                  $('tr').css('color', 'white')
+                 
+                    $('.layui-table-header').css('background-color', 'black')
+                 
+                 
+                     $('thead').find('tr').css('background-color', 'rgba(0, 0, 0, 0.8)')
+                    var trs = $('tbody').find('tr')
+                    for (var i = 0; i < trs.length; i++) {
+                        if (i % 2 == 0) {
+                            $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.65)')
+                        } else {
+                             $(trs[i]).css('background-color', 'rgba(0, 0, 0, 0.7)')
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

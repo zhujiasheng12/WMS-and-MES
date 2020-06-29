@@ -1,0 +1,623 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.Kanban.设备监控
+{
+    /// <summary>
+    /// TOP刀具准备情况 的摘要说明
+    /// </summary>
+    public class TOP刀具准备情况 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            if (context.Request["workId"] == "全部")
+            {
+
+                {
+                    //var workId = int.Parse(context.Request["workId"]);
+                    
+                    {
+                        //Top5换刀
+
+                        //int LocationID = workId;
+                        List<Tool> tools = new List<Tool>();
+                        List<ToolInfo> toolInfos = new List<ToolInfo>();
+                        DateTime timeNow = DateTime.Now;
+                        TimeSpan span = timeNow - timeNow.AddSeconds(-1);
+                        using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+                        {
+                            
+                            var devices = wms.JDJS_WMS_Device_Info;
+                            foreach (var item in devices)
+                            {
+                                int cncID = Convert.ToInt32(item.ID);
+                                string cncNum = item.MachNum;
+                                var cncState = wms.JDJS_WMS_Device_RealTime_Data.Where(r => r.CncID == cncID).FirstOrDefault();
+                                var toolLife = wms.JDJS_WMS_Tool_LifeTime_Management.Where(r => r.CncID == cncID);
+                                foreach (var real in toolLife)
+                                {
+                                    int toolNum = Convert.ToInt32(real.ToolID);
+                                    var shank = wms.JDJS_WMS_Tool_Shank_Table.Where(r => r.CncID == cncID && r.ToolNum == toolNum).FirstOrDefault();
+                                    if (shank != null)
+                                    {
+                                        if (real.ToolCurrTime > real.ToolMaxTime)
+                                        {
+
+                                            DateTime startTimeT = timeNow.AddYears(-100);
+                                            var toolOver = wms.JDJS_WMS_Tool_LifeTimeOver_History_Table.Where(r => r.CncID == cncID && r.ToolID == real.ToolID);
+                                            if (toolOver.Count() > 0)
+                                            {
+                                                startTimeT = Convert.ToDateTime(toolOver.OrderByDescending(R => R.Time).ToList().FirstOrDefault().Time);
+                                            }
+                                            if (startTimeT != timeNow.AddYears(-100))
+                                            {
+                                                ToolInfo toolInfo1 = new ToolInfo();
+                                                toolInfo1.cncNum = cncNum;
+                                                toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                                toolInfo1.time = timeNow - startTimeT;
+                                                if ((timeNow - startTimeT) > span)
+                                                {
+                                                    span = (timeNow - startTimeT);
+                                                }
+                                                toolInfos.Add(toolInfo1);
+                                            }
+                                            else
+                                            {
+                                                ToolInfo toolInfo1 = new ToolInfo();
+                                                toolInfo1.cncNum = cncNum;
+                                                toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                                toolInfo1.time = timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime));
+                                                if ((timeNow - startTimeT) > span)
+                                                {
+                                                    span = (timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime)));
+                                                }
+                                                toolInfos.Add(toolInfo1);
+                                            }
+                                        }
+                                    }
+                                }
+                                int FormateProcessID = -1;
+                                int NextProcessID = -1;
+                                if (cncState != null)
+                                {
+                                    if (cncState.ProgState != 1)
+                                    {
+                                        var schedus3 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && r.isFlag == 3);
+                                        if (schedus3.Count() > 0)
+                                        {
+                                            FormateProcessID = Convert.ToInt32(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().ProcessID);
+                                        }
+                                        var schedu12 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && (r.isFlag == 2 || r.isFlag == 1));
+                                        if (schedu12.Count() > 0)
+                                        {
+                                            NextProcessID = Convert.ToInt32(schedu12.OrderBy(r => r.StartTime).FirstOrDefault().ProcessID);
+                                        }
+                                        if (FormateProcessID != NextProcessID && NextProcessID != -1)
+                                        {
+                                            List<int> toolNos = new List<int>();
+                                            List<string> ToolNos = new List<string>();
+                                            var pro = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == NextProcessID).First();
+                                            var toolnos = wms.JDJS_WMS_Tool_Standard_Table.Where (r=>r.MachTypeID==pro.DeviceType);
+                                            foreach (var mo in toolnos)
+                                            {
+                                                ToolNos.Add(mo.ToolID);
+                                            }
+                                            var toolInfo = wms.JDJS_WMS_Order_Process_Tool_Info_Table.Where(r => r.ProcessID == NextProcessID);
+                                            foreach (var real in toolInfo)
+                                            {
+                                                int toolNo = Convert.ToInt32(real.ToolNO);
+                                                if (!ToolNos.Contains("T" + toolNo.ToString()))
+                                                {
+                                                    if (!toolNos.Contains(toolNo))
+                                                    {
+                                                        toolNos.Add(toolNo);
+                                                    }
+                                                }
+                                            }
+                                            DateTime startTime = new DateTime();
+                                            if (schedus3.Count() > 0)
+                                            {
+                                                startTime = Convert.ToDateTime(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().EndTime);
+                                            }
+                                            else
+                                            {
+                                                var toolPrepareInfo = wms.JDJS_WMS_Order_Tool_Prepare_History_table.Where(r => r.ProcessID == NextProcessID);
+                                                if (toolPrepareInfo.Count() > 0)
+                                                {
+                                                    startTime = Convert.ToDateTime(toolPrepareInfo.FirstOrDefault().PrepareTime);
+                                                }
+                                                else
+                                                {
+                                                    startTime = timeNow.AddYears(-2000);
+                                                }
+                                            }
+                                            var Tools = wms.JDJS_WMS_Device_Tool_History_Table.Where(r => r.CncID == cncID && r.Time >= startTime);
+                                            foreach (var real in Tools)
+                                            {
+                                                int toolno = Convert.ToInt32(real.ToolNum);
+                                                if (toolNos.Contains(toolno))
+                                                {
+                                                    toolNos.Remove(toolno);
+                                                }
+                                            }
+                                            if (toolNos.Count() > 0 && startTime != timeNow.AddYears(-2000))
+                                            {
+                                                foreach (var tool in toolNos)
+                                                {
+                                                    ToolInfo toolInfo1 = new ToolInfo();
+                                                    toolInfo1.cncNum = cncNum;
+                                                    toolInfo1.toolNum = tool;
+                                                    toolInfo1.time = timeNow - startTime;
+                                                    if ((timeNow - startTime) > span)
+                                                    {
+                                                        span = (timeNow - startTime);
+                                                    }
+                                                    toolInfos.Add(toolInfo1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (toolInfos.Count() > 0)
+                        {
+                            toolInfos = toolInfos.OrderByDescending(r => r.time).ToList();
+                            span = toolInfos.FirstOrDefault().time;
+                            for (int i = 0; i < toolInfos.Count(); i++)
+                            {
+                                toolInfos[i].progress = toolInfos[i].time.TotalMilliseconds / span.TotalMilliseconds;
+                            }
+                        }
+
+                        //toolInfos.OrderByDescending(r => r.time);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (toolInfos.Count() > i)
+                            {
+                                Tool tool = new Tool();
+                                tool.cncNum = toolInfos[i].cncNum;
+                                tool.progress = toolInfos[i].progress.ToString("0.0000");
+                                tool.time = toolInfos[i].time.TotalHours.ToString("0.00") + "H";
+                                tool.toolNum = "T" + toolInfos[i].toolNum.ToString();
+                                tools.Add(tool);
+                            }
+                            else
+                            {
+                                Tool tool = new Tool();
+                                tool.cncNum = "";
+                                tool.progress = "";
+                                tool.time = "";
+                                tool.toolNum = "";
+                                tools.Add(tool);
+                            }
+                        }
+                        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        var model = new { code = 0, data = tools };
+                        var json = serializer.Serialize(model);
+                        context.Response.Write("data:" + json + "\n\n"); context.Response.ContentType = "text/event-stream";
+                    }
+                }
+            }
+            else if (context.Request["workId"] == "34台")
+            {
+                List<int> cncIDs = new List<int>();
+                for (int i = 95; i < 112; i++)
+                {
+                    cncIDs.Add(i);
+                }
+                for (int i = 122; i < 139; i++)
+                {
+                    cncIDs.Add(i);
+                }
+
+                {
+                    //var workId = int.Parse(context.Request["workId"]);
+                   
+                    {
+                        //Top5换刀
+
+                        //int LocationID = workId;
+                        List<Tool> tools = new List<Tool>();
+                        List<ToolInfo> toolInfos = new List<ToolInfo>();
+                        DateTime timeNow = DateTime.Now;
+                        TimeSpan span = timeNow - timeNow.AddSeconds(-1);
+                        using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+                        {
+                            
+                            var devices = wms.JDJS_WMS_Device_Info;
+                            foreach (var item in devices)
+                            {
+                                int cncID = Convert.ToInt32(item.ID);
+                                if (cncIDs.Contains(cncID))
+                                {
+                                    string cncNum = item.MachNum;
+                                    var cncState = wms.JDJS_WMS_Device_RealTime_Data.Where(r => r.CncID == cncID).FirstOrDefault();
+                                    var toolLife = wms.JDJS_WMS_Tool_LifeTime_Management.Where(r => r.CncID == cncID);
+                                    foreach (var real in toolLife)
+                                    {
+                                        if (real.ToolCurrTime > real.ToolMaxTime)
+                                        {
+
+                                            DateTime startTimeT = timeNow.AddYears(-100);
+                                            var toolOver = wms.JDJS_WMS_Tool_LifeTimeOver_History_Table.Where(r => r.CncID == cncID && r.ToolID == real.ToolID);
+                                            if (toolOver.Count() > 0)
+                                            {
+                                                startTimeT = Convert.ToDateTime(toolOver.OrderByDescending(R => R.Time).ToList().FirstOrDefault().Time);
+                                            }
+                                            if (startTimeT != timeNow.AddYears(-100))
+                                            {
+                                                ToolInfo toolInfo1 = new ToolInfo();
+                                                toolInfo1.cncNum = cncNum;
+                                                toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                                toolInfo1.time = timeNow - startTimeT;
+                                                if ((timeNow - startTimeT) > span)
+                                                {
+                                                    span = (timeNow - startTimeT);
+                                                }
+                                                toolInfos.Add(toolInfo1);
+                                            }
+                                            else
+                                            {
+                                                ToolInfo toolInfo1 = new ToolInfo();
+                                                toolInfo1.cncNum = cncNum;
+                                                toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                                toolInfo1.time = timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime));
+                                                if ((timeNow - startTimeT) > span)
+                                                {
+                                                    span = (timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime)));
+                                                }
+                                                toolInfos.Add(toolInfo1);
+                                            }
+                                        }
+                                    }
+                                    int FormateProcessID = -1;
+                                    int NextProcessID = -1;
+                                    if (cncState != null)
+                                    {
+                                        if (cncState.ProgState != 1)
+                                        {
+                                            var schedus3 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && r.isFlag == 3);
+                                            if (schedus3.Count() > 0)
+                                            {
+                                                FormateProcessID = Convert.ToInt32(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().ProcessID);
+                                            }
+                                            var schedu12 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && (r.isFlag == 2 || r.isFlag == 1));
+                                            if (schedu12.Count() > 0)
+                                            {
+                                                NextProcessID = Convert.ToInt32(schedu12.OrderBy(r => r.StartTime).FirstOrDefault().ProcessID);
+                                            }
+                                            if (FormateProcessID != NextProcessID && NextProcessID != -1)
+                                            {
+                                                List<int> toolNos = new List<int>();
+                                                var toolInfo = wms.JDJS_WMS_Order_Process_Tool_Info_Table.Where(r => r.ProcessID == NextProcessID);
+                                                foreach (var real in toolInfo)
+                                                {
+                                                    var pro = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == NextProcessID).First();
+                                                    List<string> ToolNos = new List<string>();
+                                                    var toolnos = wms.JDJS_WMS_Tool_Standard_Table.Where (r=>r.MachTypeID ==pro.DeviceType);
+                                                    foreach (var mo in toolnos)
+                                                    {
+                                                        ToolNos.Add(mo.ToolID);
+                                                    }
+                                                    int toolNo = Convert.ToInt32(real.ToolNO);
+                                                    if (!ToolNos.Contains("T" + toolNo.ToString()))
+                                                    {
+                                                        if (!toolNos.Contains(toolNo))
+                                                        {
+                                                            toolNos.Add(toolNo);
+                                                        }
+                                                    }
+                                                }
+                                                DateTime startTime = new DateTime();
+                                                if (schedus3.Count() > 0)
+                                                {
+                                                    startTime = Convert.ToDateTime(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().EndTime);
+                                                }
+                                                else
+                                                {
+                                                    var toolPrepareInfo = wms.JDJS_WMS_Order_Tool_Prepare_History_table.Where(r => r.ProcessID == NextProcessID);
+                                                    if (toolPrepareInfo.Count() > 0)
+                                                    {
+                                                        startTime = Convert.ToDateTime(toolPrepareInfo.FirstOrDefault().PrepareTime);
+                                                    }
+                                                    else
+                                                    {
+                                                        startTime = timeNow.AddYears(-2000);
+                                                    }
+                                                }
+                                                var Tools = wms.JDJS_WMS_Device_Tool_History_Table.Where(r => r.CncID == cncID && r.Time >= startTime);
+                                                foreach (var real in Tools)
+                                                {
+                                                    int toolno = Convert.ToInt32(real.ToolNum);
+                                                    if (toolNos.Contains(toolno))
+                                                    {
+                                                        toolNos.Remove(toolno);
+                                                    }
+                                                }
+                                                if (toolNos.Count() > 0 && startTime != timeNow.AddYears(-2000))
+                                                {
+                                                    foreach (var tool in toolNos)
+                                                    {
+                                                        ToolInfo toolInfo1 = new ToolInfo();
+                                                        toolInfo1.cncNum = cncNum;
+                                                        toolInfo1.toolNum = tool;
+                                                        toolInfo1.time = timeNow - startTime;
+                                                        if ((timeNow - startTime) > span)
+                                                        {
+                                                            span = (timeNow - startTime);
+                                                        }
+                                                        toolInfos.Add(toolInfo1);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (toolInfos.Count() > 0)
+                        {
+                            toolInfos = toolInfos.OrderByDescending(r => r.time).ToList();
+                            span = toolInfos.FirstOrDefault().time;
+                            for (int i = 0; i < toolInfos.Count(); i++)
+                            {
+                                toolInfos[i].progress = toolInfos[i].time.TotalMilliseconds / span.TotalMilliseconds;
+                            }
+                        }
+
+                        //toolInfos.OrderByDescending(r => r.time);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (toolInfos.Count() > i)
+                            {
+                                Tool tool = new Tool();
+                                tool.cncNum = toolInfos[i].cncNum;
+                                tool.progress = toolInfos[i].progress.ToString("0.0000");
+                                tool.time = toolInfos[i].time.TotalHours.ToString("0.00") + "H";
+                                tool.toolNum = "T" + toolInfos[i].toolNum.ToString();
+                                tools.Add(tool);
+                            }
+                            else
+                            {
+                                Tool tool = new Tool();
+                                tool.cncNum = "";
+                                tool.progress = "";
+                                tool.time = "";
+                                tool.toolNum = "";
+                                tools.Add(tool);
+                            }
+                        }
+                        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        var model = new { code = 0, data = tools };
+                        var json = serializer.Serialize(model);
+                        context.Response.Write("data:" + json + "\n\n"); context.Response.ContentType = "text/event-stream";
+                    }
+                }
+            }
+            else
+            {
+                var workId = int.Parse(context.Request["workId"]);
+                
+                {
+                    //Top5换刀
+
+                    int LocationID = workId;
+                    List<Tool> tools = new List<Tool>();
+                    List<ToolInfo> toolInfos = new List<ToolInfo>();
+                    DateTime timeNow = DateTime.Now;
+                    TimeSpan span = timeNow - timeNow.AddSeconds(-1);
+                    using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+                    {
+                        var works = wms.JDJS_WMS_Location_Info.ToList();
+                        var device = wms.JDJS_WMS_Device_Info.ToList();
+                        List<WebApplication2.Kanban.现场.CncRead> objs = new List<WebApplication2.Kanban.现场.CncRead>();
+                        List<int> workIds = new List<int>();
+                        WebApplication2.Kanban.现场.机台状态 funs = new WebApplication2.Kanban.现场.机台状态();
+                        var devices = funs.fun(workId, works, device, objs, workIds);
+                       // var devices = wms.JDJS_WMS_Device_Info.Where(r => r.Position == LocationID);
+                        foreach (var item in devices)
+                        {
+                            int cncID = Convert.ToInt32(item.ID);
+                            string cncNum = item.MachNum;
+                            var cncState = wms.JDJS_WMS_Device_RealTime_Data.Where(r => r.CncID == cncID).FirstOrDefault();
+                            var toolLife = wms.JDJS_WMS_Tool_LifeTime_Management.Where(r => r.CncID == cncID);
+                            foreach (var real in toolLife)
+                            {
+                                int toolNum = Convert.ToInt32(real.ToolID);
+                                var shankInfo = wms.JDJS_WMS_Tool_Shank_Table.Where(r => r.CncID == cncID && r.ToolNum == toolNum).FirstOrDefault();
+                                if (shankInfo != null)
+                                {
+                                    if (real.ToolCurrTime > real.ToolMaxTime)
+                                    {
+
+                                        DateTime startTimeT = timeNow.AddYears(-100);
+                                        var toolOver = wms.JDJS_WMS_Tool_LifeTimeOver_History_Table.Where(r => r.CncID == cncID && r.ToolID == real.ToolID);
+                                        if (toolOver.Count() > 0)
+                                        {
+                                            startTimeT = Convert.ToDateTime(toolOver.OrderByDescending(R => R.Time).ToList().FirstOrDefault().Time);
+                                        }
+                                        if (startTimeT != timeNow.AddYears(-100))
+                                        {
+                                            ToolInfo toolInfo1 = new ToolInfo();
+                                            toolInfo1.cncNum = cncNum;
+                                            toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                            toolInfo1.time = timeNow - startTimeT;
+                                            if ((timeNow - startTimeT) > span)
+                                            {
+                                                span = (timeNow - startTimeT);
+                                            }
+                                            toolInfos.Add(toolInfo1);
+                                        }
+                                        else
+                                        {
+                                            ToolInfo toolInfo1 = new ToolInfo();
+                                            toolInfo1.cncNum = cncNum;
+                                            toolInfo1.toolNum = Convert.ToInt32(real.ToolID);
+
+                                            toolInfo1.time = timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime));
+                                            if ((timeNow - startTimeT) > span)
+                                            {
+                                                span = (timeNow - timeNow.AddMinutes(Convert.ToDouble(real.ToolMaxTime - real.ToolCurrTime)));
+                                            }
+                                            toolInfos.Add(toolInfo1);
+                                        }
+                                    }
+                                }
+                            }
+                            int FormateProcessID = -1;
+                            int NextProcessID = -1;
+                            if (cncState != null)
+                            {
+                                if (cncState.ProgState != 1)
+                                {
+                                    var schedus3 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && r.isFlag == 3);
+                                    if (schedus3.Count() > 0)
+                                    {
+                                        FormateProcessID = Convert.ToInt32(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().ProcessID);
+                                    }
+                                    var schedu12 = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cncID && (r.isFlag == 2 || r.isFlag == 1));
+                                    if (schedu12.Count() > 0)
+                                    {
+                                        NextProcessID = Convert.ToInt32(schedu12.OrderBy(r => r.StartTime).FirstOrDefault().ProcessID);
+                                    }
+                                    if (FormateProcessID != NextProcessID && NextProcessID != -1)
+                                    {
+                                        var pro = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == NextProcessID).First();
+                                        List<string> ToolNos = new List<string>();
+                                        var toolnos = wms.JDJS_WMS_Tool_Standard_Table.Where(r => r.MachTypeID == pro.DeviceType);
+                                        foreach (var mo in toolnos)
+                                        {
+                                            ToolNos.Add(mo.ToolID);
+                                        }
+                                        List<int> toolNos = new List<int>();
+                                        var toolInfo = wms.JDJS_WMS_Order_Process_Tool_Info_Table.Where(r => r.ProcessID == NextProcessID);
+                                        foreach (var real in toolInfo)
+                                        {
+                                            int toolNo = Convert.ToInt32(real.ToolNO);
+                                            if (!ToolNos.Contains("T" + toolNo.ToString()))
+                                            {
+                                                if (!toolNos.Contains(toolNo))
+                                                {
+                                                    toolNos.Add(toolNo);
+                                                }
+                                            }
+                                        }
+                                        DateTime startTime = new DateTime();
+                                        if (schedus3.Count() > 0)
+                                        {
+                                            startTime = Convert.ToDateTime(schedus3.OrderByDescending(r => r.EndTime).ToList().FirstOrDefault().EndTime);
+                                        }
+                                        else
+                                        {
+                                            var toolPrepareInfo = wms.JDJS_WMS_Order_Tool_Prepare_History_table.Where(r => r.ProcessID == NextProcessID);
+                                            if (toolPrepareInfo.Count() > 0)
+                                            {
+                                                startTime = Convert.ToDateTime(toolPrepareInfo.FirstOrDefault().PrepareTime);
+                                            }
+                                            else
+                                            {
+                                                startTime = timeNow.AddYears(-2000);
+                                            }
+                                        }
+                                        var Tools = wms.JDJS_WMS_Device_Tool_History_Table.Where(r => r.CncID == cncID && r.Time >= startTime);
+                                        foreach (var real in Tools)
+                                        {
+                                            int toolno = Convert.ToInt32(real.ToolNum);
+                                            if (toolNos.Contains(toolno))
+                                            {
+                                                toolNos.Remove(toolno);
+                                            }
+                                        }
+                                        if (toolNos.Count() > 0 && startTime != timeNow.AddYears(-2000))
+                                        {
+                                            foreach (var tool in toolNos)
+                                            {
+                                                ToolInfo toolInfo1 = new ToolInfo();
+                                                toolInfo1.cncNum = cncNum;
+                                                toolInfo1.toolNum = tool;
+                                                toolInfo1.time = timeNow - startTime;
+                                                if ((timeNow - startTime) > span)
+                                                {
+                                                    span = (timeNow - startTime);
+                                                }
+                                                toolInfos.Add(toolInfo1);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (toolInfos.Count() > 0)
+                    {
+                        toolInfos = toolInfos.OrderByDescending(r => r.time).ToList();
+                        span = toolInfos.FirstOrDefault().time;
+                        for (int i = 0; i < toolInfos.Count(); i++)
+                        {
+                            toolInfos[i].progress = toolInfos[i].time.TotalMilliseconds / span.TotalMilliseconds;
+                        }
+                    }
+
+                    //toolInfos.OrderByDescending(r => r.time);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (toolInfos.Count() > i)
+                        {
+                            Tool tool = new Tool();
+                            tool.cncNum = toolInfos[i].cncNum;
+                            tool.progress = toolInfos[i].progress.ToString("0.0000");
+                            tool.time = toolInfos[i].time.TotalHours.ToString("0.00") + "H";
+                            tool.toolNum = "T" + toolInfos[i].toolNum.ToString();
+                            tools.Add(tool);
+                        }
+                        else
+                        {
+                            Tool tool = new Tool();
+                            tool.cncNum = "";
+                            tool.progress = "";
+                            tool.time = "";
+                            tool.toolNum = "";
+                            tools.Add(tool);
+                        }
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    var model = new { code = 0, data = tools };
+                    var json = serializer.Serialize(model);
+                    context.Response.Write("data:" + json + "\n\n"); context.Response.ContentType = "text/event-stream";
+                }
+            }
+
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    class Tool
+    {
+        public string cncNum;
+        public string progress;
+        public string toolNum;
+        public string time;
+    }
+    class ToolInfo
+    {
+        public string cncNum;
+        public double progress;
+        public int toolNum;
+        public TimeSpan time;
+    }
+}

@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+
+    <link href="../../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../../layer-v3.1.1/layer/layer.js"></script>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../../easyui/jquery.min.js"></script>
+    <script src="../../../easyui/jquery.easyui.min.js"></script>
+
+</head>
+<body>
+    <form id="form1" class="layui-form" action="">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>机床信息</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床品牌</label>
+                    <div class="layui-input-block">
+                        <select name="interest" id="brand" lay-verify="required" lay-filter="test1">
+                            <option value="">请选择</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-row">
+
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床型号</label>
+                    <div class="layui-input-block">
+                        <select name="interest2" id="model" lay-verify="required">
+                            <option value="">请选择</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>位置信息</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床编号</label>
+                    <div class="layui-input-block">
+                        <input id="number" type="text" autocomplete="off" placeholder="请输入" class="layui-input" lay-verify="required">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-row">
+
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床IP</label>
+                    <div class="layui-input-block">
+                        <input id="ip" type="text" autocomplete="off" placeholder="请输入" class="layui-input" lay-verify="required">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床车间</label>
+                    <div class="layui-input-block">
+                        <input id="father" class="easyui-combotreegrid" data-options="
+					method:'get',
+					width:'100%',
+					panelWidth:300,
+					
+					labelPosition:'top',
+					url:'../../../工厂管理/PositionHandler.ashx',
+					idField:'id',
+					treeField:'name',
+					columns:[[
+				   {field:'name',title:'车间',width:300},
+                   {field:'id',title:'id',width:300,hidden:'true'},
+
+					]]">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>机床状态</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机床类型</label>
+                    <div class="layui-input-block">
+                        <input id="state" type="text" autocomplete="off" placeholder="请输入" class="layui-input" lay-verify="required">
+
+                     
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-row">
+
+            <div class="layui-col-md12">
+                <div class="layui-form-item" style=" padding-left:1%">
+                    <button class="layui-btn" lay-submit lay-filter="demo1">提交</button>
+                    <button class="layui-btn" type="reset">重置</button>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+    <script>
+        layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
+            var form = layui.form
+                , layer = layui.layer
+            $ = layui.$
+           
+
+            $(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "SelectHandler1.ashx",
+                    datatype: "json",
+                    success: function (data) {
+                        var options1 = JSON.parse(data);
+                        $.each(options1, function (i, item) {
+
+                            var option = new Option(item.Brand);
+                            $('[name="interest"]').append(option);
+                            form.render();
+                        });
+
+                    }
+                });
+               
+              
+            })
+
+            form.on('select(test1)', function (data) {
+            
+               // console.log(data.value); //得到被选中的值
+             
+                $.ajax({
+                    type: "POST",
+                    url: "SelectHandler3.ashx",
+                    data: {
+                        "brand": data.value
+                    },
+                    datatype: "json",
+                    success: function (data) {
+                        var options2 = JSON.parse(data);
+                        $('#model').empty();
+                        $.each(options2, function (i, item) {
+
+                            var option = new Option(item.Type);
+                          
+                            $('[name="interest2"]').append(option);
+                            form.render();
+                        });
+
+                    }
+                });
+            });      
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+                var g = $('#father').combotreegrid('grid');	
+                var r = g.treegrid('getSelected');
+               
+                layer.confirm("是否提交",function (index) {
+                   
+                        $.ajax({
+                            url: "CreateHandler.ashx", method: 'POST', dataType: "text", data: {
+                                "brand": $('#brand').val(), "model": $('#model').val(), "number": $('#number').val(), "ip": $('#ip').val(), "state": $("#state").val(), "id": r.id,
+                            }, success: function (res) {
+                                if (res == 'ok') {
+                                    layer.msg("创建成功", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index);
+                                        parent.location.reload();
+                                        parent.location.close(index);
+                                    });
+                                }
+                                else if (res == 'IpFalse') {
+                                    layer.msg('该机床IP已存在', { icon: 2, time: 1000 }, function () {
+                                        var index = parent.layer.getFrameIndex(window.name);
+                                        //parent.layer.close(index);
+                                    });
+                                } else if (res == 'NumberFalse') {
+                                    layer.msg('该机床编号已存在', { icon: 2, time: 1000 }, function () {
+                                        var index = parent.layer.getFrameIndex(window.name);
+                                        //parent.layer.close(index);
+                                    });
+                                } else {
+                                    layer.msg('该机床编号和IP已存在', { icon: 2, time: 1000 }, function () {
+                                        var index = parent.layer.getFrameIndex(window.name);
+                                        //parent.layer.close(index);
+                                    });
+                                }
+                        }
+                    });
+        
+                });
+               
+                return false;
+            });
+
+          
+
+        });
+    </script>
+
+</body>
+</html>

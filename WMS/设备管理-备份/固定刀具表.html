@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../layer-v3.1.1/layer/layer.js"></script>
+    <script src="../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <input id="file" type="file" hidden/>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        function method(id) {
+            cncTypeId = id
+            layui.use(['table','layer'], function () {
+                table = layui.table,layer=layui.layer;
+
+                //第一个实例
+              tableReload= table.render({
+                    elem: '#demo'
+                  
+                    , url: '固定刀具表读数据.ashx?id=' + id //数据接口
+                    //, page: true //开启分页
+                      ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                    , cols: [[ //表头
+                        { field: 'ID', title: 'ID', width: 80,hide:true }
+                        , { field: 'ToolID', title: '刀号' }
+                        , { field: 'Sort', title: '类型' }
+                        , { field: 'Name', title: '名称' }
+                        , { field: 'Specification', title: '规格' }
+                        , { field: 'ProcessStage', title: '精/粗' }
+                        , { field: 'RazorDiameter', title: 'RazorDiameter' }
+                        , { field: 'ToolDiameter', title: '直径' }
+                        , { field: 'ToolLength', title: '长度' }
+                        , { field: 'RotatingSpeed', title: '转速' }
+                        , { field: 'Feed', title: '进给' }
+                        , { field: 'Knife', title: 'Knife' }
+                        , { field: 'Shank', title: '刀柄' }
+                        , { field: 'MachTypeID', title: 'MachTypeID' ,hide:true}
+                          //, { field: '', title: '操作' ,toolbar: '#barDemo', width:120 }
+                        
+
+                    ]]
+                });
+                 //头工具栏事件
+  table.on('toolbar(test)', function(obj){
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch(obj.event){
+        case 'import':
+            $("#file").click()
+      break;
+        case 'download':
+            $.ajax({
+                url: '固定刀具表下载.ashx?cncTypeId=' + cncTypeId,
+                success: function (d) {
+                    if (d == "") {
+                        layer.alert("服务器没有该机床型号固定刀具表文件");
+                        return;
+                    }
+                              var path = d;
+                            var button = '<a href="' + path + '" download=""><button id="downLoad" hidden></button></a>';
+                            $('body').append(button);
+                    $('#downLoad').click();
+                    $('#downLoad').parent('a').remove()
+                }
+            })
+      break;
+   
+      
+      //自定义头工具栏右侧图标 - 提示
+      case 'LAYTABLE_TIPS':
+        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+      break;
+    };
+  });
+  
+  //监听行工具事件
+  table.on('tool(test)', function(obj){
+    var data = obj.data;
+    //console.log(obj)
+    if(obj.event === 'del'){
+      layer.confirm('是否删除', function(index){
+
+          $.ajax({
+              url: '固定刀具表删除行.ashx',
+              success: function (d) {
+                  alert(d)
+                   layer.close(index);
+              }
+
+          })
+       
+      });
+    } else if(obj.event === 'edit'){
+      layer.prompt({
+        formType: 2
+        ,value: data.email
+      }, function(value, index){
+        obj.update({
+          email: value
+        });
+        layer.close(index);
+      });
+    }
+  });
+            });
+        }
+        $("#file").change(function () {
+            var form = new FormData();
+            var file = $("#file")[0].files[0]
+            if (file == undefined) {
+                alert("请选择文件");
+                return;
+            }
+            form.append('file', file)
+            form.append("cncTypeId", cncTypeId)
+            $("#tips").text("上传解析中请稍后...")
+            $.ajax({
+                url: '固定刀具表导表.ashx',
+                data: form,
+                type:'post',
+                processData: false,
+                contentType: false,
+                success: function (d) {
+                    if (d == "ok") {
+                        $("#tips").text("")
+                        $("#file").val("")
+                        layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+                            tableReload.reload()
+                        })
+                    } else {
+                        $("#tips").text("")
+                         $("#file").val("")
+                        layer.alert(d)
+                    }
+                },
+                error: function (d) {
+                    $("#tips").text("")
+                     $("#file").val("")
+                    layer.alert(d)
+                }
+            })
+
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container" style="float:left">
+            <button class="layui-btn layui-btn-sm" lay-event="import">导表</button>
+            <button class="layui-btn layui-btn-sm" lay-event="download">下载</button>
+           
+        </div>
+        <h2  style="float:left;color:green" id="tips"></h2>
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</body>
+</html>

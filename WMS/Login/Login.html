@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.layui.com/admin/std/dist/views/user/login.html -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="/Resources/icon/logo.ico" />
+    <title>苏州精工WMS车间生产管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./登入 - layuiAdmin_files/layui.css" media="all">
+    <link rel="stylesheet" href="./登入 - layuiAdmin_files/admin.css" media="all">
+    <link rel="stylesheet" href="./登入 - layuiAdmin_files/login.css" media="all">
+    <link id="layuicss-layer" rel="stylesheet" href="./登入 - layuiAdmin_files/layer.css" media="all">
+    <script src="layui-v2.4.5/layui/layui.js"></script>
+
+
+</head>
+<body layadmin-themealias="default">
+    <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+        <div class="layadmin-user-login-main">
+            <div class="layadmin-user-login-box layadmin-user-login-header">
+                <h2>苏州精工WMS车间生产管理系统</h2>
+                <p>江苏五轴应用技术研究中心</p>
+            </div>
+            <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username"></label>
+                    <input type="text"  id="LAY-user-login-username" name="username0" lay-verify="required" placeholder="用户名" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password"></label>
+                    <input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input">
+                </div>
+               
+                <div class="layui-form-item" style="margin-bottom: 20px;">
+                    <input id="remember_password" type="checkbox" name="remember" lay-skin="primary" title="记住密码"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>记住密码</span><i class="layui-icon layui-icon-ok"></i></div>
+                    <!--<a href="https://www.layui.com/admin/std/dist/views/user/forget.html" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">注册</a>-->
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit">登 入</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        
+       
+
+    </div>
+
+   
+    <script>
+        layui.use(['form', 'jquery'], function () {
+            var $ = layui.$
+                , form = layui.form;
+
+            form.render();
+        //获取账号密码
+            getCookie();
+            // 回车键登陆
+          $('body').bind('keydown', function(event) {
+        if (event.keyCode == "13") {
+            //回车执行查询
+            $('[lay-filter="LAY-user-login-submit"]').click();
+        }
+    });
+
+
+            //$("#LAY-user-login-username").val("110")
+            //提交
+            form.on('submit(LAY-user-login-submit)', function (obj) {
+                //alert(000)
+                $.ajax({
+                    url: 'UserPasswordHandler1.ashx', data: obj.field, method: 'POST', success: function (res) {
+                        if (res == 'ok') {
+
+                            saveInfo()
+
+                            layer.msg('登入成功', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.href = '../index.html'; //后台主页
+
+                               
+                            });
+                        }
+                        else {
+                            layer.alert(res);
+                        }
+                    }
+                });
+
+            });
+
+            // 保存Cookie
+        function saveInfo() {
+            try {
+                 // 保存按键是否选中
+                var checked = $('.layui-form-checked');
+                if (checked.length>0) {
+                     var username = $("#LAY-user-login-username").val();
+                     var password = $("#LAY-user-login-password").val();
+                    
+                     if (username != "" && password != "") {
+                         SetCookie(username, password,1);
+                     }
+                } else {
+                    var username = $("#LAY-user-login-username").val();
+                     SetCookie(username,"",0);
+                 }
+
+             } catch (e) {}
+         }
+
+         // 保存Cookie
+         function SetCookie(username, password,checked) {
+
+             document.cookie = "username=" + username + ";expires=Thu, 18 Dec 2020 12:00:00 GMT";
+             document.cookie = "password=" + password + ";expires=Thu, 18 Dec 2020 12:00:00 GMT";
+             document.cookie = "checked=" + checked + ";expires=Thu, 18 Dec 2020 12:00:00 GMT";
+         }
+
+             // 获取登陆的用户名和密码
+        function getCookie() {
+           
+            var user, pass, checked;
+
+            var ca = document.cookie.trim().split(";");
+
+  for(var i=0; i<ca.length; i++) 
+  {
+
+      var array = ca[i].split('=');
+      if (array[0].trim() == "username") {
+          user=array[1]
+      }
+      if (array[0].trim() == "password") {
+          pass=array[1]
+      }
+      if (array[0].trim() == "checked") {
+          checked=array[1]
+      }
+     
+
+    
+  }
+           
+            $("#LAY-user-login-username").val(user)
+            $("#LAY-user-login-password").val(pass);
+            if (checked == 1) {
+                //var dd=$('.layui-unselect.layui-form-checkbox')
+                $('.layui-unselect.layui-form-checkbox').addClass('layui-form-checked')
+            } else {
+                $('.layui-unselect.layui-form-checkbox').removeClass('layui-form-checked')
+            }
+        }
+
+
+
+        });
+    </script>
+    <style id="LAY_layadmin_theme">
+        .layui-side-menu, .layadmin-pagetabs .layui-tab-title li:after, .layadmin-pagetabs .layui-tab-title li.layui-this:after, .layui-layer-admin .layui-layer-title, .layadmin-side-shrink .layui-side-menu .layui-nav > .layui-nav-item > .layui-nav-child {
+            background-color: #20222A !important;
+        }
+
+        .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a {
+            background-color: #009688 !important;
+        }
+
+        .layui-layout-admin .layui-logo {
+            background-color: #20222A !important;
+        }
+    </style><div class="layui-layer-move"></div>
+</body>
+</html>

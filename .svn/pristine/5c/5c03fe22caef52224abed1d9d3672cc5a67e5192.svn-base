@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/echarts.js"></script>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+
+
+    <title></title>
+</head>
+<body style="height:100%">
+    <div class="layui-form layui-row">
+        <div class="layui-col-md3">
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单</label>
+                <div class="layui-input-block">
+                    <select name="order" lay-verify="" lay-filter="order">
+                        <option value="">请选择</option>
+                        
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-form-item">
+                <label class="layui-form-label">工序</label>
+                <div class="layui-input-block">
+                    <select name="SerialNumber" lay-verify="" lay-filter="SerialNumber">
+                        <option value="">请选择</option>
+                       
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-form-item">
+                <label class="layui-form-label">机床</label>
+                <div class="layui-input-block">
+                    <select name="machine" lay-verify="" lay-filter="machine">
+                        <option value="">请选择</option>
+                       
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-form-item">
+                <label class="layui-form-label">尺寸</label>
+                <div class="layui-input-block">
+                    <select name="size" lay-verify="" lay-filter="size">
+                        <option value="">请选择一个城市</option>
+                       
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="main" style="width: 100%;height:10%;"></div>
+    <script type="text/javascript">
+        
+    </script>
+    <script>
+        layui.use('form', function () {
+           
+            $.ajax({
+            url: 'orderRead.ashx',
+            success: function (d) {
+                var objs = JSON.parse(d)
+                for (var i = 0; i < objs.length; i++) {
+                    $('[name="order"]').append( '<option value="'+objs[i].orderNumber+'">'+objs[i].orderNumber+'</option>')
+                }
+                layui.form.render('select')
+            }
+            })
+            //监控订单下拉框
+            layui.form.on('select(order)', function (data) {
+                //alert(data.value)
+                $.ajax({
+                    url: 'orderClick.ashx',
+                    data: { 'orderNumber': data.value },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="SerialNumber"]').empty()
+                        $('[name="SerialNumber"]').append( '<option value="">请选择</option>')
+                        for (var i = 0; i < obj.length; i++) {
+       $('[name="SerialNumber"]').append( '<option value="'+obj[i]+'">'+obj[i]+'</option>')
+
+                        }
+                        layui.form.render()
+                    }
+                })
+                
+            });   
+            //监控工序下拉框
+            layui.form.on('select(SerialNumber)', function (data) {
+               
+                $.ajax({
+                    url: 'serialClick.ashx',
+                    data: { 'orderNumber': $('[name="order"]').val(),'serialNumber':data.value },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="machine"]').empty()
+                        $('[name="machine"]').append( '<option value="">请选择</option>')
+                        for (var i = 0; i < obj.length; i++) {
+       $('[name="machine"]').append( '<option value="'+obj[i]+'">'+obj[i]+'</option>')
+
+                        }
+                        layui.form.render()
+                    }
+                })
+                
+            });   
+            //监控机床
+            layui.form.on('select(machine)', function (data) {
+               
+                $.ajax({
+                    url: 'machineClick.ashx',
+                    data: {
+                        'orderNumber': $('[name="order"]').val(), 'serialNumber': $('[name="SerialNumber"]').val()
+                        , 'machine': data.value
+                    },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="size"]').empty()
+                        $('[name="size"]').append( '<option value="">请选择</option>')
+                        for (var i = 0; i < obj.length; i++) {
+       $('[name="size"]').append( '<option value="'+obj[i]+'">'+obj[i]+'</option>')
+
+                        }
+                        layui.form.render()
+                    }
+                })
+                
+            });   
+            //监控尺寸
+            layui.form.on('select(size)', function (data) {
+               
+                $.ajax({
+                    url: 'sizeClick.ashx',
+                    data: {
+                        'orderNumber': $('[name="order"]').val(), 'serialNumber': $('[name="SerialNumber"]').val()
+                        , 'machine':$('[name="machine"]').val(), 'size': data.value
+                    },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        var max = [];
+                        var min = [];
+                        var standard = [];
+                        var measure = [];
+                        var x = [];
+                        var j=1;
+                        for (var i = 0; i < obj.length; i++) {
+
+                            max.push(obj[i].Max);
+                            min.push(obj[i].Min);
+                            standard.push(obj[i].Standard);
+                            measure.push(obj[i].Measure);
+                          
+                            x.push(j++)
+                         
+                        }
+                        //
+                          // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+                       
+        // 指定图表的配置项和数据
+        option = {
+    title: {
+        text: '在机测量',
+        subtext: '品质'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['最大','最小','标准','实际']
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            dataView: {readOnly: false},
+            magicType: {type: ['line', 'bar']},
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+        data: x
+    },
+    yAxis: {
+         axisLine:{  
+                    lineStyle:{  
+                        color:'#4A5675',  
+                        // width:2  
+                    }  
+                },
+              name: '数值',
+              type: 'value',
+              splitLine: {
+                  show: false
+              },
+              scale:true,
+    },
+    series: [
+        {
+            name:'最大',
+            type:'line',
+            data:max,
+           
+           
+        },
+        {
+            name:'最小',
+            type:'line',
+            data:min,
+           
+        },
+         {
+            name:'标准',
+            type:'line',
+            data:standard,
+           
+        },
+          {
+            name:'实际',
+            type:'line',
+            data:measure,
+           
+        }
+
+    ]
+};
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+                        //
+                        layui.form.render()
+                    }
+                })
+                
+            });   
+        })
+       
+    </script>
+</body>
+</html>

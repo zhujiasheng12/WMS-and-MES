@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>EntityFramework.Extensions</id>
+    <version>0.0.2</version>
+    <title>EntityFramework.Extensions</title>
+    <authors>James Pogran</authors>
+    <owners>James Pogran</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>https://github.com/jpogran/efextensions</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A couple useful extensions for creating DB creation scripts from EF Code First models.</description>
+    <summary>A couple useful extensions for creating DB creation scripts from EF Code First models.</summary>
+    <tags>EntityFramework ef</tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="4.1.10331.0" />
+    </dependencies>
+  </metadata>
+</package>

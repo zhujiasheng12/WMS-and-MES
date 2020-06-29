@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="../../Resources/js/echarts.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+
+</head>
+<body>
+
+    <div id="main" style="width:100%;height:500px;"></div>
+    <script>
+
+           var myChart = echarts.init(document.getElementById('main'));
+        forceOption = {
+            title: {
+                text: '订单流程图',
+                x: 'center',
+                y: '20',
+                textStyle: {
+                    fontWeight: 'normal',
+                }
+            },
+            tooltip: {},
+            animationDurationUpdate: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            textStyle: {
+                color: 'red'
+            },
+            series: [
+                {
+                    type: 'graph',
+                    tooltip: {
+                        backgroundColor: 'skyblue',
+                        //                      formatter: "{b} <br />{a} : {c} h "
+                    },
+                    layout: 'circular',
+                    circular: {
+                    rotateLabel:true
+                    },
+                    symbolSize: 10,
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true
+                        }
+                    },
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    edgeLabel: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 12
+                            },
+                        }
+                    },
+                    data: [{
+                        name: 'test1',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    },{
+                        name: 'test2',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    },{
+                        name: 'test3',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    },{
+                        name: 'test4',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    },{
+                        name: 'test5',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    }
+                    ],
+                    // links: [],
+                    links: [
+                        {
+                            source: 0,
+                            target: 1
+                        },{
+                            source: 1,
+                            target: 2
+                        },{
+                            source: 2,
+                            target: 3
+                        },{
+                            source: 3,
+                            target: 4
+                        }
+                  
+                    ],
+                    lineStyle: {
+                        normal: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: -0.1
+                        }
+                    }
+                }
+            ]
+        };
+
+
+        $.ajax({
+            url: 'Handler1.ashx',
+            success: function (d) {
+                var obj = JSON.parse(d);
+                //forceOption.series[0].data = [];
+
+              var dd=  {
+                        name: 'test1',
+                      
+                        value: 35,
+                        //symbol:'rect', //让节点为矩形显示
+                        symbolSize: 40,//节点的长和宽
+                        itemStyle: {
+                            normal: {
+                                color: '#369'
+                            }
+                        }
+                    }
+
+
+                myChart.setOption(forceOption);
+            }
+
+        })
+        
+
+    </script>
+   
+</body>
+</html>

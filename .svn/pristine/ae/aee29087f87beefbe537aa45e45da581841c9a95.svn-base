@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <link href="../font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    
+
+
+</head>
+<body style="height:100%">
+  
+   
+    <table id="tt" style="height:100%"></table>
+    <script>
+        
+        $('#tt').treegrid({
+            url: 'staffRead.ashx',
+            idField: 'staff',
+            animate: true,
+            treeField: 'staff',
+            method: 'get',
+            rownumbers: true,
+            //checkbox: true,
+            columns: [[
+                { title: '部门人员', field: 'staff', width: '15%' },
+                { title: '职位', field: 'position', width: '15%'},
+                { title: '电话', field: 'tel', width: '15%' },
+                { title: '邮箱', field: 'mailbox', width: '15%' },
+                { title: '备注', field: 'remark', width: '25%' },
+                { field: 'id', title: 'id',  hidden: 'true' },
+                {
+                    field: 'action', title: '操作', width: '15%',formatter: function (value, row, index) {
+                        return '<div>'+
+                            '<button add=' + row.id + ' father=' + row.staff +' class="layui-btn layui-btn-xs">添加</button>' +
+
+                            '<button modify=' + row.id + ' modifyFather=' + row.staff + ' class="layui-btn layui-btn-xs layui-btn-warm">修改</button>' +
+                            '<button delete=' + row.id + ' class="layui-btn layui-btn-xs layui-btn-danger">删除</button>' +
+                           
+                        '</div > '
+                    }
+
+                }
+            ]],
+            onLoadSuccess: function (data) {
+                $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                 $('.tree-icon').removeClass('tree-icon tree-file')
+                $(".datagrid-view1").remove()
+               $(".datagrid-view2").css('left','0')
+                $('[modify="1"]').addClass('layui-btn-disabled').attr('disabled','disabled')
+                $('[delete="1"]').addClass('layui-btn-disabled').attr('disabled','disabled')
+                $('.panel-body').css('border-color', 'white')
+               
+                $('[add]').click(function () {
+                    var id=$(this).attr('add')
+                    var father = $(this).attr('father')
+                    layui.use('layer', function () {
+
+                        var layer = layui.layer;
+                        layer.confirm('请选择', {
+                            btn: ['部门', '人员'], //按钮
+                            shade: false //不显示遮罩
+                        }, function () {
+                            layer.open({
+                                type: 2,
+                                area: ['30%', '50%'],
+                                content: '添加部门.html',
+                                cancel: function (index, layero) {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭   
+                                    location.reload()
+                                    return false;
+                                },
+                                
+                                success: function (layero, index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    body.find('[name="father"]').val(father)
+                                    body.find('#id').text(id)
+                                }
+                            })
+                        }, function () {
+                            layer.open({
+                                type: 2,
+                                area: ['80%', '90%'],
+                                content: '添加人员权限.html',
+                                cancel: function (index, layero) {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭   
+                                    location.reload()
+                                    return false;
+                                },
+                                success: function (layero, index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    body.find('[name="father"]').val(father)
+                                    body.find('#id').text(id)
+                                }
+                            })
+                        });
+                       
+                    })
+                })
+
+                $('[modify]').click(function () {
+                    var id = $(this).attr('modify')
+                    var father = $(this).attr('modifyFather')
+                    var department = $(this).parents('td[field="action"]').siblings('td[field="staff"]')[0].children[0].innerText
+                    var position = $(this).parents('td[field="action"]').siblings('td[field="position"]')[0].children[0].innerText
+                    var remark = $(this).parents('td[field="action"]').siblings('td[field="remark"]')[0].children[0].innerText
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        
+                        layer.confirm("是否修改", function (index1) {
+                            if (position == "") {
+                                layer.open({
+                                    type: 2,
+                                    area: ['40%', '50%'],
+                                    content: 'departmentModify.html',
+                                    cancel: function (index, layero) {
+                                       
+                                        var index2 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                        parent.layer.close(index2); //再执行关闭   
+                                        location.reload()
+                                        return false;
+                                    },    
+                                    success: function (layero, index) {
+                                        var body = layer.getChildFrame('body', index);
+                                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                                        body.find('[name="department"]').val(department)
+                                        body.find('[name="remark"]').val(remark)
+                                        body.find('#id').text(id)
+                                        iframeWin.method(id);
+                                    }
+                                })
+                            } else {
+
+
+                                layer.open({
+                                    type: 2,
+                                    area: ['80%', '99%'],
+                                    content: '修改弹窗.html',
+                                    cancel: function (index, layero) {
+                                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                        parent.layer.close(index); //再执行关闭   
+                                        location.reload()
+                                        return false;
+                                    },
+                                    success: function (layero, index) {
+                                        var body = layer.getChildFrame('body', index);
+                                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                                        //body.find('[name="father"]').val(father)
+                                        body.find('#id').text(id)
+                                        iframeWin.method(id);
+                                    }
+                                })
+                            }
+                        })
+                               
+                        
+               
+                    })
+                })
+
+                $('[delete]').click(function () {
+                    var id = $(this).attr('delete')
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        layer.confirm('是否删除', function (index) {
+                           
+                            $.ajax({
+                                url: 'delete.ashx', data: { "id": id }, success: function (d) {
+                                    if (d == "ok") {
+                                        layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                            layer.close(index)
+                                            location.reload()
+                                        })
+                                    }
+                                    else {
+                                        layer.alert(d)
+                                    }
+                                }
+                            })
+                        })
+                    })
+                })
+                
+                var arr = $('td[field="position"]')
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].innerText != "") {
+                        $(arr[i]).siblings('[field="action"]').find('button[add]').addClass('layui-btn-disabled').attr('disabled','disabled')
+                    }
+                }
+
+                $.ajax({
+                    url: '../刀具管理/Jurisdiction.ashx', success: function (d) {
+                        var obj = JSON.parse(d)
+                        var limit = obj.Limit
+                        for (var i = 0; i < limit.length; i++) {
+                            if (limit[i] == "操作") {
+                                $('td[field="action"]').remove()
+                            }
+                        }
+                     }
+                       
+                })
+
+            }
+
+
+        });
+
+
+    </script>
+
+</body>
+</html>

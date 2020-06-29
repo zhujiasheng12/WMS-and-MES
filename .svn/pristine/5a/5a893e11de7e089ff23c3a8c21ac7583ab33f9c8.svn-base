@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+  
+  
+    
+</head>
+
+<body>
+    <div id="playTips"></div>
+    <button onclick="anounce('支付成功。收到金额0.1元')">播放</button>
+    <script>
+        function anounce(txt) {
+            txt = encodeURI(txt);
+            document.getElementById("playTips").innerHTML = "<audio autoplay=\"autoplay\"><source src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + txt + "\" type=\"audio/mpeg\"><embed height=\"0\" width=\"0\" src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + txt + "\"></audio>";
+        }
+    </script>
+</body>
+
+</html>

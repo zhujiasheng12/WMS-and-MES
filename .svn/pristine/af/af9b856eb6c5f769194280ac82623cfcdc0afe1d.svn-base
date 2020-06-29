@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ToolAdminModelStoreContainer" CdmEntityContainer="ToolAdminEntities">
+    <EntitySetMapping Name="UserPassword">
+      <EntityTypeMapping TypeName="ToolAdminModel.UserPassword">
+        <MappingFragment StoreEntitySet="UserPassword">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Limit" ColumnName="Limit" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KnifeStock">
+      <EntityTypeMapping TypeName="ToolAdminModel.KnifeStock">
+        <MappingFragment StoreEntitySet="KnifeStock">
+          <ScalarProperty Name="OldKnife" ColumnName="OldKnife" />
+          <ScalarProperty Name="NewKnife" ColumnName="NewKnife" />
+          <ScalarProperty Name="AllKnife" ColumnName="AllKnife" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GetHistory">
+      <EntityTypeMapping TypeName="ToolAdminModel.GetHistory">
+        <MappingFragment StoreEntitySet="GetHistory">
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="KnifeNumber" ColumnName="KnifeNumber" />
+          <ScalarProperty Name="KnifeSpecifications" ColumnName="KnifeSpecifications" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BorrowHistory">
+      <EntityTypeMapping TypeName="ToolAdminModel.BorrowHistory">
+        <MappingFragment StoreEntitySet="BorrowHistory">
+          <ScalarProperty Name="project" ColumnName="project" />
+          <ScalarProperty Name="NewOldKnife" ColumnName="NewOldKnife" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="ReturnNumber" ColumnName="ReturnNumber" />
+          <ScalarProperty Name="BorrowNumber" ColumnName="BorrowNumber" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BadHistory">
+      <EntityTypeMapping TypeName="ToolAdminModel.BadHistory">
+        <MappingFragment StoreEntitySet="BadHistory">
+          <ScalarProperty Name="BadTime" ColumnName="BadTime" />
+          <ScalarProperty Name="BadNumber" ColumnName="BadNumber" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="KnifeSpecification" ColumnName="KnifeSpecification" />
+          <ScalarProperty Name="KnifeName" ColumnName="KnifeName" />
+          <ScalarProperty Name="KnifeDepartment" ColumnName="KnifeDepartment" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserDepartment" ColumnName="UserDepartment" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

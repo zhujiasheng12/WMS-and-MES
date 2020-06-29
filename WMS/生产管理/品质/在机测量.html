@@ -1,0 +1,569 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+
+
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.min.js"></script>
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../Resources/js/echarts.js"></script>
+
+    <title></title>
+</head>
+<body style="height:100%">
+
+
+    <div class="layui-layout layui-layout-admin" style="height:100%">
+        <div class="layui-header" style="background-color:white">
+
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <div class="layui-form layui-row">
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">订单</label>
+                        <div class="layui-input-block">
+                            <select name="order" lay-verify="" lay-filter="order">
+                                <option value="">请选择</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">工序</label>
+                        <div class="layui-input-block">
+                            <select name="SerialNumber" lay-verify="" lay-filter="SerialNumber">
+                                <option value="">请选择</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">机床</label>
+                        <div class="layui-input-block">
+                            <select name="machine" lay-verify="" lay-filter="machine">
+                                <option value="">请选择</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">尺寸</label>
+                        <div class="layui-input-block">
+                            <select name="size" lay-verify="" lay-filter="size">
+                                <option value="">请选择一个城市</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>-->
+
+            </div>
+
+        </div>
+
+        <div class="layui-side layui-bg-black" style="background-color:white">
+            <div class="layui-side-scroll" style="">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <table id="tt" style="width:100%;height:100%;"></table>
+            </div>
+        </div>
+
+        <div class="layui-body" style="bottom:0;top:70px;height:100%">
+            <!-- 内容主体区域 -->
+            <div id="line" style="padding: 15px;height:100%">
+                <div id="main" style="width: 100%;height:20%;"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    
+    <script>
+        layui.use('form', function () {
+
+            $.ajax({
+                url: 'orderRead.ashx',
+                success: function (d) {
+                    var objs = JSON.parse(d)
+                    for (var i = 0; i < objs.length; i++) {
+                        $('[name="order"]').append('<option value="' + objs[i].orderNumber + '">' + objs[i].orderNumber + '</option>')
+                    }
+                    layui.form.render('select')
+                }
+            })
+            //监控订单下拉框
+            layui.form.on('select(order)', function (data) {
+                //alert(data.value)
+                $.ajax({
+                    url: 'orderClick.ashx',
+                    data: { 'orderNumber': data.value },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="SerialNumber"]').empty()
+                        $('[name="SerialNumber"]').append('<option value="">请选择</option>')
+                        for (var i = 0; i < obj.length; i++) {
+                            $('[name="SerialNumber"]').append('<option value="' + obj[i] + '">' + obj[i] + '</option>')
+
+                        }
+                        layui.form.render()
+                    }
+                })
+
+            });
+            //监控工序下拉框
+            layui.form.on('select(SerialNumber)', function (data) {
+
+                $.ajax({
+                    url: 'serialClick.ashx',
+                    data: { 'orderNumber': $('[name="order"]').val(), 'serialNumber': data.value },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="machine"]').empty()
+                        $('[name="machine"]').append('<option value="">请选择</option>')
+                        for (var i = 0; i < obj.length; i++) {
+                            $('[name="machine"]').append('<option value="' + obj[i] + '">' + obj[i] + '</option>')
+
+                        }
+                        layui.form.render()
+                    }
+                })
+
+            });
+            //监控机床
+            layui.form.on('select(machine)', function (data) {
+
+                $.ajax({
+                    url: 'machineClick.ashx',
+                    data: {
+                        'orderNumber': $('[name="order"]').val(), 'serialNumber': $('[name="SerialNumber"]').val()
+                        , 'machine': data.value
+                    },
+                    success: function (d) {
+                     
+                        //$('[name="size"]').empty()
+                        //$('[name="size"]').append('<option value="">请选择</option>')
+                        //for (var i = 0; i < obj.length; i++) {
+                        //    $('[name="size"]').append('<option value="' + obj[i] + '">' + obj[i] + '</option>')
+
+                        //}
+                        //layui.form.render()
+                        $("#line").empty()
+                        var obj = JSON.parse(d)
+                      
+                        for (var k = 0; k < obj.length; k++) {
+                            $('#line').append(' <div id="' + k + '" style="width: 100%;height:25%;"></div>')
+                          var max = [];
+                        var min = [];
+                        var standard = [];
+                        var measure = [];
+                        var x = [];
+                        var j = 1;
+                        for (var i = 0; i < obj[k].Vals.length; i++) {
+
+                            max.push(obj[k].Vals[i].Max);
+                            min.push(obj[k].Vals[i].Min);
+                            standard.push(obj[k].Vals[i].Standard);
+                            measure.push(obj[k].Vals[i].Measure);
+
+                            x.push(j++)
+
+                        }
+                        //
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById(k));
+
+                        // 指定图表的配置项和数据
+                        option = {
+                            title: {
+                                text: obj[k].Vals[0].sizeName,
+                                subtext: ''
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['最大', '最小', '标准', '实际']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataZoom: {
+                                        yAxisIndex: 'none'
+                                    },
+                                    dataView: { readOnly: false },
+                                    magicType: { type: ['line', 'bar'] },
+                                    restore: {},
+                                    saveAsImage: {}
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: x
+                            },
+                            yAxis: {
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#4A5675',
+                                        // width:2  
+                                    }
+                                },
+                                name: '数值',
+                                type: 'value',
+                                splitLine: {
+                                    show: false
+                                },
+                                scale: true,
+                            },
+                            series: [
+                                {
+                                    name: '最大',
+                                    type: 'line',
+                                    data: max,
+
+
+                                },
+                                {
+                                    name: '最小',
+                                    type: 'line',
+                                    data: min,
+
+                                },
+                                {
+                                    name: '标准',
+                                    type: 'line',
+                                    data: standard,
+
+                                },
+                                {
+                                    name: '实际',
+                                    type: 'line',
+                                    data: measure,
+
+                                }
+
+                            ]
+                        };
+
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                        //
+                        //layui.form.render()
+                        }
+            
+                    }
+                })
+
+            });
+            //监控尺寸
+            layui.form.on('select(size)', function (data) {
+
+                $.ajax({
+                    url: 'sizeClick.ashx',
+                    data: {
+                        'orderNumber': $('[name="order"]').val(), 'serialNumber': $('[name="SerialNumber"]').val()
+                        , 'machine': $('[name="machine"]').val(), 'size': data.value
+                    },
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        var max = [];
+                        var min = [];
+                        var standard = [];
+                        var measure = [];
+                        var x = [];
+                        var j = 1;
+                        for (var i = 0; i < obj.length; i++) {
+
+                            max.push(obj[i].Max);
+                            min.push(obj[i].Min);
+                            standard.push(obj[i].Standard);
+                            measure.push(obj[i].Measure);
+
+                            x.push(j++)
+
+                        }
+                        //
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById('main'));
+
+                        // 指定图表的配置项和数据
+                        option = {
+                            title: {
+                                text: '在机测量',
+                                subtext: '品质'
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['最大', '最小', '标准', '实际']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataZoom: {
+                                        yAxisIndex: 'none'
+                                    },
+                                    dataView: { readOnly: false },
+                                    magicType: { type: ['line', 'bar'] },
+                                    restore: {},
+                                    saveAsImage: {}
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: x
+                            },
+                            yAxis: {
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#4A5675',
+                                        // width:2  
+                                    }
+                                },
+                                name: '数值',
+                                type: 'value',
+                                splitLine: {
+                                    show: false
+                                },
+                                scale: true,
+                            },
+                            series: [
+                                {
+                                    name: '最大',
+                                    type: 'line',
+                                    data: max,
+
+
+                                },
+                                {
+                                    name: '最小',
+                                    type: 'line',
+                                    data: min,
+
+                                },
+                                {
+                                    name: '标准',
+                                    type: 'line',
+                                    data: standard,
+
+                                },
+                                {
+                                    name: '实际',
+                                    type: 'line',
+                                    data: measure,
+
+                                }
+
+                            ]
+                        };
+
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                        //
+                        layui.form.render()
+                    }
+                })
+
+            });
+        })
+
+    </script>
+    <script>
+        fun()
+
+
+        function fun() {
+            $('#tt').treegrid({
+                url: 'PositionHandler.ashx',
+                idField: 'id',
+                animate: true,
+                treeField: 'name',
+                method: 'get',
+                rownumbers: true,
+
+                columns: [[
+                    { title: '位置名称', field: 'name', width: '120%' },
+
+                    { field: 'id', title: 'id', width: 80, hidden: true },
+                    { field: 'CncID', title: 'CncID', width: 80, /*hidden: true */ },
+                    { field: 'flag', title: 'flag', width: 80, /*hidden: true */ }
+                ]],
+
+            });
+        }
+
+
+        $('#tt').treegrid({
+
+            onLoadSuccess: function (data) {
+                $('td').css('border', 'none')
+                $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                $('.tree-icon').removeClass('tree-icon tree-file')
+
+                $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' });
+
+                $('tr').click(function () {
+                    var id = $(this)[0].children[2].children[0].innerText
+                    $("#cncId").val(id)
+                    layui.use(['table', 'laypage'], function () {
+                        var table = layui.table, $ = layui.$, laypage = layui.laypage;
+
+                        $.ajax({
+                            url: '在机测量读数据.ashx',
+                            data: { 'cncId': id },
+                            success: function (d) {
+                                 {
+                     
+                        //$('[name="size"]').empty()
+                        //$('[name="size"]').append('<option value="">请选择</option>')
+                        //for (var i = 0; i < obj.length; i++) {
+                        //    $('[name="size"]').append('<option value="' + obj[i] + '">' + obj[i] + '</option>')
+
+                        //}
+                        //layui.form.render()
+                        $("#line").empty()
+                        var obj = JSON.parse(d)
+                      
+                        for (var k = 0; k < obj.length; k++) {
+                            $('#line').append(' <div id="' + k + '" style="width: 100%;height:25%;"></div>')
+                          var max = [];
+                        var min = [];
+                        var standard = [];
+                        var measure = [];
+                        var x = [];
+                        var j = 1;
+                        for (var i = 0; i < obj[k].Vals.length; i++) {
+
+                            max.push(obj[k].Vals[i].Max);
+                            min.push(obj[k].Vals[i].Min);
+                            standard.push(obj[k].Vals[i].Standard);
+                            measure.push(obj[k].Vals[i].Measure);
+
+                            x.push(j++)
+
+                        }
+                        //
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById(k));
+
+                        // 指定图表的配置项和数据
+                        option = {
+                            title: {
+                                text: obj[k].Vals[0].sizeName,
+                                subtext: ''
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['最大', '最小', '标准', '实际']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataZoom: {
+                                        yAxisIndex: 'none'
+                                    },
+                                    dataView: { readOnly: false },
+                                    magicType: { type: ['line', 'bar'] },
+                                    restore: {},
+                                    saveAsImage: {}
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: x
+                            },
+                            yAxis: {
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#4A5675',
+                                        // width:2  
+                                    }
+                                },
+                                name: '数值',
+                                type: 'value',
+                                splitLine: {
+                                    show: false
+                                },
+                                scale: true,
+                            },
+                            series: [
+                                {
+                                    name: '最大',
+                                    type: 'line',
+                                    data: max,
+
+
+                                },
+                                {
+                                    name: '最小',
+                                    type: 'line',
+                                    data: min,
+
+                                },
+                                {
+                                    name: '标准',
+                                    type: 'line',
+                                    data: standard,
+
+                                },
+                                {
+                                    name: '实际',
+                                    type: 'line',
+                                    data: measure,
+
+                                }
+
+                            ]
+                        };
+
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                        //
+                        //layui.form.render()
+                        }
+            
+                    }
+                            }
+                        })
+
+
+                    });
+                })
+                $('tr')[1].click();
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+
+            }
+        });
+
+    </script>
+</body>
+</html>

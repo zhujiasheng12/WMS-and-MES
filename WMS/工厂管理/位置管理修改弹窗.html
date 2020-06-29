@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic ComboTreeGrid - jQuery EasyUI Demo</title>
+    <link href="../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <script src="../layer-v3.1.1/layer/layer.js"></script>
+    <link href="../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <style>
+        .but1 {
+            background-color: #097FF8;
+            border: 1px solid #3762bc;
+            color: white;
+            border-radius: 8%;
+            padding: 0.4% 1.5% 0.4% 1.5%;
+            cursor: pointer;
+            font-size: 100%;
+        }
+
+        .but2 {
+            background-color: white;
+            border: 1px solid #3762bc;
+            color: #097FF8;
+            border-radius: 8%;
+            padding: 0.4% 1.5% 0.4% 1.5%;
+            margin-right: 1%;
+            margin-left: 0.6%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="padding:1%">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend>车间信息</legend>
+    </fieldset>
+
+    <div class="layui-row">
+
+        <div class="layui-col-md12">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width:100px">车间名称:</label>
+                <div class="layui-input-block">
+                    <input id="name" name="jcbh" type="text" autocomplete="off" placeholder="请输入" class="layui-input" lay-verify="required">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div><label>车间名称:</label><input id="name" type="text" name="jcbh" placeholder="请输入" style="width:20%;padding:0.3%;margin-left:0.5%"></div>-->
+    <!--<div style="margin-bottom:20px">
+
+        <input id="father" class="easyui-combotreegrid" data-options="
+                    method:'get',
+                    width:'100%',
+                    panelWidth:300,
+                    label:'父节点:',
+                    labelPosition:'top',
+                    url:'../工厂管理/PositionHandler.ashx',
+                    idField:'id',
+                    treeField:'name',
+                    columns:[[
+                   {field:'name',title:'Name',width:300},
+                   {field:'id',title:'id',width:300,hidden:'true'},
+
+                    ]]">
+    </div>-->
+    <!--<div style="margin-bottom:20px">
+
+        <input id="team" class="easyui-combotreegrid" data-options="
+                    method:'get',
+                    width:'100%',
+                    panelWidth:300,
+                    label:'组织机构:',
+                    labelPosition:'top',
+                    url:'../工厂管理/PositionHandler.ashx',
+                    idField:'id',
+                    treeField:'name',
+                    columns:[[
+                        {field:'name',title:'Name',width:300},
+
+                    ]]">
+    </div>-->
+
+    <div>
+        <button class="layui-btn" type="submit" id="submit" style="margin-left:1%">提交</button>
+    </div>
+    <!--<button class="but1" type="submit" id="submit" style="margin-top:1%">提交</button>-->
+    <input id="id" type="hidden" />
+    <script>
+        $(function () {
+
+            $('#submit').click(function () {
+                //var g = $('#father').combotreegrid('grid');	// get treegrid object
+                //var r = g.treegrid('getSelected');	// get the selected row
+                //var gg = $('#team').combotreegrid('grid');	// get treegrid object
+                //var rr = gg.treegrid('getSelected');	// get the selected row
+                layer.confirm("是否提交", function (index) {
+
+                    $.ajax({
+                        url: "ModiHandler1.ashx", method: 'POST', dataType: "text", data: {
+                            "name": $('#name').val(), /*"father": r.id,*/ "team": "北京精雕", "id": $("#id").val()
+                        }, success: function (res) {
+                            if (res == 'ok') {
+                                layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                    layer.close(index);
+                                    parent.location.reload();
+                                    parent.location.close(index);
+                                });
+                            }
+                            else {
+                                layer.msg('父节点不能是本身', { icon: 2, time: 1000 }, function () {
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //parent.layer.close(index);
+                                });
+                            }
+                        }
+                    });
+
+                });
+
+                return false;
+            })
+
+        });
+    </script>
+</body>
+</html>
+
+

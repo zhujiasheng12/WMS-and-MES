@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body style="height:96%;background-color:black;padding:10px">
+    <div class="layui-row" style="height:30%;background-color:#D53A35">
+        <div class="layui-col-md5" style="height:100%;background-color:#D53A35">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:200px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">当前品质状态</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="qualityStatus" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md7" style="height:100%;background-color:green">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">品质历史</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="qualityHistory" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:30%;background-color:#F7B564;margin-top:10px">
+
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:10%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">订单品质</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="orderQuality" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="layui-row" style="height:40%;background-color:#D53A35;margin-top:10px">
+        <div class="layui-col-md6" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">在机测量异常</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <ul class="layui-timeline" style="padding-top:10px">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    3-40-20190801-P1尺寸2超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    3-40-20190801-P1尺寸2超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    3-40-20190801-P1尺寸2超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    3-40-20190801-P1尺寸2超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    3-40-20190801-P1尺寸2超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                    </ul>
+</div>
+            </div>
+        </div>
+        <div class="layui-col-md6" style="height:100%;">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:20%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">机外测量异常</div>
+                <div class="layui-card-body" style="position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <ul class="layui-timeline" style="padding-top:10px">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    20190801-P1垂直度超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    20190801-P1垂直度超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    20190801-P1垂直度超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    20190801-P1垂直度超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:#D53A35">
+                                    20190801-P1垂直度超差，公差正负0.01，实际0.02
+                                </h3>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var myChart = echarts.init(document.getElementById('qualityStatus'));//qualityHistory
+         option = {
+           
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+   
+    series : [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius : '90%',
+          label : {
+              normal: {
+         
+          formatter: '{b}:{c} ({d}%)',
+       textStyle : {
+             fontWeight : 'normal',
+                fontSize: 20
+                  }
+              },
+               emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            data:[
+                {value: 335, name: '合格品', itemStyle: {color:'green'}},
+                {value:310, name:'不合格品', itemStyle: {color:'#D53A35'}},
+                {value:234, name:'未检测品', itemStyle: {color:'#F7B564'}},
+             
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                },
+
+            }
+        }
+    ]
+};
+
+        myChart.setOption(option);
+    </script>
+
+    <script>
+        var myChart = echarts.init(document.getElementById('qualityHistory'));//orderQuality
+       var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['合格品数', '不合格品数'],
+                    textStyle: {
+                                color: '#ffffff'
+                            }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14', '2019-08-15'],
+                     axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                          axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                     splitLine:{
+			                show:false
+                    },
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            series: [
+
+                {
+                    name: '合格品数',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [150, 200, 300, 100, 200, 100, 300],
+                    itemStyle: {color:'green'}
+                },
+                {
+                    name: '不合格品数',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [100, 50, 50, 200, 100, 100, 100],
+                     itemStyle: {color:'#D53A35'}
+                },
+   
+
+
+
+
+
+            ],
+            barWidth: '30%'
+        };
+        myChart.setOption(option);
+    </script>
+    <script>
+        var myChart = echarts.init(document.getElementById('orderQuality'));//
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['合格品数', '不合格品数','未检测数'],
+                    textStyle: {
+                                color: '#ffffff'
+                            }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['20190809', '20190810', '20190811', '20190812', '20190813', '20190814', '20190815'],
+                     axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                          axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                     splitLine:{
+			                show:false
+                    },
+                      axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            series: [
+
+                {
+                    name: '合格品数',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [150, 200, 300, 100, 200, 100, 300],
+                    itemStyle: {color:'green'}
+                },
+                {
+                    name: '不合格品数',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [100, 50, 50, 200, 100, 100, 100],
+                     itemStyle: {color:'#D53A35'}
+                },
+                {
+                    name: '未检测数',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [100, 50, 50, 200, 100, 100, 100],
+                     itemStyle: {color:'#F7B564'}
+                },
+
+
+
+
+
+            ],
+            barWidth: '20%'
+        };
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

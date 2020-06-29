@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/echarts.js"></script>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+
+    <link href="resource/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+     <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+</head>
+<body style="height:95%;background-color:black;padding:10px">
+
+    <div class="layui-row" style="height:100%">
+        <div class="layui-col-md6" style="height:100%">
+             <div class="layui-row" style="height:50%;">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:200px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">料池状态</div>
+                <div id="card-body1" class="layui-card-body" style="color:white;position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table1" class="table" style="background-color:white">
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">项目名称</th>
+                                     <th :style="style">产品名称</th>
+                                       <th :style="style">订单号</th>
+                                       <th :style="style">物料类型</th>
+                                       <th :style="style">物料总量</th>
+                                       <th :style="style">已出料数</th>
+                                       <th :style="style">未出料数</th>
+                                     
+
+                                    
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.OrderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankType}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankSpecification}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankRequairNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankAlreadyNum}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.BlankPendingNum}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.BlankState}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.StartTime}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.EndTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:50%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:200px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">待料状态</div>
+                <div id="card-body2" class="layui-card-body" style="color:white;position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table2" class="table" style="background-color:white">
+
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">项目名称</th>
+                                    <th :style="style">产品名称</th>
+                                     <th :style="style">订单号</th>
+                                     <th :style="style">待料类型</th>
+                                     <th :style="style">治具类型</th>
+                                     <th :style="style">需求数量</th>
+                                   
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.orderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.process}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.specif}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.number}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.haveNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.waitNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.state}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.requestTime}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.completeTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+        <div class="layui-col-md6"style="height:100%">
+              <div class="layui-row" style="height:33%;">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:250px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">上下料区今日概况</div>
+                <div id="Div3" class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                 <div id="main" style="width:100%;height:100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+             <div class="layui-row" style="height:33%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:200px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">今日来料</div>
+                <div id="Div1" class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table3" class="table" style="background-color:white">
+
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">项目名称</th>
+                                      <th :style="style">产品名称</th>
+                                      <th :style="style">订单号</th>
+                                      <th :style="style">来料类型</th>
+                                      <th :style="style">数量</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.orderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.process}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.specif}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.number}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.haveNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.waitNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.state}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.requestTime}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.completeTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+               <div class="layui-row" style="height:33%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:200px;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">今日出料</div>
+                <div id="Div2" class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table4" class="table" style="background-color:white">
+
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">项目名称</th>
+                                      <th :style="style">产品名称</th>
+                                      <th :style="style">订单号</th>
+                                      <th :style="style">出料类型</th>
+                                      <th :style="style">数量</th>
+                                     
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.orderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.process}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.specif}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.number}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.haveNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.waitNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.state}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.requestTime}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.completeTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+    </div>
+
+
+   <script>
+       var myChart = echarts.init(document.getElementById('main'));
+       option = {
+           tooltip: {
+               trigger: 'axis',
+               axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                   type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+               }
+           },
+           legend: {
+               data: ['来料', '出料'],
+               textStyle: {
+                   color:"white"
+               }
+               },
+           grid: {
+               left: '3%',
+               right: '7%',
+               bottom: '3%',
+               containLabel: true
+           },
+           xAxis: {
+            
+               show:false,
+               splitLine:{
+                   show:false
+               },
+               type: 'value',
+               splitNumber:100
+           },
+           yAxis: {
+               show:false,
+               splitLine:{
+                   show:false
+               },
+               type: 'category',
+               data: ['来出料', ]
+           },
+           series: [
+               {
+                   name: '来料',
+                   type: 'bar',
+                   stack: '总量',
+                   label: {
+                       show: true,
+                       position: 'insideRight'
+                   },
+                   data: [320],
+                   itemStyle: {
+                       color:'green'
+                   }
+               },
+               {
+                   name: '出料',
+                   type: 'bar',
+                   stack: '总量',
+                   label: {
+                       show: true,
+                       position: 'insideRight'
+                   },
+                   data: [120],
+                   itemStyle: {
+                       color: 'orange'
+                   }
+               },
+           ]
+       };
+       myChart.setOption(option);
+   </script>
+   
+    <script>
+        var vm1 = new Vue({
+            el: "#table1",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/毛坯请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                //this.fun()
+            }
+        })
+
+
+
+
+        var vm2 = new Vue({
+            el: "#table2",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/特殊治具请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+               // this.fun()
+            }
+        })
+
+        var vm3 = new Vue({
+            el: "#table3",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/特殊治具请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                //this.fun()
+            }
+        })
+        var vm4 = new Vue({
+            el: "#table4",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/特殊治具请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                //this.fun()
+            }
+        })
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+        
+
+          var i1 = 0;
+        var old1 = -1;
+        var new1 = -2;
+            setInterval(function () {
+              var table1=  $('#card-body1').find('.layui-table-body.layui-table-main')
+            if (table1.length == 0) {
+                return;
+            }
+            $(table1).scrollTop(i1);
+            new1 = $(table1).scrollTop();
+            if (old1 == new1) {
+                i1 = 0;
+                old1 = -1;
+                return;
+            }
+            i1 +=1.2;
+            old1 = $(table1).scrollTop();
+        }, 200);
+
+        setInterval(function () {
+            tableReload1.reload()
+        }, 60000)
+
+
+             var i2 = 0;
+        var old2 = -1;
+        var new2 = -2;
+            setInterval(function () {
+              var table2=  $('#card-body1').find('.layui-table-body.layui-table-main')
+            if (table2.length == 0) {
+                return;
+            }
+            $(table2).scrollTop(i2);
+            new2 = $(table2).scrollTop();
+            if (old2 == new2) {
+                i2 = 0;
+                old2 = -1;
+                return;
+            }
+            i2+=1.2;
+            old2 = $(table2).scrollTop();
+        }, 200);
+
+        setInterval(function () {
+            tableReload2.reload()
+        }, 60000)
+        });
+
+
+    </script>
+</body>
+</html>

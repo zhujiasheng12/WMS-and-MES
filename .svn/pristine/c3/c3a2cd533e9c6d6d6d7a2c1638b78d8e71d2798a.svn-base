@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../刀具管理/jquery-3.3.1.js"></script>
+
+    <link href="../../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../../Resources/js/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+    <div class="layui-form">
+       
+    
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">工序</label>
+                    <div class="layui-input-block">
+                        <input lay-verify="number" type="text" name="1" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">总时间(min)</label>
+                    <div class="layui-input-block">
+                        <input lay-verify="number" type="text" name="2" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">机床类型</label>
+                    <div class="layui-input-block">
+
+                        <input id="cc" name="3" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <!--<button style=" margin-left:3%" class="layui-btn layui-btn-danger del" onclick="del(this)">删除</button>-->
+            </div>
+        </div>
+    
+        <div id="flag" class="layui-input-block">
+            <!--<button class="layui-btn" id="addProcess"  lay-filter="111">添加工序</button>-->
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <script>
+         $('#cc').combotreegrid({
+                        width:'100%',
+                        panelWidth:'20%',
+                        labelPosition:'top',
+                        limitToGrid: true,
+                        url:'optionRead.ashx',
+                        idField:'id',
+                        treeField:'machType',
+                        columns:[[
+                            { field: 'machType', title: '机床类型', width: '100' },
+                            { field: 'id', title: 'id', width: 100, hidden: true },
+                            
+                        ]],
+                        onLoadSuccess: function (d) {
+                            $('.tree-icon.tree-file').remove()
+                            $('td').css('border', 'none')
+                
+                        }
+
+                    });
+        layui.use('form', function () {
+            var i = 4;
+            var id = 1;
+            var form = layui.form,$=layui.$;
+
+            form.on('submit(*)', function (d) {
+               
+                layer.confirm('是否提交', function (index) {
+                    var formDate = new FormData();
+                    var dd=JSON.stringify(d.field)
+                  
+                    formDate.append('id',$("#orderId").val() )
+                    formDate.append('form',dd )
+                    $.ajax({
+                        url: 'createVirPro.ashx',
+                        data: formDate,
+                        type: 'post',
+                        processData: false,
+                        contentType: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+                                    parent.process.reload({})
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭        
+                                })
+                            }
+                            else {
+                                layer.alert(d)
+                            }
+                        }
+                    })
+                })
+                
+            })
+
+            layui.$(function () {
+                $("#addProcess").click(function () {
+                   
+                    var dd =
+                        ' <div class="layui-row">' +
+                        ' <div class="layui-col-md3">' +
+                        '<div class="layui-form-item ">' +
+                        '<label class="layui-form-label">工序</label>' +
+                        '<div class="layui-input-block">' +
+                        '<input lay-verify="number" type="text" name="' + i++ + '" placeholder="请输入" autocomplete="off" class="layui-input">' +
+                        '</div>' +
+                        ' </div>' +
+                        '</div>' +
+
+                        '<div class="layui-col-md3">' +
+                        '<div class="layui-form-item ">' +
+                        '<label class="layui-form-label">总时间(min)</label>' +
+                        '<div class="layui-input-block">' +
+                        ' <input lay-verify="number" type="text" name="' + i++ + '" placeholder="请输入" autocomplete="off" class="layui-input">' +
+                        ' </div>' +
+                        '</div>' +
+                        '</div>' +
+
+                         '<div class="layui-col-md3">'+
+                '<div class="layui-form-item ">'+
+                    '<label class="layui-form-label">机床类型</label>'+
+                    '<div class="layui-input-block">'+
+
+                        '<input id="'+id+++'" name="'+i+++'" class="layui-input">'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+
+                        '<div class="layui-col-md3">' +
+                        '<button style="margin-left:3%" class="layui-btn layui-btn-danger del" onclick="del(this)">删除</button>' +
+                        ' </div>' +
+                        ' </div>';
+                    $("#flag").before(dd)
+                     render(id)
+                })
+               
+            })
+        });
+
+        function del(d) {
+            $(d).parents('.layui-row').remove()
+        }
+    </script>
+    <script>
+        function method(d) {
+            $("#orderId").val(d)
+            $.ajax({
+                url: '新建虚拟工序获取工序编号.ashx',
+                data: { "orderId": d },
+                success: function (d) {
+                    var i = new Number(d)+1
+
+                    $('[name="1"]').val(i).attr('readonly','readonly')
+                    
+                }
+
+            })
+            }
+    function render(d) {
+        var ss=d-1
+       var id='#'+ss+''
+        $(id).combotreegrid({
+                        width:'100%',
+                        panelWidth:'20%',
+                        labelPosition:'top',
+                        limitToGrid: true,
+                        url:'optionRead.ashx',
+                        idField:'id',
+                        treeField:'machType',
+                        columns:[[
+                            { field: 'machType', title: '机床类型', width: '100' },
+                            { field: 'id', title: 'id', width: 100, hidden: true },
+                            
+                        ]],
+                        onLoadSuccess: function (d) {
+                            $('.tree-icon.tree-file').remove()
+                            $('td').css('border', 'none')
+                
+                        }
+
+                    });
+    }
+    </script>
+    <input id="orderId" hidden/>
+</body>
+</html>

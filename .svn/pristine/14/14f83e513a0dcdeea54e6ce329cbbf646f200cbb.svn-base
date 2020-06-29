@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+     <link href="/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="/easyui/jquery.min.js"></script>
+    <script src="/easyui/jquery.easyui.min.js"></script>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+</head>
+<body style="text-align:center;padding:10px">
+      <input id="tt" name="name">
+    <button class="layui-btn" onclick="sub()" style="margin-top:10px">提交</button>
+    <script>
+        layui.use('layer', function () { layer=layui.layer})
+        function fun(processID1) {
+            processID = processID1
+        }
+        $('#tt').combotreegrid({
+            url: '/刀具管理/刀具寿命管理/PositionHandler.ashx',
+            width: '100%',
+            //panelWidth: 500,
+            panelHeight: 400,
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+           // rownumbers: true,
+
+            columns: [[
+                { title: '位置名称', field: 'name', width: '100%' },
+
+                //{ field: 'id', title: 'id', width: 80,  },
+                //{ field: 'CncID', title: 'CncID', width: 80, },
+                //{ field: 'flag', title: 'flag', width: 80, }
+            ]],
+            onLoadSuccess: function () {
+                $(".tree-folder.tree-folder-open").removeClass("tree-folder-open")
+                $(".tree-folder").removeClass("tree-folder")
+                $(".tree-file").removeClass("tree-file")
+            }
+        });
+        function sub() {
+            if ($("#tt").val() == "") {
+                layer.alert("请选择机床！");
+                return;
+
+            }
+
+            var g = $('#tt').combotreegrid('grid'); // 获取数据表格对象
+            var r = g.datagrid('getSelected'); // 获取选择的行
+            if (r.CncID == 0) {
+                layer.alert("请选择机床！");
+                return;
+            }
+         
+            $.ajax({
+                url: '机台间调整加工任务.ashx',
+                type: 'post',
+                data: { machId: r.CncID, id: processID },
+                success: function (res) {
+                    if (res == "ok") {
+                        layer.msg("换产成功",{icon:1,time:1000}, function () {
+                            parent.table1.reload();
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭   
+                        })
+                    } else {
+                        layer.alert(res)
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

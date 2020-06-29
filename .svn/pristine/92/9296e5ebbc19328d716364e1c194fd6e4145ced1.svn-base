@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/echarts.js"></script>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+
+    <link href="resource/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+     <script src="/Resources/js/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Resources/js/vue.min.js"></script>
+</head>
+<body style="height:95%;background-color:black;padding:10px">
+    <div class="layui-row" style="height:30%">
+        <div class="layui-col-md6" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">物料概况</div>
+                <div class="layui-card-body" style="color:white;position:absolute;top:30px;right:10px;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="cake1" style="height:100%;width:25%;float:left"></div>
+                    <div id="" style="height:100%;width:25%;float:left">
+                        <div>
+                            <div><div style="float:left;font-size:120%">毛坯请求总数：</div><div id="blankRequairNum" style="float:left;color:orange;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">请求毛坯规格数：</div><div id="blankFormatNum" style="float:left;color:orange;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">已备毛坯数：</div><div id="blankAlready" style="float:left;color:green;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">待备毛坯数：</div><div id="blankPending" style="float:left;color:#D53A35;font-size:150%">10</div></div>
+
+                       
+                        </div>
+                    </div>
+                    <div id="cake2" style="height:100%;width:25%;float:left"></div>
+                    <div id="" style="height:100%;width:25%;float:left">
+                        <div>
+                            <div><div style="float:left;font-size:120%">特殊治具请求总数：</div><div id="specialFixtureRequairNum" style="float:left;color:orange;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">请求特殊物料规格数：</div><div id="specialFixtureFormatNum" style="float:left;color:orange;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">已备特殊治具数：</div><div id="specialFixtureAlready" style="float:left;color:green;font-size:150%">10</div></div>
+                            <div><div style="float:left;font-size:120%">待备特殊治具数：</div><div id="specialFixturePending" style="float:left;color:#D53A35;font-size:150%">10</div></div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">物料历史</div>
+                <div class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <div id="column" style="height:100%;width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:30%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">毛坯请求</div>
+                <div id="card-body1" class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table1" class="table" style="background-color:white">
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">请求订单号</th>
+                                      <th :style="style">毛坯类型</th>
+                                      <th :style="style">毛坯规格</th>
+                                      <th :style="style">毛坯需求数</th>
+                                      <th :style="style">已备毛坯个数</th>
+                                      <th :style="style">待备毛坯个数</th>
+                                      <th :style="style">毛坯备料状态</th>
+                                      <th :style="style">毛坯需求下达时间</th>
+                                      <th :style="style">毛坯需求完成时间</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.OrderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankType}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankSpecification}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankRequairNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.BlankAlreadyNum}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.BlankPendingNum}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.BlankState}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.StartTime}}
+                                    </td>
+                                    <td :style="style">
+                                        {{item.EndTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="height:40%;margin-top:10px">
+        <div class="layui-col-md12" style="height:100%">
+            <div class="layui-card" style="height:100%;background-color:black">
+                <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">特殊治具请求</div>
+                <div id="card-body2" class="layui-card-body" style="color:white;position:absolute;top:30px;right:0;bottom:0;left:0;background-color:rgba(128,128,128,0.3)">
+                    <table id="table2" class="table" style="background-color:white">
+
+                         <thead>
+                                 <tr style="background-color:rgba(0, 0, 0, 0.8)">
+                                     <th :style="style">请求订单号</th>
+                                      <th :style="style">订单工序</th>
+                                      <th :style="style">特殊治具规格</th>
+                                      <th :style="style">特殊治具需求数</th>
+                                      <th :style="style">已备特殊治具个数</th>
+                                     <th :style="style">待备特殊治具个数</th>
+                                      <th :style="style">治具备料状态</th>
+                                      <th :style="style">特殊治具需求下达时间</th>
+                                      <th :style="style">特殊治具需求完成时间</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,i) in list"  :style="{'background-color':i%2==0?'rgba(0, 0, 0, 0.65)':'rgba(0, 0, 0, 0.7)'}">
+                                    <td :style="style">
+                                        {{item.orderNum}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.process}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.specif}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.number}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.haveNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.waitNumber}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.state}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.requestTime}}
+                                    </td>
+                                     <td :style="style">
+                                        {{item.completeTime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      
+        var myChart1 = echarts.init(document.getElementById('cake1'));
+        var myChart2 = echarts.init(document.getElementById('cake2'));
+        option1 = {
+         
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+    
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '80%',
+                 
+                       label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+               
+            },
+                    data: [
+                        { value: 335, name: '未备毛坯数',itemStyle: {color:'#D53A35'} },
+                        { value: 310, name: '已备毛坯数',itemStyle: {color:'green'} },
+                     
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+         option2 = {
+         
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+    
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '80%',
+                  
+                       label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+               
+            },
+                    data: [
+                        { value: 335, name: '未备特殊治具数', itemStyle: {color:'#D53A35'} },
+                        { value: 310, name: '已备特殊治具数', itemStyle: {color:'green'}  },
+                     
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+      
+       
+        var source = new EventSource('资材/物料概况.ashx');
+        source.onmessage = function (event) {
+            var obj = JSON.parse(event.data)
+            option1.series[0].data[1].value = obj.blankAlready;
+            option1.series[0].data[0].value = obj.blankPending;
+            $('#blankAlready').text(obj.blankAlready)
+            $('#blankPending').text(obj.blankPending)
+            $('#blankRequairNum').text(obj.blankRequairNum)
+            $('#blankFormatNum').text(obj.blankFormatNum)
+
+            option2.series[0].data[0].value = obj.specialFixturePending
+            option2.series[0].data[1].value = obj.specialFixtureAlready
+            $('#specialFixturePending').text(obj.specialFixturePending)
+            $('#specialFixtureAlready').text(obj.specialFixtureAlready)
+            $('#specialFixtureFormatNum').text(obj.specialFixtureFormatNum)
+            $('#specialFixtureRequairNum').text(obj.specialFixtureRequairNum)
+            myChart1.setOption(option1);
+            myChart2.setOption(option2);
+        }
+    </script>
+    <script>
+     
+        var myChart = echarts.init(document.getElementById('column'));//orderQuality
+       var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['特殊治具备料数', '毛坯备料数'],
+                    textStyle: {
+                                color: '#ffffff'
+                            }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['2019-08-08', '2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14'],
+                            axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                                  axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                          axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#ffffff'
+                            }
+                    },
+                     splitLine:{
+			                show:false
+                    },
+                           axisLine: {
+            lineStyle: {
+                color: 'white',
+                width:0.5,//这里是为了突出显示加上的
+            }
+        }
+                }
+            ],
+            series: [
+
+                {
+                    name: '特殊治具备料数',
+                    type: 'bar',
+                    stack: '治具',
+                    data: [100, 50, 50, 200, 100, 100, 100]
+                },
+                {
+                    name: '毛坯备料数',
+                    type: 'bar',
+                    stack: '毛坯',
+                   
+                     data: [150, 200, 300, 100, 200, 100, 300]
+                },
+   
+
+
+
+
+
+            ],
+            barWidth: '30%'
+        };
+     
+
+        var source = new EventSource('资材/物料历史.ashx');
+        source.onmessage = function (event) {
+            var obj = JSON.parse(event.data)
+            myChart.setOption(option);
+            option.xAxis[0].data = [];
+            option.series[0].data = [];
+            option.series[1].data = [];
+            for (var i = 0; i < obj.length; i++) {
+                option.xAxis[0].data.push(obj[i].time)
+                option.series[0].data.push(obj[i].fixtureNum)
+                option.series[1].data.push(obj[i].blankNum)
+            }
+            myChart.setOption(option)
+        }
+    </script>
+    <script>
+        var vm1 = new Vue({
+            el: "#table1",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/毛坯请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+
+        var vm2 = new Vue({
+            el: "#table2",
+            data: {
+                list: []
+                , style: { color: 'white', padding: '0.3rem', border: 'none' }
+
+
+            },
+            methods: {
+
+                fun: function () {
+                    var _this = this
+                    if (typeof (EventSource) !== "undefined") {
+                        var source = new EventSource('资材/特殊治具请求.ashx');
+                        source.onmessage = function (event) {
+
+                            var data = JSON.parse(event.data);
+
+                            _this.list = data.data
+
+                        }
+                    }
+                }
+            },
+            created: function () {
+
+
+                this.fun()
+            }
+        })
+
+
+
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+        
+
+          var i1 = 0;
+        var old1 = -1;
+        var new1 = -2;
+            setInterval(function () {
+              var table1=  $('#card-body1').find('.layui-table-body.layui-table-main')
+            if (table1.length == 0) {
+                return;
+            }
+            $(table1).scrollTop(i1);
+            new1 = $(table1).scrollTop();
+            if (old1 == new1) {
+                i1 = 0;
+                old1 = -1;
+                return;
+            }
+            i1 +=1.2;
+            old1 = $(table1).scrollTop();
+        }, 200);
+
+        setInterval(function () {
+            tableReload1.reload()
+        }, 60000)
+
+
+             var i2 = 0;
+        var old2 = -1;
+        var new2 = -2;
+            setInterval(function () {
+              var table2=  $('#card-body1').find('.layui-table-body.layui-table-main')
+            if (table2.length == 0) {
+                return;
+            }
+            $(table2).scrollTop(i2);
+            new2 = $(table2).scrollTop();
+            if (old2 == new2) {
+                i2 = 0;
+                old2 = -1;
+                return;
+            }
+            i2+=1.2;
+            old2 = $(table2).scrollTop();
+        }, 200);
+
+        setInterval(function () {
+            tableReload2.reload()
+        }, 60000)
+        });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../jquery-3.3.1.js"></script>
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+</head>
+<body style=" height:100%">
+    <!--<div style=" height:100%;width:30%;float:left">
+        <h1>1序</h1>
+        <table id="tt" style="width:100%;height:100%;"></table>
+    </div>
+
+    <div style=" height:100%;width:30%;float:left">
+        <h1>2序</h1>
+        <table id="table2" style="width:100%;height:100%;"></table>
+    </div>-->
+   
+  
+    <script>
+       
+    function method(d) {
+        orderId = d
+        $.ajax({
+            url: '手动排产读工序.ashx?orderId=' + orderId,
+            success: function (d) {
+                var obj = JSON.parse(d)
+
+                for (var i = 0; i <obj.length; i++) {
+                    var html =
+                       ` <div class="cnc layui-col-md4" style=" height:100%;">
+                            <h1>`+obj[i].process+`序</h1>
+                            <table id="table`+obj[i].process+`" style="width:100%;height:100%;"></table>
+                        </div>`
+                    $('body').append(html)
+                     $('#table'+obj[i].process).treegrid({
+            url: '手动排产读机床.ashx?cncType='+obj[i].cncType,
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+            rownumbers: true,
+            checkbox: true,
+            columns: [[
+                { title: '位置名称', field: 'name', width: 180 },
+                { title: '预计可用时间', field: 'time', width: 180 },
+                { field: 'id', title: 'id', width: 80, hidden: true },
+                { field: 'CncID', title: 'CncID', width: 80, hidden: true  },
+                { field: 'flag', title: 'flag', width: 80, hidden: true }
+            ]],
+            onLoadSuccess: function (data) {
+                $('td').css('border', 'none')
+                $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                $('.tree-icon').removeClass('tree-icon tree-file')
+
+                $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' });
+
+
+
+                //$('[node-id="67"]').find('[field="action"]').hide()
+
+
+               
+                $(".datagrid-view1").remove()
+                $(".datagrid-view2").css('left',0)
+            }
+        });
+                }
+
+                                $('body').append(`<div style="height:100%">
+        <input type="button" value="提交" style="margin-top:100px" class="layui-btn" onclick="submit()" >
+    `)
+            }
+        })
+    }
+        function submit() {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.confirm("是否提交",function (index) {
+
+                        var formDate = new FormData();
+        formDate.append("orderId", orderId)
+        var length = $(".cnc").length
+        for (var i = 0; i < length; i++) {
+            if ($($(".cnc")[i]).find('.tree-checkbox1').length > 0) {
+                for (var j = 0; j < $($(".cnc")[i]).find('.tree-checkbox1').length; j++) {
+                    var cncId = $($($(".cnc")[i]).find('.tree-checkbox1')[j]).parent('div').parent('td').siblings('td[field="CncID"]')[0].children[0].innerText
+                    if (cncId > 0) {
+                         formDate.append(i, cncId)
+                    }
+                   
+                }
+
+            }
+
+        }
+        $.ajax({
+            url: '手动排产提交.ashx',
+            type: 'post',
+            processData: false,
+            contentType: false,
+            data: formDate,
+            success: function (d) {
+                if (d == "ok") {
+                    layer.msg("手动排产成功", { icon: 1, time: 1000 }, function () {
+                        layer.close(index)
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index);//再执行关闭       
+                    })
+                } else {
+                    layer.alert(d)
+                }
+            }
+        })
+
+                })
+            })
+
+    
+    }
+       
+    </script>
+</body>
+</html>

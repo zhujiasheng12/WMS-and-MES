@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../刀具管理/jquery-3.3.1.js"></script>
+
+    <link href="../../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../../Resources/js/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+    <div class="layui-form">
+       
+    
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">工序</label>
+                    <div class="layui-input-block">
+                        <input lay-verify="number" type="text" name="process" placeholder="请输入" autocomplete="off" class="layui-input" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">总时间(min)</label>
+                    <div class="layui-input-block">
+                        <input lay-verify="number" type="text" name="time" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">机床类型</label>
+                    <div class="layui-input-block">
+
+                        <input id="cc" name="deviceType" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <!--<button style=" margin-left:3%" class="layui-btn layui-btn-danger del" onclick="del(this)">删除</button>-->
+            </div>
+        </div>
+    
+        <div id="flag" class="layui-input-block">
+            <!--<button class="layui-btn" id="addProcess"  lay-filter="111">添加工序</button>-->
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <script>
+         $('#cc').combotreegrid({
+                       width: '100%',
+                         panelWidth: '400px',
+                        labelPosition:'top',
+                        limitToGrid: true,
+                        url:'optionRead.ashx',
+                        idField:'id',
+                        treeField:'machType',
+                        columns:[[
+                            { field: 'machType', title: '机床类型', width: '100%' },
+                            { field: 'id', title: 'id', width: 100, hidden: true },
+                            
+                        ]],
+                        onLoadSuccess: function (d) {
+                            $('.tree-icon.tree-file').remove()
+                            $('td').css('border', 'none')
+                
+                        }
+
+                    });
+        layui.use('form', function () {
+            var i = 4;
+            var id = 1;
+            var form = layui.form,$=layui.$;
+
+            form.on('submit(*)', function (d) {
+               
+                layer.confirm('是否提交', function (index) {
+                    var formDate = new FormData();
+                    var dd=JSON.stringify(d.field)
+                  
+                    formDate.append('id',$("#orderId").val() )
+                    formDate.append('form',dd )
+                    $.ajax({
+                        url: 'VirProcessEdit.ashx',
+                        data: {
+                         'processId': $('#processId').val(),
+                            'process': $("[name='process']").val(),
+                            'time': $("[name='time']").val(),
+                        'deviceType':$("[name='deviceType']").val()},
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("编辑成功", { icon: 1, time: 1000 }, function () {
+                                    parent.process.reload({})
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭        
+                                })
+                            }
+                            else {
+                                layer.alert(d)
+                            }
+                        }
+                    })
+                })
+                
+            })
+
+            
+        });
+
+    </script>
+    <script>
+    function method(d) {
+        $("#processId").val(d)
+        $.ajax({
+            url: 'virtualProEditRead.ashx',
+            data: { "processId": d },
+            success: function (d) {
+                var obj = JSON.parse(d);
+                $("[name='process']").val(obj.process)
+                $("[name='time']").val(obj.time)
+                $("#cc").combotreegrid('setValue', {id:obj.deviceType})
+            }
+        })
+    }
+   
+    </script>
+    <input id="processId" hidden/>
+</body>
+</html>

@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+    <link href="../../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../../Resources/js/easyui/jquery.easyui.min.js"></script>
+
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="background-color:white">
+            <button type="button" class="layui-btn layui-btn-sm" id="test1">
+                <i class="layui-icon">&#xe67c;</i>导表
+            </button>
+
+            <button type="button" class="layui-btn layui-btn-sm" onclick="add()">
+                <i class="layui-icon layui-icon-add-1"></i>添加
+            </button>
+            <button type="button" class="layui-btn layui-btn-sm" onclick="location.reload()">
+                <i class="layui-icon layui-icon-refresh-3"></i>刷新
+            </button>
+            <input id="file" type="file" hidden />
+        </div>
+
+        <div class="layui-side layui-bg-black" style="">
+            <div class="layui-side-scroll" style="background-color:white">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <table id="tt" style=""></table>
+            </div>
+        </div>
+        <div id="left2" class="layui-side layui-bg-black" style="left:200px;">
+            <div class="layui-side-scroll" style="background-color:white">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+
+                <table id="workpieceNum" style=""></table>
+            </div>
+        </div>
+        <div class="layui-body" style=" left:400px;">
+            <!-- 内容主体区域 -->
+            <table id="demo" lay-filter="test"></table>
+        </div>
+
+
+    </div>
+    <input orderId="orderId" />
+    <script>
+    function add() {
+        layer.open({
+            type: 2,
+            area:['70%','70%'],
+            content: '添加工件弹窗.html',
+            success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                var orderId=$('[orderId]').val()
+                iframeWin.method(orderId)
+                console.log(body.html()) //得到iframe页的body内容
+                //body.find('input').val('Hi，我是从父页来的')
+            }
+        });      
+    }
+    </script>
+    <script>
+        //JavaScript代码区域
+        $('#tt').treegrid({
+            url: 'order_orderId.ashx',
+            idField: 'orderId',
+            treeField: 'order',
+            columns: [[
+                { title: '订单单号', field: 'order', width: '100%' },
+                { field: 'orderId', title: 'orderId', width: 60, hidden: true },
+
+            ]],
+
+            onLoadSuccess: function () {
+                $('.tree-file').removeClass('tree-file')
+                $('.panel-body').css('border-color', 'white')
+                $('tr').click(function () {
+                    var orderId = $(this).find('td[field="orderId"]')[0].children[0].innerText
+                    if (orderId == "orderId") {
+                        return;
+                    }
+                      $('[orderId]').val($(this).find('td[field="order"]')[0].children[0].innerText)
+                    $('#workpieceNum').treegrid({
+                        url: 'workpieceRead.ashx?orderId=' + orderId + '',
+                        idField: 'workpieceNumber',
+                        treeField: 'workpieceNumber',
+                        columns: [[
+                            { title: '工件序号', field: 'workpieceNumber', width: '100%' },
+
+
+                        ]],
+
+                        onLoadSuccess: function () {
+                            $('.tree-file').removeClass('tree-file')
+                            $('.panel-body').css('border-color', 'white')
+                            $('tr').click(function () {
+                                var workpieceNumber = $(this).find('td[field="workpieceNumber"]')[0].children[0].innerText
+                                if (workpieceNumber == "工件序号") {
+                                    return;
+                                }
+                                layui.use('table', function () {
+                                    var table = layui.table;
+
+                                    //第一个实例
+                                  reload=  table.render({
+                                        elem: '#demo'
+                                        , toolbar: '#toolbarDemo'
+                                        , url: 'sizeRead.ashx?orderId=' + orderId + '&workpieceNumber=' + workpieceNumber + ''
+                                        //,page: true
+                                        ,id:'idTest'
+                                      , cols: [[ //表头
+                                              { field: '',type:'checkbox', title: '', width: 50,fixed:'left' },
+                                            { field: 'number', type: 'numbers', title: '序号', width: 60 }
+                                            , { field: 'SizeNumber', title: '尺寸序号', width: 100 }
+                                            , { field: 'SizeName', title: '尺寸名称', width: 100 }
+                                            , { field: 'StandardValue', title: '尺寸理论值', width: 100 }
+                                            , { field: 'ToleranceRangeMin', title: '尺寸最小值', width: 100 }
+                                            , { field: 'ToleranceRangeMax', title: '尺寸最大值', width: 100 }
+                                            , { field: 'Measurements', title: '尺寸实测值', width: 100 }
+                                            , { field: 'OutOfTolerance', title: '是否超差', width: 100 }
+                                            , { field: 'ID', title: 'id', width: 100, hide: true }
+                                            , { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 120},
+
+                                        ]],
+                                        done: function () {
+                                            $("#orderId").val(orderId)
+                                            $("#workpieceNumber").val(workpieceNumber)
+                                        }
+
+                                    });
+
+                                });
+                            })
+                            if ($("#left2").find('tr').length > 1) {
+                                 $("#left2").find('tr')[1].click()
+                            }
+                           
+                            
+                            
+                        }
+                    });
+                })
+                if ($('tr').length > 1) {
+                     $('tr')[1].click()
+                }
+               
+            }
+        });
+
+        layui.use('element', function () {
+            var element = layui.element;
+
+
+
+        });
+    </script>
+    <script>
+
+        $(function () {
+            $("#test1").click(function () {
+                $("#file").click();
+            })
+            $("#file").change(function () {
+                var formData = new FormData();
+
+                formData.append('file', $("#file")[0].files[0])
+                $.ajax({
+                    url: 'importExcel.ashx',
+                    type: 'post',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (d) {
+                        if (d == "ok") {
+                            layui.use('layer', function () {
+                                layui.layer.alert("导入成功")
+                            })
+
+                        } else {
+                            alert(d)
+                        }
+                    }
+                })
+            })
+        })
+
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer;//头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
+                switch (obj.event) {
+                    case 'add':
+                        layer.open({
+                            type: 2,
+                            area: ['70%', '70%'],
+                            content: '添加尺寸.html',
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method($("#orderId").val(), $("#workpieceNumber").val())
+                            }
+
+                        });
+                        break;
+                    case 'del':
+                        if (checkStatus.data.length == 0) {
+                            layer.alert("清先勾选");
+                            return;
+                        }
+                        layer.confirm("是否删除", function (index) {
+                            var formData = new FormData();
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                formData.append(i, checkStatus.data[i].ID);
+
+                            }
+                            $.ajax({
+                                url: '手动录入批量删除.ashx',
+                                type: 'post',
+                                contentType: false,
+                                processData: false,
+                                data: formData,
+                                success: function (d) {
+                                    if (d == "ok") {
+                                            layer.msg('删除成功', { icon: 1, time: 1000 }, function () {
+                                                reload.reload({});
+                                                location.reload()
+                                    })
+                                    }
+                                }
+                            })
+                        })
+                       
+                };
+            });
+             //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        
+                        $.ajax({
+                            url: '手动录入删除.ashx?id='+data.ID,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg('删除成功', { icon: 1, time: 1000 }, function () {
+                                        reload.reload({})
+                                    })
+                                }
+                            }
+
+
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        area:['70%','70%'],
+                        content: 'sizeEdit.html',
+                        success: function (layero, index) {
+                           
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.ID)
+                        }
+                    });           
+                }
+            });
+
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">添加尺寸</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">批量删除</button>
+        </div>
+        <input id="orderId" hidden />
+        <input id="workpieceNumber" hidden />
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</body>
+
+</html>

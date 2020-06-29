@@ -1,0 +1,789 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Resources/js/echarts.js"></script>
+    <script src="../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Resources/js/jquery-3.3.1.js"></script>
+
+   
+</head>
+<body style="height:96%;background-color:black;padding:10px;color:">
+    <!--#19201E-->
+    <div class="layui-row layui-col-space20 " style="height:40%;">
+
+
+        <div class="layui-col-md8" style="height:100%;">
+            <div class="layui-col-md12" style="height:30%;margin-bottom:10px">
+                <div class="layui-card" style="background-color:black;height:100%">
+                    <div class="layui-card-header" style="width:15%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;font-size:150%;color:white">车间机台状态</div>
+                    <div class="layui-card-body" style="background-color:rgba(128,128,128,0.3); position: absolute;top:30px;bottom:0;left:0;right:-10px;color:white">
+                        <div style="height:100%;width:100%;padding:10px">
+
+
+                            <div style="width:20%;height:100%;float:left"><div style="float:left;font-size:130%">机台总数：</div><div style="float:left;font-size:140%">34</div></div>
+                            <div style="width:20%;height:100%;float:left"><div style="float:left;font-size:130%"> 运行机台数：</div><div style="float:left;font-size:140%;color:green">20</div></div>
+                            <div style="width:20%;height:100%;float:left"><div style="float:left;font-size:130%"> 暂停待料：</div><div style="float:left;font-size:140%;color:yellow">10</div></div>
+                            <div style="width:20%;height:100%;float:left"><div style="float:left;font-size:130%">故障报警：</div><div style="float:left;font-size:140%;color:#D53A35">3</div></div>
+                            <div style="width:20%;height:100%;float:left"><div style="float:left;font-size:130%"> 故障维修：</div><div style="float:left;font-size:140%">1</div></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="layui-col-md12" style="height:70%;">
+                <div class="layui-card" style="height:100%;background-color:black">
+                    <div class="layui-card-header" style="height:30px;color:white;font-size:150%;width:15%;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0">设备利用占比</div>
+                    <div class="layui-card-body" style="background-color:rgba(128,128,128,0.3);height:80%;position: absolute;top:30px;bottom:0;left:0;right:-10px;color:white ">
+                        <div id="echarts" style="height:100%;width:100%"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-col-md4" style="height:100%;background-color:black; ">
+            <div class="layui-card" style="background-color:black;height:100%">
+                <div class="layui-card-header" style="font-size:150%;width:30%;height:30px;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;color:white">机台实时物料</div>
+                <div class="layui-card-body" style="background-color:rgba(128,128,128,0.3);position: absolute;top:40px;bottom:0;left:10px;right:0;color:white">
+                    <ul class="layui-timeline" style="padding-top:10px">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">3-40等待换料</h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">3-20等待备刀装刀</h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">3-41等待换料</h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">3-42等待换料</h3>
+
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title" style="color:white">3-43等待换料</h3>
+
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-row layui-col-space20" style="height:60%;margin-top:10px;">
+        <div class="layui-col-md8" style="height:100%">
+            <div class="layui-card" style="background-color:black;height:100%">
+                <div class="layui-card-header" style="font-size:150%;height:30px;background-color:rgba(128,128,128,0.3);width:20%;border-bottom:hidden;border-radius:10px 30px 0 0;color:white">机台生产状态</div>
+
+                <div class="layui-card-body" style="background-color:rgba(128,128,128,0.3);position: absolute;top:40px;bottom:0;left:10px;right:0">
+                    <div class="layui-row layui-col-space10" style="height:100%">
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:green"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-01</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake1" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:yellow;color:black"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-02</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake2" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:red"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-03</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake3" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:green"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-04</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake4" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:green"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-05</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake5" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md2" style="height:100%;">
+
+
+                            <div style="height:100%;background-color:rgba(128, 128, 128,0.4);padding:5px">
+                                <div class="" style="height:60%;color:white;">
+                                    <div style="background-color:green"><div style="float:left;font-size:120%">机台编号：</div><div style="font-size:140%"> 1A-06</div></div>
+                                    <div><div style="float:left;font-size:110%"> 当前任务：</div><div style="font-size:120%"> 201908010001</div></div>
+                                    <div><div style="float:left;font-size:110%"> 任务进度：</div><div style="font-size:120%"> 80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 下个任务：</div><div style="font-size:120%"> 201908010002</div></div>
+                                    <div><div style="float:left;font-size:110%"> 开机时长：</div><div style="font-size:120%">20h</div></div>
+                                    <div><div style="float:left;font-size:110%">  运行时长：</div><div style="font-size:120%"> 2000min</div></div>
+                                    <div><div style="float:left;font-size:110%">  产量：</div><div style="font-size:120%"> 100</div></div>
+                                    <div><div style="float:left;font-size:110%">开机率： </div><div style="font-size:120%"> 90%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 运行率：</div><div style="font-size:120%">80%</div></div>
+                                    <div><div style="float:left;font-size:110%"> 加工率：</div><div style="font-size:120%"> 95%</div></div>
+
+                                    <div id="roundCake6" style="height:70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4" style="height:100%">
+            <div class="layui-card" style="background-color:black;height:100%">
+                <div class="layui-card-header" style="font-size:150%;height:30px;width:30%;background-color:rgba(128,128,128,0.3);border-bottom:none;border-radius:10px 30px 0 0;color:white">稼动率评估</div>
+                <div class="layui-card-body" style="background-color:rgba(128,128,128,0.3);position: absolute;top:40px;bottom:0;left:10px;right:0">
+                    <div id="time" style="width:50%;height:50%;float:left"></div>
+                    <div id="performance" style="width:50%;height:50%;float:left"></div>
+                    <div id="goodProductRate" style="width:50%;height:50%;float:left"></div>
+                    <div id="oee" style="width:50%;height:50%;float:left"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script>
+        var mychart = echarts.init(document.getElementById('echarts'));
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['其他', '故障报警', '暂停等待', '运行时间'],
+                textStyle: {
+                    color: '#ffffff'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['2019-08-09', '2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13', '2019-08-14', '2019-08-15'],
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 0.5,//这里是为了突出显示加上的
+                        }
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: 'white',
+                            width: 0.5,//这里是为了突出显示加上的
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                }
+            ],
+            series: [
+
+                {
+                    name: '其他',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [150, 300, 200, 100, 200, 100, 300],
+                    itemStyle: { color: '#80A9B0' }
+                },
+                {
+                    name: '故障报警',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [50, 100, 200, 300, 200, 100, 100],
+                    itemStyle: { color: '#D53A35' }
+                },
+                {
+                    name: '暂停等待',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [50, 100, 100, 300, 100, 100, 100],
+                    itemStyle: { color: '#F7B564' }
+                },
+                {
+                    name: '运行时间',
+                    type: 'bar',
+                    stack: '设备',
+                    data: [100, 100, 200, 300, 100, 100, 100],
+                    itemStyle: { color: 'green' }
+                },
+            
+
+
+
+            ],
+            barWidth: '30%'
+        };
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake1'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                        { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake2'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                       { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake3'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                       { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake4'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                     { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake5'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                     { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+    <script>
+        var mychart = echarts.init(document.getElementById('roundCake6'));
+        option = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+
+                    },
+
+                    data: [
+                       { value: 335, name: '绿灯', itemStyle: { color: 'green' } },
+                        { value: 310, name: '黄灯', itemStyle: { color: '#F7B564' } },
+                        { value: 234, name: '红灯', itemStyle: { color: '#D53A35' } },
+                        { value: 135, name: '其他', itemStyle: { color: '#80A9B0' } },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        mychart.setOption(option);
+    </script>
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('time'));//performance
+        var myChartPerformance = echarts.init(document.getElementById('performance'));//goodProductRate
+        var myChartGoodProductRate = echarts.init(document.getElementById('goodProductRate'));//
+        var myChartOee = echarts.init(document.getElementById('oee'));//
+        option1 = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+              title: {
+		        text: '时间稼动率',
+		        left:'center', //标题位置
+		        bottom:'10%',
+		        textStyle:{
+		        	color:"#999",
+		        	fontSize:18
+		        },
+		    },
+
+            series: [
+                {
+                    name: '时间稼动率',
+                    type: 'gauge',
+                        title : {               //设置仪表盘中间显示文字样式
+                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                          
+                            color:"white"
+                        }
+                    },
+
+
+                    axisLabel: {
+                        show: false,
+                distance:-40
+            },
+                    detail: {
+                        formatter: '{value}%',
+                        textStyle: {
+                         
+                            "fontSize": 20,
+                        }
+                    },
+                    data: [{ value: 20, name: '', }]
+                }
+
+            ],
+
+        };
+         option2 = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+             },
+              title: {
+		        text: '性能稼动率',
+		        left:'center', //标题位置
+		        bottom:'10%',
+		        textStyle:{
+		        	color:"#999",
+		        	fontSize:18
+		        },
+		    },
+            series: [
+                {
+                    name: '性能稼动率',
+                    type: 'gauge',
+                        title : {               //设置仪表盘中间显示文字样式
+                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                          
+                            color:"white"
+                        }
+                    },
+
+
+                    axisLabel: {
+                        show: false,
+                distance:-40
+            },
+                    detail: {
+                        formatter: '{value}%',
+                        textStyle: {
+                         
+                            "fontSize": 20,
+                        }
+                    },
+                    data: [{ value: 50, name: '', }]
+                }
+
+            ],
+
+        };
+         option3 = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+             },
+              title: {
+		        text: '良品率',
+		        left:'center', //标题位置
+		        bottom:'10%',
+		        textStyle:{
+		        	color:"#999",
+		        	fontSize:18
+		        },
+		    },
+            series: [
+                {
+                    name: '良品率',
+                    type: 'gauge',
+                        title : {               //设置仪表盘中间显示文字样式
+                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                          
+                            color:"white"
+                        }
+                    },
+
+
+                    axisLabel: {
+                        show: false,
+                distance:-40
+            },
+                    detail: {
+                        formatter: '{value}%',
+                        textStyle: {
+                         
+                            "fontSize": 20,
+                        }
+                    },
+                    data: [{ value: 70, name: '', }]
+                }
+
+            ],
+
+        };
+         option4 = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+             },
+              title: {
+		        text: 'OEE',
+		        left:'center', //标题位置
+		        bottom:'10%',
+		        textStyle:{
+		        	color:"#999",
+		        	fontSize:18
+		        },
+		    },
+            series: [
+                {
+                    name: 'OEE',
+                    type: 'gauge',
+                        title : {               //设置仪表盘中间显示文字样式
+                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                          
+                            color:"white"
+                        }
+                    },
+
+
+                    axisLabel: {
+                        show: false,
+                distance:-40
+            },
+                    detail: {
+                        formatter: '{value}%',
+                        textStyle: {
+                         
+                            "fontSize": 20,
+                        }
+                    },
+                    data: [{ value: 90, name: '', }]
+                }
+
+            ],
+
+        };
+
+        myChart.setOption(option1);
+        myChartPerformance.setOption(option2);
+        myChartGoodProductRate.setOption(option3);
+        myChartOee.setOption(option4);
+        //setInterval(function () {
+        //    option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+        //    myChartOee.setOption(option, true);
+        //}, 100);
+
+
+
+    </script>
+</body>
+</html>

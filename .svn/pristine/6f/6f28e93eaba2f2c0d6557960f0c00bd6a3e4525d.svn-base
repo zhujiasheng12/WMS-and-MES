@@ -1,0 +1,119 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.SessionState;
+
+namespace WebApplication2.生产管理.品质
+{
+    /// <summary>
+    /// qualityEditSubmit 的摘要说明
+    /// </summary>
+    public class qualityEditSubmit : IHttpHandler,IRequiresSessionState
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var data = context.Request["data"];
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var obj = serializer.Deserialize<QualityEditSubmitList>(data);
+            using(JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
+            {
+                using (System.Data.Entity.DbContextTransaction mytran = entities.Database.BeginTransaction())
+                {
+
+                    try
+                    {
+                        var id = int.Parse(obj.id);
+                        var row = entities.JDJS_WMS_Quality_Confirmation_Table.Where(r => r.ID == id);
+                        int OrderID = Convert.ToInt32(row.FirstOrDefault().OrderID);
+
+                        int QualifiedProductNumber = 0;
+                        int PefectiveProductNumber = 0;
+                        int DetectionNumber = 0;
+                        if (row.First().QualifiedProductNumber != null)
+                        {
+                            QualifiedProductNumber = Convert.ToInt32(row.First().QualifiedProductNumber);
+                        }
+                        if (row.First().PefectiveProductNumber != null)
+                        {
+                            PefectiveProductNumber = Convert.ToInt32(row.First().PefectiveProductNumber);
+
+                        }
+                        if (row.First().DetectionNumber != null)
+                        {
+                            DetectionNumber = Convert.ToInt32(row.First().DetectionNumber);
+                        }
+                        double fenmu = Convert.ToDouble(int.Parse(obj.PefectiveProductNumber) + PefectiveProductNumber + int.Parse(obj.QualifiedProductNumber) + QualifiedProductNumber);
+                        if (fenmu == 0)
+                        {
+                            row.First().PassRate = 0;
+                        }
+                        else
+                        {
+                            var passrate =Convert.ToDouble(Convert.ToDouble(obj.QualifiedProductNumber) + QualifiedProductNumber) / (Convert.ToDouble(int.Parse(obj.PefectiveProductNumber) + PefectiveProductNumber + int.Parse(obj.QualifiedProductNumber) + QualifiedProductNumber));
+                            if (passrate > 1)
+                            {
+                                passrate = 1;
+                            }
+                            row.First().PassRate = passrate;
+                        }
+                        row.First().PefectiveProductNumber = PefectiveProductNumber+ int.Parse(obj.PefectiveProductNumber);
+                        row.First().QualifiedProductNumber = QualifiedProductNumber + int.Parse(obj.QualifiedProductNumber);
+                        //row.First().PendingNumber = row.First().CurrFinishedProductNumber - int.Parse(obj.PefectiveProductNumber) -int.Parse(obj.QualifiedProductNumber);
+                        row.First().DetectionNumber = DetectionNumber+ int.Parse(obj.PefectiveProductNumber) + int.Parse(obj.QualifiedProductNumber);
+                        
+
+
+
+                        int orderID =Convert.ToInt32( row.FirstOrDefault().OrderID);
+                        var product = entities.JDJS_WMS_Finished_Product_Manager.Where(r => r.OrderID == orderID);
+                        if (product.Count() > 0)
+                        {
+                            int wait = 0;
+                            if (product.FirstOrDefault().waitForWarehousing != null)
+                            {
+                                wait = Convert.ToInt32(product.FirstOrDefault().waitForWarehousing);
+                            }
+                           
+                            product.FirstOrDefault ().waitForWarehousing =wait+ int.Parse(obj.QualifiedProductNumber);
+                            entities.SaveChanges();
+                        }
+                        JDJS_WMS_Quality_Confirmation_History_Table qualtity = new JDJS_WMS_Quality_Confirmation_History_Table()
+                        {
+                            OrderID = orderID,
+                            GoodNum = int.Parse(obj.QualifiedProductNumber),
+                            PoolNum = int.Parse(obj.PefectiveProductNumber),
+                            OperateTime = DateTime.Now,
+                            StaffID = Convert.ToInt32(context.Session["id"]),
+                        };
+                        entities.JDJS_WMS_Quality_Confirmation_History_Table.Add(qualtity);
+                        entities.SaveChanges();
+                        mytran.Commit ();
+                        context.Response.Write("ok");
+                    }
+                    catch (Exception ex)
+                    {
+                        mytran.Rollback ();
+                        context.Response.Write(ex.Message);
+                    }
+                }
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+    class QualityEditSubmitList
+    {
+        public string order;
+        public string PefectiveProductNumber;
+        public string QualifiedProductNumber;
+        public string  id;
+    }
+}

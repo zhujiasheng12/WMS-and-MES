@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <script src="/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                   
+                    case 'reload':
+                        key = "";
+                        table.reload('idTest', function () {
+
+                        })
+                        break;
+                    case 'search':
+                     key= $("#select").val()
+                       
+                    tableReload.reload({
+                        url: '刀具历史读数据.ashx',
+                        where: {
+                            key:$("#select").val()
+                        }
+                    })
+            
+                        break;
+       
+                };
+            });
+        
+            //监听行工具事件
+           
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-row">
+            
+            <div class="layui-col-md2" style=" ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md2" style=" ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="search" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="reload" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="look">查看</a>
+       
+    </script>
+    <script>
+        key = "";  
+        layui.use(['table', 'form'], function () {
+            var table = layui.table, $ = layui.$, form = layui.form;
+
+            //第一个实例
+            tableReload = table.render({
+                elem: '#demo'
+                
+                , url: '刀具历史读数据.ashx' //数据接口
+                , page: true //开启分页
+                , toolbar: '#toolbarDemo'
+                , id: 'idTest'
+                , cols: [[ //表头
+                  
+                    { field: 'number', title: '序号', type: 'numbers', width: 160,  }
+                    , { field: 'toolId', title: '刀具ID', width: 220, }
+                    , { field: 'specification', title: '刀具规格', width: 220, sort:true}
+                    , { field: 'nowLife', title: '当前寿命', width: 220, }
+                       , { field: 'maxLife', title: '最大寿命', width: 220, }
+                    , { field: 'state', title: '状态', width: 220, sort: true }
+                     , { field: 'primaryKey', title: 'primaryKey', width: 220, hide:true }//
+              ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                ]],
+                done: function () {
+                    $.ajax({
+                        url: '下拉框读数据.ashx',
+                        success: function (d) {
+                            var objs = JSON.parse(d);
+
+                            $.each(objs, function (i, obj) {
+                                if (obj ==key) {
+                                     $('#select').append('<option value="' + obj + '" selected>' + obj + '</option>')
+                                } else {
+                                     $('#select').append('<option value="' + obj + '">' + obj + '</option>')
+                                }
+                               
+                            })
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                form.render()
+                            })
+                        }
+                    });
+                    var tds = $('[data-field="state"]')
+                    for (var i = 0; i < tds.length; i++) {
+                        if ($(tds[i]).children('div').text() == "未使用") {
+                            //$(tds[i]).css({ 'background-color': 'gray','color':'white'})
+                        } else if ($(tds[i]).children('div').text() == "使用中") {
+                            $(tds[i]).css({ 'background-color': 'green','color':'white'})
+                        }else if ($(tds[i]).children('div').text() == "待使用") {
+                            $(tds[i]).css({ 'background-color': 'orange','color':'white'})
+                        }
+                    }
+                    layui.form.render()
+                   
+                }
+            });
+            //监听行工具事件
+  table.on('tool(test)', function(obj){
+    var data = obj.data;
+   
+    if(obj.event === 'look'){
+        layer.open({
+            type: 2,
+            area:['50%','80%'],
+            content: '查看弹窗.html',
+            success: function (layero, index) {
+               
+                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                iframeWin.fun(data.primaryKey)
+            }
+        });       
+    } 
+  });
+        });
+    </script>
+
+        <table id="demo" lay-filter="test"></table>
+    
+</body>
+</html>

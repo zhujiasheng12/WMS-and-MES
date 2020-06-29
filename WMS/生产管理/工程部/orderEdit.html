@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../jquery-3.3.1.js"></script>
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+    <script>
+        $(function () {
+   
+
+
+            $('#cc').combotreegrid({
+                value: '',
+                width: '100%',
+                panelWidth: '80%',
+                label: '',
+                animate: true,
+                labelPosition: 'top',
+                url: '../../人员管理/staffRead.ashx',
+                idField: 'id',
+                treeField: 'staff',
+                columns: [[
+                    { title: '部门人员', field: 'staff', width: '100%' },
+                    { title: '职位', field: 'position', width: '15%', hidden: true },
+                    { title: '电话', field: 'tel', width: '15%', hidden: true },
+                    { title: '邮箱', field: 'mailbox', width: '15%', hidden: true },
+                    { title: '备注', field: 'remark', width: '25%', hidden: true },
+                    { field: 'id', title: 'id', hidden: 'true' },
+
+                ]],
+                onLoadSuccess: function (d) {
+                    $(".tree-folder.tree-folder-open").removeClass("tree-icon tree-folder tree-folder-open ")
+                    $('.tree-file').removeClass('tree-file')
+                }
+            });
+        });
+       
+        function method(d, type1) {
+            type=type1
+            $.ajax({
+                url: 'editRead.ashx?type='+type,
+                data: { "id": d },
+                success: function (d) {
+                    if (type == "生产订单") {
+                        var obj = JSON.parse(d)[0];
+                        $('[name="Order_Number"]').val(obj.Order_Number)
+                        $('[name="Order_Leader"]').val(obj.Order_Leader)
+                        $('[name="Product_Name"]').val(obj.Product_Name)
+                        $('[name="Product_Material"]').val(obj.Product_Material)
+                        $('[name="Product_Output"]').val(obj.Product_Output)
+                        $('[name="Order_Plan_End_Time"]').val(obj.Order_Plan_End_Time)
+                        //$('[name="Order_State"]').val(obj.Order_State)
+                        $("#id").val(obj.id)
+                        $("#Engine_Program_ManagerId").val(obj.Engine_Program_ManagerId)
+                        $("#Engine_Technology_ManagerId").val(obj.Engine_Technology_ManagerId)
+                        if (obj.Engine_Program_ManagerId != "" & obj.Engine_Program_ManagerId != null) {
+                            $('#cc').combotreegrid('setValue', { id: obj.Engine_Program_ManagerId });
+                        }
+                      
+                    } else if(type == "意向订单"){
+
+                        var obj = JSON.parse(d)[0];
+                        $('[name="Order_Number"]').val(obj.Order_Number)
+                        $('[name="Order_Leader"]').val(obj.Order_Leader)
+                        $('[name="Product_Name"]').val(obj.Product_Name)
+                        $('[name="Product_Material"]').val(obj.Product_Material)
+                        $('[name="Product_Output"]').val(obj.Product_Output)
+                        $('[name="Order_Plan_End_Time"]').val(obj.Order_Plan_End_Time)
+                        //$('[name="Order_State"]').val(obj.Order_State)
+                        $("#id").val(obj.id)
+                        $("#Engine_Program_ManagerId").val(obj.Engine_Program_ManagerId)
+                        $("#Engine_Technology_ManagerId").val(obj.Engine_Technology_ManagerId)
+                        $("#cc").parent("div").siblings("label").text("虚拟方案责任人")
+                        console.log(obj.virtualProgPersId)
+                        if (obj.virtualProgPersId != "" & obj.virtualProgPersId != null) {
+                            $('#cc').combotreegrid('setValue', { id: obj.virtualProgPersId });
+                        }
+                       
+                    
+                    }
+                    
+                  
+               
+
+                }
+            })
+        }
+    </script>
+    <script>
+        layui.use(['laydate', 'form', 'table', 'layer'], function () {
+            var laydate = layui.laydate, form = layui.form, $ = layui.$, layer = layui.layer;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#startDate' //指定元素
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#endDate' //指定元素
+                , type: 'datetime'
+
+                , trigger: 'click'
+            });
+
+            form.on('submit(submit)', function (data) {
+               debugger
+                if (type == "生产订单") {
+                    //var g = $('#cc').combotreegrid('grid'); // 获取数据表格对象
+                    // var r = g.combotreegrid('getSelected'); // 获取选择的行
+                    var formDate = new FormData();
+                    formDate.append('type', type)
+                    formDate.append('id', $("#id").val())
+                    formDate.append('prog', $("#cc").val())
+
+                    formDate.append('progOld', $("#Engine_Program_ManagerId").val())
+                    formDate.append('techOld', $("#Engine_Technology_ManagerId").val())
+
+
+                    $.ajax({
+                        url: 'edit - 复制.ashx',
+                        type: 'POST',
+                        data: formDate,
+                        processData: false,
+                        contentType: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg('编辑成功', { icon: 1, time: 1000 }, function (index) {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭  
+                                    parent.table1.reload()
+                                    parent.table2.reload()
+                                    //parent.tableReloadProcess.reload({})
+                                })
+
+
+                            }
+                            else {
+                                layer.alert(d)
+                            }
+                        },
+                        error: function (d) {
+                            layer.alert(d.responseText)
+
+
+                        }
+
+                    })
+                } else if(type=="意向订单"){
+                    var formDate = new FormData();
+                    formDate.append('type1',type)
+                    formDate.append('id', $("#id").val())
+                    formDate.append('prog', $("#cc").val())
+
+                    formDate.append('progOld', $("#Engine_Program_ManagerId").val())
+                    formDate.append('techOld', $("#Engine_Technology_ManagerId").val())
+
+
+                    $.ajax({
+                        url: 'edit - 复制.ashx',
+                        type: 'POST',
+                        data: formDate,
+                        processData: false,
+                        contentType: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg('编辑成功', { icon: 1, time: 1000 }, function (index) {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭  
+                                    parent.table1.reload({})
+                                    parent.table2.reload({})
+                                    //parent.tableReloadProcess.reload({})
+                                })
+
+
+                            }
+                            else {
+                                layer.alert(d)
+                            }
+                        },
+                        error: function (d) {
+                            layer.alert(d.responseText)
+
+
+                        }
+
+                    })
+                }
+             
+
+
+
+          
+                return false;
+            });
+        });
+    </script>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品订单号</label>
+            <div class="layui-input-block">
+                <input readonly lay-verify="required" type="text" name="Order_Number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单负责人</label>
+            <div class="layui-input-block">
+                <input readonly lay-verify="required" type="text" name="Order_Leader" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品名称</label>
+            <div class="layui-input-block">
+                <input readonly lay-verify="required" type="text" name="Product_Name" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+       
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">编程责任人<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="cc" lay-verify="required">
+            </div>
+        </div>
+
+       
+
+      
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+
+    </form>
+    <input id="id" hidden />
+    <input id="Engine_Program_ManagerId" hidden />
+    <input id="Engine_Technology_ManagerId" hidden />
+</body>
+</html>

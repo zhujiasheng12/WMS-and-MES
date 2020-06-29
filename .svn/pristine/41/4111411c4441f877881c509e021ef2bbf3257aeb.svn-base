@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+
+namespace WebApplication2.生产管理.生产部.换产
+{
+    /// <summary>
+    /// 排序修改提交 的摘要说明
+    /// </summary>
+    public class 排序修改提交 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            List<int> sortTaskIDs = new List<int>();
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+
+            sortTaskIDs = serializer.Deserialize <List<int>>("");
+            context.Response.ContentType = "text/plain";
+            context.Response.Write("Hello World");
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

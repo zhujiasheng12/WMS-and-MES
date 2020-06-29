@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CNCINFOModel1StoreContainer" CdmEntityContainer="CNCINFOEntities1">
+    <EntitySetMapping Name="Cnc">
+      <EntityTypeMapping TypeName="CNCINFOModel1.Cnc">
+        <MappingFragment StoreEntitySet="Cnc">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MachNum" ColumnName="MachNum" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="MachState" ColumnName="MachState" />
+          <ScalarProperty Name="MachType" ColumnName="MachType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CncBrand">
+      <EntityTypeMapping TypeName="CNCINFOModel1.CncBrand">
+        <MappingFragment StoreEntitySet="CncBrand">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CncType">
+      <EntityTypeMapping TypeName="CNCINFOModel1.CncType">
+        <MappingFragment StoreEntitySet="CncType">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MachTimesData">
+      <EntityTypeMapping TypeName="CNCINFOModel1.MachTimesData">
+        <MappingFragment StoreEntitySet="MachTimesData">
+          <ScalarProperty Name="IDNum" ColumnName="IDNum" />
+          <ScalarProperty Name="NowRunTime" ColumnName="NowRunTime" />
+          <ScalarProperty Name="AllRunTime" ColumnName="AllRunTime" />
+          <ScalarProperty Name="OpenTime" ColumnName="OpenTime" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

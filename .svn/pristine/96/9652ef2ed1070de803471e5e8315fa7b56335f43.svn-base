@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    
+    <script>
+        layui.use(['laydate', 'form', 'table', 'layer', 'element'], function () {
+            var laydate = layui.laydate, form = layui.form, $ = layui.$,
+                layer = layui.layer, element = layui.element;
+            
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#startDate' //指定元素
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#endDate' //指定元素
+                , type: 'datetime'
+
+                , trigger: 'click'
+            });
+
+            form.on('submit(submit)', function (data) {
+                if ($('.layui-unselect.layui-form-switch').hasClass('layui-form-onswitch')) {
+                    var formDate = new FormData();
+                    formDate.append('flag', 1)
+                    formDate.append('Order_Number', data.field.Order_Number)
+                    formDate.append('Order_Leader', data.field.Order_Leader)
+                    formDate.append('old', data.field.select)
+                    formDate.append('Product_Name', data.field.Product_Name)
+                    formDate.append('Product_Material', data.field.Product_Material)
+                    formDate.append('Product_Output', data.field.Product_Output)
+                    formDate.append('Order_Plan_End_Time', data.field.Order_Plan_End_Time)
+                    formDate.append('Order_State', data.field.Order_State)
+                     formDate.append('Customer', data.field.Customer)
+                     formDate.append('projectName', data.field.projectName)
+                    //pattern
+                    $.ajax({
+                        url: 'create.ashx',
+                        type: 'POST',
+                        data: formDate,
+                        processData: false,
+                        contentType: false,
+                        success: function (d) {
+                            if (d == "ok") {
+
+                                layer.confirm("创建成功，是否继续创建", function (index) {
+                                    
+                                }, function (index) {
+                                   
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭
+                                    parent.tableReload.reload({
+                                    })
+                               
+
+                                })
+
+
+                            }
+                            else {
+                              
+                                layer.alert(d)
+
+                            }
+                        },
+                        error: function (d) {
+                          
+                           
+                            layer.alert(d.responseText)
+
+
+                        },
+                      
+
+                    })
+                } else {
+                 
+
+                    var formDate = new FormData();
+                    var file = $("#file")[0].files;
+
+                    for (var i = 0; i < file.length; i++) {
+                        formDate.append('file' + i, file[i])
+                    }
+                    formDate.append('flag', 0)
+                    formDate.append('Order_Number', data.field.Order_Number)
+                    formDate.append('Order_Leader', data.field.Order_Leader)
+                    formDate.append('Product_Name', data.field.Product_Name)
+                    formDate.append('Product_Material', data.field.Product_Material)
+                    formDate.append('Product_Output', data.field.Product_Output)
+                    formDate.append('Order_Plan_End_Time', data.field.Order_Plan_End_Time)
+                    formDate.append('Order_State', data.field.Order_State)
+                  
+                       formDate.append('Customer', data.field.Customer)
+                       formDate.append('pattern', data.field.pattern)
+                       formDate.append('projectName', data.field.projectName)
+                   //
+                    $.ajax({
+                        url: 'create.ashx',
+                        type: 'POST',
+                        data: formDate,
+                        processData: false,
+                        contentType: false,
+                        success: function (d) {
+                            if (d == "ok") {
+
+
+                                  layer.confirm("创建成功，是否继续创建", function (index) {
+                                       parent.tableReload.reload({
+                                       })
+                                       $(".layui-progress-bar").attr('lay-percent', 0)
+                                      element.render()
+                                      var value= Number($('[name="Order_Number"]').val()) 
+                                      $('[name="Order_Number"]').val(value + 1)
+                                      $('[name="Product_Material"]').val("")
+                                       $('[name="Product_Name"]').val("")
+                                      $('[name="Product_Output"]').val("")
+                                       $('#file').val("")
+                                      layer.close(index);
+                                }, function (index) {
+                                   
+                                    $(".layui-progress-bar").attr('lay-percent', 0)
+                                    element.render()
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭
+                                    parent.tableReload.reload({
+                                    })
+
+                                })
+
+
+
+                          
+
+                            }
+                            else {
+                                $(".layui-progress-bar").attr('lay-percent', 0)
+                                element.render()
+                                layer.alert(d)
+
+                            }
+                        },
+                        error: function (d) {
+                            $(".layui-progress-bar").attr('lay-percent', 0)
+                            element.render()
+                            layer.alert(d.responseText)
+
+
+                        },
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+                            //使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
+                            xhr.upload.addEventListener('progress', function (e) {
+                                console.log(e);
+                                //loaded代表上传了多少
+                                //total代表总数为多少
+                                var progressRate = (e.loaded / e.total) * 100 + '%';
+
+                                //通过设置进度条的宽度达到效果
+                                $(".layui-progress-bar").attr('lay-percent', progressRate)
+                                element.render()
+                            })
+
+                            return xhr;
+                        },
+
+                    })
+                }
+                return false;
+            });
+            form.on('switch(switch)', function (d) {
+                if (d.elem.checked) {
+                    $('[drawing]').remove()
+                    var html = '<div class="layui-form-item" select="select">' +
+                        '<label class="layui-form-label">关联订单<span style="color:red">*</span></label>' +
+                        '<div class="layui-input-block">' +
+                        '<select name="select" lay-verify="required" lay-filter="select">' +
+                        '<option value=""></option>' +
+
+                        '</select>' +
+                        '</div>' +
+                        '</div>'
+                    $('[switch]').after(html)
+                    $.ajax({
+                        url: '读生产订单.ashx',
+                        success: function (d) {
+                            var obj = JSON.parse(d)
+                            for (var i = 0; i < obj.length; i++) {
+                                $('[name="select"]').append(' <option value="' + obj[i] + '">' + obj[i] + '</option>')
+                            }
+                            form.render('select')
+                        }
+                    })
+                    form.render('select')
+                } else {
+                    $('[select]').remove()
+                     $('[name="Product_Name"]').val("").removeAttr('readonly')
+                        $('[name="Product_Material"]').val("").removeAttr('readonly')
+                    var html = '<div class="layui-form-item" drawing="drawing">' +
+                        '<label class="layui-form-label">产品图纸<span style="color:red">*</span></label>' +
+                        '<div class="layui-input-block">' +
+                        '<input lay-verify="required" id="file" type="file" class="layui-input" multiple="multiple">' +
+                        '<div class="layui-progress layui-progress-big" lay-showPercent="yes" style="">' +
+                        '<div class="layui-progress-bar layui-bg-blue" lay-percent="0"></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    $('[output]').before(html);
+                }
+            });
+            form.on('select(select)', function (d) {
+                
+                $.ajax({
+                    url: '生产订单关联读数据.ashx?orderNumber=' + d.value,
+                    success: function (d) {
+                        var obj = JSON.parse(d)
+                        $('[name="Product_Name"]').val(obj.Product_Name).attr('readonly',true)
+                        $('[name="Product_Material"]').val(obj.Product_Material).attr('readonly',true)
+                    }
+                })
+            })
+        });
+    </script>
+    <form class="layui-form">
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">产品订单号<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="number" type="text" name="Order_Number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+          <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">项目名称<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="projectName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">订单负责人<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Order_Leader" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+     <!--   <div class="layui-form-item" switch="switch"style="margin-right:15px">
+            <label class="layui-form-label">是否关联往期订单</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="switch" lay-skin="switch" lay-filter="switch">
+            </div>
+        </div>-->
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">客户名称<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Customer" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">产品名称<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Product_Name" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">产品材料<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="text" name="Product_Material" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" drawing="drawing"style="margin-right:15px">
+            <label class="layui-form-label">产品图纸<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" id="file" type="file" class="layui-input" multiple="multiple">
+                <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="">
+                    <div class="layui-progress-bar layui-bg-blue" lay-percent="0"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" output="output"style="margin-right:15px">
+            <label class="layui-form-label">产品产量<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="number" type="text" name="Product_Output" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">计划时间<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input lay-verify="required" id="endDate" type="text" name="Order_Plan_End_Time" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">订单状态<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="radio" name="Order_State" value="执行" title="执行" checked>
+                <input type="radio" name="Order_State" value="停止" title="停止">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:15px">
+            <label class="layui-form-label">生产模式<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="radio" name="pattern" value="-1" title="大批量" >
+                <input type="radio" name="pattern" value="1" title="小批量" checked>
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="text-align:center">
+            <div class="layui-input-block"style="margin-left:0">
+                <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+
+    </form>
+</body>
+</html>

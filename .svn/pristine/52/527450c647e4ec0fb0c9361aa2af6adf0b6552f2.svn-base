@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <!--<input style="margin-left:1%;" id="file" type="file" >
+    <button id="upload" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-upload"></i>重新上传</button>-->
+    <table id="demo" lay-filter="test"></table>
+    <p id="number" hidden></p>
+    <p id="processId" hidden></p>
+    <script type="text/html" id="barDemo">
+        <a><span class="layui-btn layui-btn-xs" lay-event="downLoad"><i class="layui-icon layui-icon-download-circle"></i>下载</span></a>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+    <script id="toolbarDemo">
+        <div class="layui-btn-container">
+
+        </div>
+    </script>
+    <script>
+        function method(d, processId) {
+            $("#processId").text(processId)
+            layui.use('table', function () {
+                var table = layui.table, $ = layui.$;
+                $('#number').text(d)
+                //第一个实例
+                reload = table.render({
+                    elem: '#demo'
+                    , height: 312
+                    , url: 'toolChartFileRead.ashx'
+                    , page: true,
+                    //toolbar: '#toolbarDemo',
+                    where: { number: d }
+                    , cols: [[ //表头
+                        { field: 'number', type: 'numbers', title: '编号', width: '10%', fixed: 'left' }
+                        , { field: 'fileName', title: '文件名', width: '30%' }
+                        , { field: 'fileSize', title: '文件大小', width: '30%' }
+                        , { field: 'filePath', title: '文件路径', width: '30%', hide: true }
+                        , { field: 'toolbar', title: '操作', width: '30%', toolbar: '#barDemo' }
+                    ]]
+                });
+
+            });
+
+        }
+    </script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+
+            $(function () {
+                $("#upload").click(function () {
+                    var formData = new FormData();
+                    var file = $("#file")[0].files
+
+                    if (file.length == 0) {
+                        layer.alert("请选择文件")
+                    } else {
+                        for (var i = 0; i < file.length; i++) {
+                            formData.append("file" + i, file[i])
+                        }
+                        formData.append('number', $("#number").text())
+                         formData.append('processId', $("#processId").text())
+                      
+                        $.ajax({
+                            url: 'uploadToolChartFile.ashx',
+                            data: formData,
+                            type: 'post',
+                            processData: false,
+                            contentType: false,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("上传成功", { icon: 1, time: 1000 }, function () {
+                                        reload.reload({
+
+                                        })
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                            }
+                        })
+                    }
+                })
+            })
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        $.ajax({
+                            url: 'fileDelete.ashx',
+                            data: { 'number': data.filePath },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        reload.reload({})
+                                    })
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'downLoad') {
+                    $('#110').remove();
+                    var number = $('#number').text();
+                    $.ajax({
+                        url: '../downLoadPathRead.ashx',
+                        success: function (d) {
+                            var http = d;
+                            var path = http + number + '/刀具表/' + data.fileName;
+                            var button = '<a href="' + path + '" download="' + data.fileName + '"><button id="110" hidden>1</button></a>';
+                            $('body').append(button);
+                            $('#110').click();
+                        }
+                    })
+
+                }
+            });
+        })
+    </script>
+</body>
+</html>

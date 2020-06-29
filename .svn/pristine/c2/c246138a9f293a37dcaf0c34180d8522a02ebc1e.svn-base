@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>环形流程图</title>
+
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="contenedor">
+        <div class="ciclo1">
+            <a class="sc_object">A</a>
+            <a class="sc_object">B</a>
+            <a class="sc_object">C</a>
+            <a class="sc_object">D</a>
+            <a class="sc_object">E</a>
+            <a class="sc_object">F</a>
+            <a class="sc_center">center</a>
+        </div>
+    </div>
+    <div class="btn add">Add</div>
+
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/smartCycle.min.js"></script>
+    <script>
+ var radio = 160;
+ var radio_arrows =140;
+ var container_width = 420, container_height=420;
+ var c_container_width = 420, c_container_height=420;
+
+
+$(".ciclo1").smartCycle({
+	container_width: '420px',
+	container_height: '420px',
+	radio: radio,
+	radio_arrows: radio_arrows,
+	arrows_colors:['#40A4C0'],
+	colors:['#928fa2','#928fa2']
+});
+
+var alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+var alphabet_pos =6;
+
+
+$(".add").click(function(){
+
+	$(".ciclo1").append('<a class="sc_object">'+alphabet[alphabet_pos]+'</a>');
+
+	radio+=25;
+	radio_arrows+=25;
+	container_width+=50;
+	container_height+=50;
+
+	c_container_width+=50;
+	c_container_height+=50;
+
+	$(".contenedor").css({
+		'width':c_container_width+'px',
+		'height':c_container_height+'px'
+	});
+
+	$(".ciclo1").smartCycle('options',{'radio': radio, 'radio_arrows': radio_arrows, 'container_width': container_width+'px',
+	'container_height': container_height+'px',});
+
+
+
+	$(".ciclo1").smartCycle('realign');
+
+	alphabet_pos+=1;
+
+});
+
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+   
+    <script>
+        fun()
+       
+        function fun() {
+            source = new EventSource('a.ashx')
+            source.onmessage = function (event) {
+            //console.log(event)
+                $('body').append(event.data)
+               
+            }
+
+            source.onerror = function (event) {
+              console.log(event)
+            };
+
+        }
+     
+    </script>
+</body>
+</html>

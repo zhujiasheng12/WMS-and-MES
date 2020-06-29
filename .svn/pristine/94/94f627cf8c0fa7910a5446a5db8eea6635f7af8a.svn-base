@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../../../Resources/js/jquery-3.3.1.js"></script>
+    <link href="../../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+   
+    <script type="text/html" id="switchTpl">
+        <!-- 这里的 checked 的状态只是演示 -->
+        <input type="checkbox" name="sex" value="{{d.MaintenanceEnable}}" lay-skin="switch" lay-text="开|关" lay-filter="sexDemo" {{ d.MaintenanceEnable == 1 ? 'checked' : '' }}>
+    </script>
+    <script>
+        layui.use(['table', 'form'], function () {
+            var table = layui.table;
+           
+            reload = table.render({
+                elem: '#demo'
+                
+                , url: '维保计划读数据.ashx' //数据接口
+                , page: true //开启分页
+                , toolbar: '#toolbarDemo'
+                , cols: [[ //表头
+                    { field: 'numbers', type: 'numbers', title: '序号', width: 40, fixed: 'left' }
+                    , { field: 'CncNum', title: '机床编号', width: 100 }
+                    , { field: 'MaintenanceContence', title: '维保内容', width: 160, sort: true }
+                    , {
+                        field: 'MaintenacneCycleStr', title: '维保周期', width: 100
+                    }
+                    , { field: 'MaintenanceTime', title: '本次维保计划开始时间', width: 177, }
+                    , { field: 'NextMaintenTime', title: '下次计划维保时间', width: 177, }
+                    , { field: 'days', title: '维保计划剩余时间', width: 177, }
+                    , {
+                        field: 'MaintenanceGuide', title: '维保指导', width: 160, templet: function (d) {
+                            var html='<div class="layui-progress layui-progress-big" lay-showPercent="yes">'+
+                           '<div class="layui-progress-bar" lay-percent="'+d.MaintenanceGuide*100+'%"></div>'+
+                         '</div>'
+                            return html;
+                        }
+                    }
+                      , { field: 'do', title: '操作', width: 135, toolbar: '#barDemo' }
+                    , {
+                        field: 'MaintenanceEnable', title: '维保使能', width: 140, templet: '#switchTpl',
+                    }
+                    
+                     , { field: 'MaintenacneID', title: 'id', width: 135, hide:true }
+                  
+                ]],
+                done: function (d) {
+
+                    {
+                       
+                    }
+
+
+
+                var arr=   $('td[data-field="MaintenanceEnable"]')
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].children[0].innerText == "关") {
+                            
+                            $(arr[i]).siblings('td[data-field="do"]').find('button[lay-event="confirm"]').addClass('layui-btn-disabled').attr('disabled',"true")
+                        }
+                    }
+
+
+
+                    layui.use('element', function () {
+                        var element = layui.element;
+                        element.init()
+                    });
+                    var td = $('td[data-field="days"]'); 
+
+                    for (var i = 0; i < td.length; i++) {
+                        $(td[i]).siblings('td[data-field="do"]').find('button[lay-event="confirm"]').addClass('layui-btn-disabled').attr('disabled', "true")
+
+                        if (td[i].children[0].innerText == "0天") {
+                            $(td[i]).css({ 'background-color': 'yellow', 'color': 'black' })
+                            $(td[i]).siblings('td[data-field="do"]').find('button[lay-event="confirm"]').removeClass('layui-btn-disabled').removeAttr('disabled', "true")
+
+                        }
+                        if (td[i].children[0].innerText.indexOf('-') != -1) {
+                            $(td[i]).css({ 'background-color': 'red', 'color': 'white' })
+                            $(td[i]).siblings('td[data-field="do"]').find('button[lay-event="confirm"]').removeClass('layui-btn-disabled').removeAttr('disabled', "true")
+                        }
+                        if (td[i].children[0].innerText == "1天"|td[i].children[0].innerText == "2天") {
+                            $(td[i]).siblings('td[data-field="do"]').find('button[lay-event="confirm"]').removeClass('layui-btn-disabled').removeAttr('disabled', "true")
+                             $(td[i]).css({ 'background-color': 'yellow', 'color': 'black' })
+                        }
+
+
+
+                    }
+
+                    var guid = $("td[data-field='MaintenanceGuide']")
+                    for (var i = 0; i < guid.length; i++) {
+                        var dd = $(guid[i]).find('.layui-progress-bar').attr('lay-percent')
+                        var ss = dd.substring(0, dd.length - 1);
+                        if (ss > 100) {
+                            $(guid[i]).siblings('td[data-field="days"]').css({ 'background-color': 'red', 'color': 'white' })
+                        }
+                    }
+                }
+            });
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'create':
+                        layer.open({
+                            type: 2,
+                            area: ['70%', '70%'],
+                            content: '创建维保计划弹窗.html',
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                console.log(body.html()); //得到iframe页的body内容
+                               
+                            }
+                        });
+                        break;
+                    case 'import':
+                        alert(123)
+                        break;
+                };
+            });
+
+            layui.form.on('switch(sexDemo)', function (obj) {
+                var MaintenanceEnable = obj.value;
+                if (MaintenanceEnable == "0") {
+                    MaintenanceEnable = "1"
+                } else {
+                    MaintenanceEnable = "0"
+                }
+                var MaintenacneID = $(obj.othis[0]).parents('td[data-field="MaintenanceEnable"]').siblings('td[data-field="MaintenacneID"]')[0].children[0].innerText
+                $.ajax({
+                    url: '使能开关.ashx',
+                    data: { 'MaintenanceEnable': MaintenanceEnable, 'MaintenacneID': MaintenacneID }
+                    , success: function (d) {
+                        if (d == "ok") {
+                            reload.reload({})
+                        }
+                    }
+                })
+            });
+
+             //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'confirm') {
+               
+                    layer.confirm("是否已完成此次维保", function () {
+                        
+                        $.ajax({
+                            url: '../../../人员管理/session/Jurisdiction.ashx',
+                            success: function (dd) {
+                                var obj1 = JSON.parse(dd)
+                               
+                                $.ajax({
+                                    url: '确认提交.ashx',
+                                    data: { "MaintenacneID": data.MaintenacneID, "staffId": obj1.id },
+                                    success: function (d) {
+                                        if (d == "ok") {
+                                            layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                                reload.reload({})
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    })
+                } else if (obj.event === 'edit') {
+                          
+                        
+                     layer.open({
+                            type: 2,
+                            area: ['70%', '70%'],
+                            content: '维保计划修改弹窗.html',
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                              iframeWin.method(data.MaintenacneID)
+                               
+                            }
+                        });
+                   
+                }
+            });
+
+        });
+    </script>
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-xs" lay-event="confirm">完成</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit">修改</button>
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-row">
+           
+            
+            <div class="layui-col-md4">
+                <button class="layui-btn layui-btn-sm" lay-event="create" style="float:left">创建</button>
+                <button class="layui-btn layui-btn-sm" lay-event="import" style="float:left">导入</button>
+            </div>
+            <!--<div class="layui-col-md5">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="">搜索</label>
+                    <div class="layui-form">
+                        <div class="layui-input-block">
+                            <select id="search" lay-verify="" lay-search style="">
+                                <option value="">请选择一个城市</option>
+                                <option value="010">北京</option>
+                                <option value="021">上海</option>
+                                <option value="0571">杭州</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+   
+
+    <link href="../../../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../../../Resources/js/easyui/jquery.easyui.min.js"></script>
+    <script src="../../../Resources/js/layer-v3.1.1/layer/layer.js"></script>
+    <link href="../../../Resources/js/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+
+    <script src="../../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="../../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+
+</head>
+<body style="background-color:#F0F0F0;padding:0.8%">
+    <div class="layui-header" style="background-color:white;left:220px">
+
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+
+        <div class="layui-row">
+            <div class="layui-col-md3" style="text-align:center">
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-md9">
+                        <!--<button class="layui-btn" style="float:left" onclick="location.reload()">刷新</button>-->
+                        <label style="float:right"><font id="" size="6" face="arial " style="">正在加工机台数</font></label>
+                    </div>
+                    <div class="layui-col-md3 layui-col-space10">
+                        <p style="float:left"><font id="machining" size="10" face="arial " style="color:#F8B62D;"></font></p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-col-md3" style="text-align:center">
+
+
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-md9">
+                        <label style="float:right"><font id="" size="6" face="verdana" style="">可备料机台数</font></label>
+                    </div>
+                    <div class="layui-col-md3">
+                        <p style="float:left"><font id="spareParts" size="10" face="verdana" style=" color:red"></font></p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4" style="text-align:center">
+
+
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-md9">
+                        <label style="float:right"><font id="" size="6" face="verdana" style="">停机待换料机台数</font></label>
+                    </div>
+                    <div class="layui-col-md3">
+                        <p style="float:left"><font id="Refueling" size="10" face="verdana" style=" color:red"></font></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll" style="background-color:white">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <table id="tt" style="width:100%;"></table>
+        </div>
+    </div>
+    <div class="layui-body"style="top:60px">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <table id="demo" lay-filter="test"></table>
+        </div>
+    </div>
+
+
+    <script>
+        $('#tt').treegrid({
+            url: 'PositionHandler.ashx',
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+            rownumbers: true,
+
+            columns: [[
+                { title: '位置名称', field: 'name', width: '100%' },
+                //{ field: 'hierarchy', title: '位置层级', width: 60, align: 'right' },
+                //{ field: 'team', title: '组织机构名称', width: 150 },
+                //{ field: 'state1', title: '状态', width: 80 },
+                { field: 'id', title: 'id', width: 80, hidden: true },
+
+            ]],
+
+        });
+
+        $('#tt').treegrid({
+
+            onLoadSuccess: function (data) {
+
+                $('td').css('border','none')
+                $('.panel-body').css('border-color', 'white')
+                $(".tree-icon,.tree-file").removeClass("tree-file");
+                $(".tree-icon,.tree-folder").removeClass("tree-folder-open tree-folder");
+                $('[node-id="67"]').find('[field="action"]').hide()
+                $(".datagrid-view1").remove()
+               
+                $('tr').click(function () {
+                    var LocationID = $(this).children('td[field="id"]')[0].children[0].innerText
+                    layui.use('table', function () {
+                        var table = layui.table;
+
+                        //第一个实例
+                        table.render({
+                            elem: '#demo'
+
+                            , url: '区域显示读机床.ashx?LocationID=' + LocationID
+                            , page: true //开启分页
+                            , cols: [[ //表头
+                                { field: 'numbers', type: 'numbers', title: '序号', width: 80, fixed: 'left' }
+                                , { field: 'cncNum', title: '机床编号', width: 180, }
+                                , { field: 'doingProcess', title: '正在进行订单及工序', width: 180, }
+                                , { field: 'waitingProcess', title: '等待加工订单及工序', width: 180 }
+                                , { field: 'surplusNumber', title: '机台当前订单剩余量', width: 177 }
+                                , { field: 'doingFileName', title: '正在加工文件名', width: 180, }
+                                , { field: 'waitingFileName', title: '等待加工文件名', width: 180, }
+                                , {
+                                    field: 'progress', title: '当前任务完成进度', width: 180, templet: function (d) {
+                                        var data = d.progress * 100 + "%"
+                                        return '<div class="layui-progress layui-progress-big"  lay-showPercent="yes">' +
+                                            '<div class="layui-progress-bar " lay-percent="' + data + '"></div>' +
+                                            '</div>'
+                                    }
+                                }
+
+                            ]],
+                            done: function (d) {
+                                if (d.data.length == 0) {
+                                    $('#machining').text(0)
+                                    $('#spareParts').text(0)
+                                    $('#Refueling').text(0)
+                                } else {
+                                     $('#machining').text(d.data[0].RunMachNum)
+                                    $('#spareParts').text(d.data[0].Mach80Num)
+                                    $('#Refueling').text(d.data[0].mach100Num)
+                                }
+                               
+                                layui.use('element', function () {
+                                    var element = layui.element;
+                                    element.init()
+                                });
+
+                                var arr = $('td[data-field="progress"]')
+                                for (var i = 0; i < arr.length; i++) {
+                                    var data = $(arr[i]).find('.layui-progress-bar').attr('lay-percent')
+                                    var substring = data.substring(0, data.length - 1)
+                                    if (substring >= 100) {
+                                        $(arr[i]).find('.layui-progress-bar').addClass('layui-bg-red')
+                                    } else if (substring >= 80) {
+                                        $(arr[i]).find('.layui-progress-bar').addClass('layui-bg-yellow')
+                                    } else {
+                                        $(arr[i]).find('.layui-progress-bar').addClass('layui-bg-green')
+                                    }
+                                }
+                            }
+                        });
+
+                    });
+                })
+                 $('tr')[1].click()
+            }
+        });
+        $(function () {
+
+
+        })
+    </script>
+
+</body>
+</html>

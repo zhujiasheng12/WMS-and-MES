@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KnifeAdminModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BadHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserDepartment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeDepartment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeSpecification" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BadNumber" Type="Int32" />
+    <Property Name="BadTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="BorrowHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserDepartment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="KnifeDepartment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="KnifeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="KnifeSpecification" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BorrowNumber" Type="Int32" Nullable="false" />
+    <Property Name="ReturnNumber" Type="Int32" Nullable="false" />
+    <Property Name="BadNumber" Type="Int32" Nullable="false" />
+    <Property Name="FinishTime" Type="DateTime" Precision="3" />
+    <Property Name="BorrowTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NewOldKnife" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="project" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="GetHistory">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KnifeDepartment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeSpecifications" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Time" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="KnifeStock">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KnifeSpecifications" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AllKnife" Type="Int32" />
+    <Property Name="NewKnife" Type="Int32" />
+    <Property Name="OldKnife" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserPassword">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="ToolAdminEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BadHistory" EntityType="Self.BadHistory" />
+    <EntitySet Name="BorrowHistory" EntityType="Self.BorrowHistory" />
+    <EntitySet Name="GetHistory" EntityType="Self.GetHistory" />
+    <EntitySet Name="KnifeStock" EntityType="Self.KnifeStock" />
+    <EntitySet Name="UserPassword" EntityType="Self.UserPassword" />
+  </EntityContainer>
+</Schema>
