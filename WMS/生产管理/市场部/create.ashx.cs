@@ -99,8 +99,9 @@ namespace WebApplication2.Model.生产管理.市场部
                                 CtratPersonID = loginID,
                                 Priority = priority,
                                 CreateTime = DateTime.Now,
-                                CreatePersonID = loginID
-
+                                CreatePersonID = loginID,
+                                AuditResult ="待审核"
+                                
                             };
                             entities.JDJS_WMS_Order_Entry_Table.Add(row);
                             entities.SaveChanges();
@@ -200,8 +201,9 @@ namespace WebApplication2.Model.生产管理.市场部
                                                         CreatePersonID = loginID,
                                                         Order_State = OrderState,
                                                         virtualProgPersId = OldOrderInfo.FirstOrDefault().virtualProgPersId,
-                                                        virtualReturnTime = OldOrderInfo.FirstOrDefault().virtualReturnTime
-
+                                                        virtualReturnTime = OldOrderInfo.FirstOrDefault().virtualReturnTime,
+                                                       // audit_Result = "待审核",
+                                                        AuditResult ="待审核"
                                                     };
                                                     wms.JDJS_WMS_Order_Entry_Table.Add(orderentry);
                                                     wms.SaveChanges();

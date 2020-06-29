@@ -118,8 +118,8 @@
           <Property Name="AlarmStateID" Type="int" />
           <Property Name="MaintenanceStaff" Type="varchar(max)" />
           <Property Name="MaintenanceDesc" Type="varchar(max)" />
-          <Property Name="OrderNumber" Type="bigint" />
           <Property Name="ReportStaff" Type="varchar(max)" />
+          <Property Name="OrderNumber" Type="bigint" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Device_Borrow_Info">
           <Key>
@@ -575,11 +575,13 @@
           <Property Name="audit_Result" Type="varchar(max)" />
           <Property Name="ProofingORProduct" Type="int" />
           <Property Name="program_audit_result" Type="varchar(max)" />
-          <Property Name="ProjectName" Type="varchar(max)" />
           <Property Name="CtratPersonID" Type="int" />
           <Property Name="Priority" Type="int" />
+          <Property Name="ProjectName" Type="varchar(max)" />
           <Property Name="CreateTime" Type="datetime" />
           <Property Name="CreatePersonID" Type="int" />
+          <Property Name="AuditResult" Type="varchar(max)" />
+          <Property Name="AuditAdvice" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -816,7 +818,7 @@
           <Property Name="parentId" Type="int" />
           <Property Name="users" Type="varchar" MaxLength="50" />
           <Property Name="password" Type="varchar" MaxLength="50" />
-          <Property Name="limit" Type="varchar" MaxLength="500" />
+          <Property Name="limit" Type="varchar(max)" />
           <Property Name="remark" Type="varchar" MaxLength="50" />
           <Property Name="mailbox" Type="varchar" MaxLength="50" />
           <Property Name="orderNumberId" Type="varchar(max)" />
@@ -1084,8 +1086,6 @@
           <Property Name="PassWords" Type="varchar" MaxLength="50" />
           <Property Name="Limit" Type="int" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“WmsAuto.dbo.JDJS_WMS_Warehouse_InBlank_History_Table”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="JDJS_WMS_Warehouse_InBlank_History_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1096,8 +1096,6 @@
           <Property Name="Time" Type="datetime" />
           <Property Name="PersonId" Type="int" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“WmsAuto.dbo.JDJS_WMS_Warehouse_InOut_History_Table”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="JDJS_WMS_Warehouse_InOut_History_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1107,8 +1105,6 @@
           <Property Name="InNum" Type="float" />
           <Property Name="OutNum" Type="float" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“WmsAuto.dbo.JDJS_WMS_Warehouse_OutBlank_History_Table”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="JDJS_WMS_Warehouse_OutBlank_History_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1354,9 +1350,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_JDJS_WMS_Device_Info_JDJS_WMS_Location_Info">
-          <End Role="JDJS_WMS_Location_Info" Type="Self.JDJS_WMS_Location_Info" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="JDJS_WMS_Location_Info" Type="Self.JDJS_WMS_Location_Info" Multiplicity="0..1" />
           <End Role="JDJS_WMS_Device_Info" Type="Self.JDJS_WMS_Device_Info" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="JDJS_WMS_Location_Info">
@@ -1967,32 +1961,9 @@
           <EntitySet Name="JDJS_WMS_ToolHolder_Tool_Table" EntityType="Self.JDJS_WMS_ToolHolder_Tool_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_ToolHolder_ToolLife_History_Table" EntityType="Self.JDJS_WMS_ToolHolder_ToolLife_History_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Users_Login_Info" EntityType="Self.JDJS_WMS_Users_Login_Info" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="JDJS_WMS_Warehouse_InBlank_History_Table" EntityType="Self.JDJS_WMS_Warehouse_InBlank_History_Table" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [JDJS_WMS_Warehouse_InBlank_History_Table].[ID] AS [ID], 
-    [JDJS_WMS_Warehouse_InBlank_History_Table].[Process] AS [Process], 
-    [JDJS_WMS_Warehouse_InBlank_History_Table].[InNum] AS [InNum], 
-    [JDJS_WMS_Warehouse_InBlank_History_Table].[Time] AS [Time], 
-    [JDJS_WMS_Warehouse_InBlank_History_Table].[PersonId] AS [PersonId]
-    FROM [dbo].[JDJS_WMS_Warehouse_InBlank_History_Table] AS [JDJS_WMS_Warehouse_InBlank_History_Table]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="JDJS_WMS_Warehouse_InOut_History_Table" EntityType="Self.JDJS_WMS_Warehouse_InOut_History_Table" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [JDJS_WMS_Warehouse_InOut_History_Table].[ID] AS [ID], 
-    [JDJS_WMS_Warehouse_InOut_History_Table].[ProcessId] AS [ProcessId], 
-    [JDJS_WMS_Warehouse_InOut_History_Table].[InNum] AS [InNum], 
-    [JDJS_WMS_Warehouse_InOut_History_Table].[OutNum] AS [OutNum]
-    FROM [dbo].[JDJS_WMS_Warehouse_InOut_History_Table] AS [JDJS_WMS_Warehouse_InOut_History_Table]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="JDJS_WMS_Warehouse_OutBlank_History_Table" EntityType="Self.JDJS_WMS_Warehouse_OutBlank_History_Table" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [JDJS_WMS_Warehouse_OutBlank_History_Table].[ID] AS [ID], 
-    [JDJS_WMS_Warehouse_OutBlank_History_Table].[Process] AS [Process], 
-    [JDJS_WMS_Warehouse_OutBlank_History_Table].[OutNum] AS [OutNum], 
-    [JDJS_WMS_Warehouse_OutBlank_History_Table].[Time] AS [Time], 
-    [JDJS_WMS_Warehouse_OutBlank_History_Table].[PersonId] AS [PersonId]
-    FROM [dbo].[JDJS_WMS_Warehouse_OutBlank_History_Table] AS [JDJS_WMS_Warehouse_OutBlank_History_Table]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="JDJS_WMS_Warehouse_InBlank_History_Table" EntityType="Self.JDJS_WMS_Warehouse_InBlank_History_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Warehouse_InOut_History_Table" EntityType="Self.JDJS_WMS_Warehouse_InOut_History_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Warehouse_OutBlank_History_Table" EntityType="Self.JDJS_WMS_Warehouse_OutBlank_History_Table" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__JDJS_WMS___CncID__09746778" Association="Self.FK__JDJS_WMS___CncID__09746778">
             <End Role="JDJS_WMS_Device_Info" EntitySet="JDJS_WMS_Device_Info" />
             <End Role="JDJS_WMS_Device_Alarm_History_Table" EntitySet="JDJS_WMS_Device_Alarm_History_Table" />
@@ -3158,6 +3129,8 @@
           <NavigationProperty Name="JDJS_WMS_Order_Process_Info_Table" Relationship="Model.FK_JDJS_WMS_Order_Process_Info_Table_JDJS_WMS_Order_Entry_Table" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Order_Process_Info_Table" />
           <NavigationProperty Name="JDJS_WMS_Order_Queue_Table" Relationship="Model.FK_JDJS_WMS_Order_Queue_Table_JDJS_WMS_Order_Entry_Table" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Order_Queue_Table" />
           <NavigationProperty Name="JDJS_WMS_Quality_Confirmation_History_Table" Relationship="Model.FK_JDJS_WMS_Quality_Confirmation_History_Table_JDJS_WMS_Order_Entry_Table" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Quality_Confirmation_History_Table" />
+          <Property Name="AuditResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuditAdvice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -3423,7 +3396,7 @@
           <Property Name="parentId" Type="Int32" />
           <Property Name="users" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="limit" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="limit" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="mailbox" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="orderNumberId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -5090,6 +5063,8 @@
           <EntitySetMapping Name="JDJS_WMS_Order_Entry_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Entry_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Order_Entry_Table">
+                <ScalarProperty Name="AuditAdvice" ColumnName="AuditAdvice" />
+                <ScalarProperty Name="AuditResult" ColumnName="AuditResult" />
                 <ScalarProperty Name="CreatePersonID" ColumnName="CreatePersonID" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />

@@ -3387,6 +3387,12 @@
     <Compile Include="生产管理\市场部\pushDown.ashx.cs">
       <DependentUpon>pushDown.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\市场部\审核不通过确认.ashx.cs">
+      <DependentUpon>审核不通过确认.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\市场部\审核订单.ashx.cs">
+      <DependentUpon>审核订单.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\市场部\导出表.ashx.cs">
       <DependentUpon>导出表.ashx</DependentUpon>
     </Compile>
@@ -3404,6 +3410,9 @@
     </Compile>
     <Compile Include="生产管理\市场部\插单管理提交.ashx.cs">
       <DependentUpon>插单管理提交.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\市场部\查看订单审核情况.ashx.cs">
+      <DependentUpon>查看订单审核情况.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\市场部\生产订单关联读数据.ashx.cs">
       <DependentUpon>生产订单关联读数据.ashx</DependentUpon>
@@ -4218,6 +4227,9 @@
     <Content Include="生产管理\市场部\由项目名称获取客户名称和订单负责人.ashx" />
     <Content Include="生产管理\工程部\装夹示意图\del.ashx" />
     <Content Include="生产管理\工程部\装夹示意图\upload.ashx" />
+    <Content Include="生产管理\市场部\审核订单.ashx" />
+    <Content Include="生产管理\市场部\查看订单审核情况.ashx" />
+    <Content Include="生产管理\市场部\审核不通过确认.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

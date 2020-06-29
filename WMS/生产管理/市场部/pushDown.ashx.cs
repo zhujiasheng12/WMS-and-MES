@@ -23,10 +23,6 @@ namespace WebApplication2.生产管理.市场部
                 for (int i = 0; i < form.Count-1; i++)
                 {
                     var orderId = int.Parse(form[i]);
-
-
-
-                    
                     if (str == "下推")
                     {
                         var output = Convert.ToInt32(context.Request.Form["Product_Output"]);
@@ -47,7 +43,7 @@ namespace WebApplication2.生产管理.市场部
                             context.Response.Write("已下推");
                             return;
                         }
-
+                        row.First().AuditResult = "待审核";
                         row.First().Intention = 3;
                         row.First().Product_Output = output;
                         row.First().ProofingORProduct = pattern;

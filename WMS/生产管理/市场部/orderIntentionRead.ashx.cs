@@ -46,7 +46,7 @@ namespace WebApplication2.Model.生产管理.市场部
                                orders.virtualReturnTime,
                                orders.ProjectName ,
                                 orders .Priority ,
-                                
+                                orders.AuditResult ,
                                 client.ClientName
                            };
 
@@ -84,6 +84,7 @@ namespace WebApplication2.Model.生产管理.市场部
                     //virtualReturnTime = (time *( item.Product_Output==null?1:Convert.ToInt32 (item.Product_Output ))).ToString ();
                     order.Add(new OrderRead
                     {
+                        audit =item.AuditResult ==null?"":item.AuditResult,
                         Engine_Program_Manager = item.Engine_Program_Manager,
                         Order_Number = item.Order_Number.ToString(),
                         Engine_Status = item.Engine_Status,

@@ -22,6 +22,7 @@ namespace WebApplication2.生产管理.市场部
                     foreach (var order in orders)
                     {
                         OrderProcessRead orderProcessRead = new OrderProcessRead();
+                        orderProcessRead.audit = order.AuditResult == null ? "" : order.AuditResult;
                         orderProcessRead.orderName = order.Product_Name;
                         orderProcessRead.projectName = order.ProjectName;
                         orderProcessRead.OrderID = order.Order_ID.ToString();
@@ -273,6 +274,7 @@ namespace WebApplication2.生产管理.市场部
     }
     public class OrderProcessRead
     {
+        public string audit;
         /// <summary>
         /// 订单主键ID
         /// </summary>

@@ -33,6 +33,7 @@ namespace WebApplication2.Model.生产管理.市场部
                     {
                         order.Add(new OrderRead
                         {
+                            audit = item.AuditResult == null ? "" : item.AuditResult,
                             Engine_Program_Manager = item.Engine_Program_Manager,
                             Order_Number = item.Order_Number.ToString(),
                             Engine_Status = item.Engine_Status,
@@ -47,10 +48,10 @@ namespace WebApplication2.Model.生产管理.市场部
                             Order_State = Order_State.ToString(),
                             Engine_Technology_Manager = item.Engine_Technology_Manager,
                             craftPerson = item.craftPerson,
-                            projectName =item.ProjectName ,
+                            projectName = item.ProjectName,
                             Priority = item.Priority.ToString(),
                             clientName = clientName
-                        });
+                        }) ;
                     }
       
                 }
@@ -95,6 +96,7 @@ namespace WebApplication2.Model.生产管理.市场部
     }
     class OrderRead
     {
+        public string audit;
         public string Order_ID;
         public string Order_Number;
         public string Order_Leader;

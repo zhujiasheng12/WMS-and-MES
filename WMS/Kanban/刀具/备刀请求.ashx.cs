@@ -17,12 +17,12 @@ namespace WebApplication2.Kanban.刀具
 
             using (JDJS_WMS_DB_USEREntities CIE = new JDJS_WMS_DB_USEREntities())
             {
-                using (System.Data.Entity.DbContextTransaction mytran = CIE.Database.BeginTransaction())
+               // using (System.Data.Entity.DbContextTransaction mytran = CIE.Database.BeginTransaction())
                 {
-                    try
+                    //try
                     {
-                        var orders = CIE.JDJS_WMS_Order_Queue_Table.Where(r => r.isFlag != 0);
-
+                        var orders = CIE.JDJS_WMS_Order_Process_Info_Table.Where(r => r.toolPreparation == 0);
+                        //var orders = CIE.JDJS_WMS_Order_Queue_Table.Where(r => r.isFlag != 0);
                         foreach (var item in orders)
                         {
                             var OrderNum = CIE.JDJS_WMS_Order_Entry_Table.Where(R => R.Order_ID == item.OrderID).First();
@@ -128,23 +128,10 @@ namespace WebApplication2.Kanban.刀具
 
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        mytran.Rollback();
-                    }
 
 
                 }
             }
-
-
-
-
-
-
-
-
             System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             var sort = toolReads.OrderBy(r => r.toolPreparation);
             var model = new { code = 0, data = sort.Where(r=>r.toolNumber>0) };

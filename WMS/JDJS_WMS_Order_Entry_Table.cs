@@ -63,6 +63,8 @@ namespace WebApplication2
         public Nullable<int> Priority { get; set; }
         public Nullable<System.DateTime> CreateTime { get; set; }
         public Nullable<int> CreatePersonID { get; set; }
+        public string AuditResult { get; set; }
+        public string AuditAdvice { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JDJS_WMS_Blank_Additional_History_Table> JDJS_WMS_Blank_Additional_History_Table { get; set; }
