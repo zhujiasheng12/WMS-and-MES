@@ -141,14 +141,6 @@ namespace WebApplication2.刀具管理.备刀管理
 
                 }
             }
-
-
-
-
-
-
-
-
             System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             var sort = toolReads.OrderBy(r => r.toolPreparation).ThenBy (r=>r.orderID).ThenBy (r=>r.processID ).ThenBy (r=>r.toolnumber );
             var model = new { code = 0, data = sort };
