@@ -25,10 +25,11 @@ namespace WebApplication2.刀具管理.备刀管理
 
                     if (item.toolPreparation != 1)
                     {
+                        var sch = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.ProcessID == item.ID).FirstOrDefault();
                         var order = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderID).FirstOrDefault();
-                        if (order != null)
+                        if (order != null&&sch!=null)
                         {
-                            str += order.Order_Number + "号订单" + processNum.ToString() + "序" + "待备刀"+"/r/n";
+                            str += order.Order_Number + "号订单" + processNum.ToString() + "序" + "待备刀"+"</br>";
                         }
                     }
                 }

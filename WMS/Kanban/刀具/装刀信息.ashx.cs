@@ -51,7 +51,7 @@ namespace WebApplication2.Kanban.刀具
             List<ToolInstallationRead> toolInstallationReads = new List<ToolInstallationRead>();
             using (JDJS_WMS_DB_USEREntities CIE = new JDJS_WMS_DB_USEREntities())
             {
-                using (System.Data.Entity.DbContextTransaction mytran = CIE.Database.BeginTransaction())
+                //using (System.Data.Entity.DbContextTransaction mytran = CIE.Database.BeginTransaction())
                 {
                     try
                     {
@@ -61,10 +61,13 @@ namespace WebApplication2.Kanban.刀具
                         {
                             List<string> toolsNo = new List<string>();
                             var toolStand = CIE.JDJS_WMS_Tool_Standard_Table.Where(r => r.MachTypeID == cnc.MachType).ToList();
+
                             foreach (var meal in toolStand)
                             {
                                 toolsNo.Add(meal.ToolID);
                             }
+                            var yizhuangTool = CIE.JDJS_WMS_Tool_Shank_Table.Where(r => r.CncID == cnc.ID);
+
                             var processInfo = CIE.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.CncID == cnc.ID && r.isFlag == 2).OrderBy(r => r.StartTime);
                             var OverProcess = CIE.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.ProcessID == processInfo.FirstOrDefault().ProcessID && r.isFlag != 0 && r.isFlag == 3);
                             int OverCount = OverProcess.Count();
@@ -75,7 +78,7 @@ namespace WebApplication2.Kanban.刀具
                                 List<JDJS_WMS_Order_Process_Tool_Info_Table> tool = new List<JDJS_WMS_Order_Process_Tool_Info_Table>();
                                 foreach (var real in tools)
                                 {
-                                    if (!toolsNo.Contains("T" + real.ToolNO.ToString()))
+                                    if (!toolsNo.Contains("T" + real.ToolNO.ToString())&&yizhuangTool.Where (r=>r.ToolNum==real.ToolNO).FirstOrDefault ()==null)
                                     {
                                         tool.Add(real);
                                     }
@@ -88,7 +91,7 @@ namespace WebApplication2.Kanban.刀具
                                     List<JDJS_WMS_Order_Process_Tool_Info_Table> nextTool = new List<JDJS_WMS_Order_Process_Tool_Info_Table>();
                                     foreach (var real in nextTools)
                                     {
-                                        if (!toolsNo.Contains("T" + real.ToolNO.ToString()))
+                                        if (!toolsNo.Contains("T" + real.ToolNO.ToString()) && yizhuangTool.Where(r => r.ToolNum == real.ToolNO).FirstOrDefault() == null)
                                         {
                                             nextTool.Add(real);
                                         }
@@ -224,7 +227,7 @@ namespace WebApplication2.Kanban.刀具
                                     List<JDJS_WMS_Order_Process_Tool_Info_Table> tool = new List<JDJS_WMS_Order_Process_Tool_Info_Table>();
                                     foreach (var real in tools)
                                     {
-                                        if (!toolsNo.Contains("T" + real.ToolNO.ToString()))
+                                        if (!toolsNo.Contains("T" + real.ToolNO.ToString()) && yizhuangTool.Where(r => r.ToolNum == real.ToolNO).FirstOrDefault() == null)
                                         {
                                             tool.Add(real);
                                         }
@@ -237,7 +240,7 @@ namespace WebApplication2.Kanban.刀具
                                         List<JDJS_WMS_Order_Process_Tool_Info_Table> nextTool = new List<JDJS_WMS_Order_Process_Tool_Info_Table>();
                                         foreach (var real in nextTools)
                                         {
-                                            if (!toolsNo.Contains("T" + real.ToolNO.ToString()))
+                                            if (!toolsNo.Contains("T" + real.ToolNO.ToString()) && yizhuangTool.Where(r => r.ToolNum == real.ToolNO).FirstOrDefault() == null)
                                             {
                                                 nextTool.Add(real);
                                             }
@@ -369,7 +372,7 @@ namespace WebApplication2.Kanban.刀具
                     catch (Exception ex)
                     {
                         context.Response.Write(ex.Message);
-                        mytran.Rollback();
+                        //mytran.Rollback();
                     }
                 }
             }
