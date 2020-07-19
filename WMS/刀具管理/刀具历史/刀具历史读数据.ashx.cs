@@ -73,10 +73,10 @@ namespace WebApplication2.刀具管理.刀具历史
                     var maxLife = "";
                     if(entities.JDJS_WMS_ToolHolder_ToolLife_History_Table.Where(r => r.ToolID == id).Count() > 0)
                     {
-                        nowLife = entities.JDJS_WMS_ToolHolder_ToolLife_History_Table.Where(r => r.ToolID == id).First().ToolCurrLife.ToString();
-                        maxLife= entities.JDJS_WMS_ToolHolder_ToolLife_History_Table.Where(r => r.ToolID == id).First().ToolMaxLife.ToString();
+                        nowLife = entities.JDJS_WMS_ToolHolder_ToolLife_History_Table.Where(r => r.ToolID == id).OrderByDescending (t=>t.Time).First().ToolCurrLife.ToString();
+                        maxLife= entities.JDJS_WMS_ToolHolder_ToolLife_History_Table.Where(r => r.ToolID == id).OrderByDescending(t => t.Time).First().ToolMaxLife.ToString();
                     }
-                    var KnifeSpecifications = entities.JDJS_WMS_Tool_Stock_History.Where(r => r.Id == item.ToolSpecifications).First().KnifeSpecifications.ToString();
+                    var KnifeSpecifications = entities.JDJS_WMS_Tool_Stock_History.Where(r => r.Id == item.ToolSpecifications).FirstOrDefault()==null?"": entities.JDJS_WMS_Tool_Stock_History.Where(r => r.Id == item.ToolSpecifications).FirstOrDefault().KnifeSpecifications==null?"": entities.JDJS_WMS_Tool_Stock_History.Where(r => r.Id == item.ToolSpecifications).FirstOrDefault().KnifeSpecifications.ToString();
                     tools.Add(new ToolHistory
                     {
                         toolId = toolIdentity,
