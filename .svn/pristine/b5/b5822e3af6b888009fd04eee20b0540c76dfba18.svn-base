@@ -67,7 +67,7 @@ namespace WebApplication2.生产管理.生产部
                                     }
                                     
                                     pro.notProcess = allBlankNum - (int)Math.Ceiling(doCount * (1.0) / moudel);
-                                    pro.processing = donow.Count();
+                                    pro.processing = 1;
                                     pro.processed = (int)Math.Ceiling(doCount * (1.0) / moudel);
                                     pruduction.processInfo.Add(pro);
                                     allBlankNum = allBlankNum * moudel;
