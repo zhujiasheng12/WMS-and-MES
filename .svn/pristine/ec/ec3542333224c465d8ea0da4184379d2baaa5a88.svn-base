@@ -1,0 +1,127 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using WebApplication2.生产管理.生产部.订单跟踪.Model;
+
+namespace WebApplication2.生产管理.生产部.订单跟踪
+{
+    /// <summary>
+    /// 市场下单 的摘要说明
+    /// </summary>
+    public class 市场下单 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var orderId =int.Parse ( context.Request.Form["orderId"]);
+            Order_Trace_Info order_Trace_Info = new Order_Trace_Info();
+            order_Trace_Info.ContentList = new List<Order_Trace_Content_Info>();
+            using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
+            {
+                var order = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).FirstOrDefault();
+                order_Trace_Info.Name = "市场下单";
+                Order_Trace_Content_Info info = new Order_Trace_Content_Info();
+                info.Content = "市场下单";
+                order_Trace_Info.IsOver = true;
+                info.Person = order.Order_Leader;
+                info.PlanEndTime = "-";
+                switch (order.Intention)
+                {
+                    case 2:
+                        if (order.AuditResult == "审核通过")
+                        {
+                            info.IsOver = true;
+                            info.EndTime = "-";
+                            var str= order.AuditAdvice.Split('\n');
+                            if (str.Length > 0)
+                            {
+                                int index= str.Last().IndexOf ("：");
+                                info.EndTime = str.Last().Substring(0, index);
+
+                            }
+                           
+                        }
+                        else
+                        {
+                            info.IsOver = false;
+
+                            info.EndTime = "-";
+                        }
+                        break;
+                    case 3:
+                        if (order.AuditResult == "审核通过")
+                        {
+                            info.IsOver = true;
+
+                            info.EndTime = "-";
+                            var str = order.AuditAdvice.Split('\n');
+                            if (str.Length > 0)
+                            {
+                                int index = str.Last().IndexOf("：");
+                                info.EndTime = str.Last().Substring(0, index);
+
+                            }
+                        }
+                        else
+                        {
+                            info.IsOver = false;
+
+                            info.EndTime = "-";
+                        }
+                        break;
+                    case 4:
+                        if (order.AuditResult == "审核通过")
+                        {
+                            info.IsOver = true;
+
+                            info.EndTime = "-";
+                            var str = order.AuditAdvice.Split('\n');
+                            if (str.Length > 0)
+                            {
+                                int index = str.Last().IndexOf("：");
+                                info.EndTime = str.Last().Substring(0, index);
+
+                            }
+                        }
+                        else
+                        {
+                            info.IsOver = false;
+
+                            info.EndTime = "-";
+                        }
+                        break;
+                    default:
+                        info.IsOver = false;
+                        info.EndTime = "-";
+                        break;
+                }
+
+                order_Trace_Info.ContentList.Add(info);
+
+
+            }
+            foreach (var item in order_Trace_Info.ContentList)
+            {
+                if (!item.IsOver)
+                {
+                    order_Trace_Info.IsOver = false;
+                }
+            }
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var json = serializer.Serialize(order_Trace_Info);
+
+            context.Response.Write(json);
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+
+    
+}

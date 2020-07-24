@@ -2470,6 +2470,7 @@
     <Content Include="生产管理\生产部\换产\换产.html" />
     <Content Include="生产管理\生产部\排产\排产.html" />
     <Content Include="生产管理\生产部\生产流程.html" />
+    <Content Include="生产管理\生产部\订单跟踪\index.html" />
     <Content Include="生产管理\维修部\报警历史\报警历史.html" />
     <Content Include="生产管理\维修部\报修管理.html" />
     <Content Include="生产管理\维修部\维保计划\维保计划修改弹窗.html" />
@@ -2862,6 +2863,12 @@
     </Compile>
     <Compile Include="JDJS_WMS_Warehouse_OutBlank_History_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kanban\2020.7.24\DownLoadTool.ashx.cs">
+      <DependentUpon>DownLoadTool.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Kanban\2020.7.24\OrderPragram.ashx.cs">
+      <DependentUpon>OrderPragram.ashx</DependentUpon>
     </Compile>
     <Compile Include="Kanban\test\Handler1.ashx.cs">
       <DependentUpon>Handler1.ashx</DependentUpon>
@@ -3477,6 +3484,17 @@
     <Compile Include="生产管理\生产部\生产流程读数据.ashx.cs">
       <DependentUpon>生产流程读数据.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\生产部\订单跟踪\Model\Order_Trace_Info.cs" />
+    <Compile Include="生产管理\生产部\订单跟踪\Model\Order_Trace_Work_Sche.cs" />
+    <Compile Include="生产管理\生产部\订单跟踪\市场下单.ashx.cs">
+      <DependentUpon>市场下单.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\订单跟踪\生产进度.ashx.cs">
+      <DependentUpon>生产进度.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\订单跟踪\读取订单.ashx.cs">
+      <DependentUpon>读取订单.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\生产部\读工序数量.ashx.cs">
       <DependentUpon>读工序数量.ashx</DependentUpon>
     </Compile>
@@ -3922,6 +3940,8 @@
     <Content Include="Kanban\缓冲区看板\今日出料.ashx" />
     <Content Include="Kanban\缓冲区看板\上下料今日概况.ashx" />
     <Content Include="libman.json" />
+    <Content Include="Kanban\2020.7.24\OrderPragram.ashx" />
+    <Content Include="Kanban\2020.7.24\DownLoadTool.ashx" />
     <None Include="packages.config" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />
@@ -4230,6 +4250,9 @@
     <Content Include="生产管理\市场部\审核订单.ashx" />
     <Content Include="生产管理\市场部\查看订单审核情况.ashx" />
     <Content Include="生产管理\市场部\审核不通过确认.ashx" />
+    <Content Include="生产管理\生产部\订单跟踪\市场下单.ashx" />
+    <Content Include="生产管理\生产部\订单跟踪\读取订单.ashx" />
+    <Content Include="生产管理\生产部\订单跟踪\生产进度.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
