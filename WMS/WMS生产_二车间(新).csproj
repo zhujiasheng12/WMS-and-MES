@@ -3489,6 +3489,9 @@
     <Compile Include="生产管理\生产部\订单跟踪\市场下单.ashx.cs">
       <DependentUpon>市场下单.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\生产部\订单跟踪\模糊搜索.ashx.cs">
+      <DependentUpon>模糊搜索.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\生产部\订单跟踪\生产进度.ashx.cs">
       <DependentUpon>生产进度.ashx</DependentUpon>
     </Compile>
@@ -4253,6 +4256,7 @@
     <Content Include="生产管理\生产部\订单跟踪\市场下单.ashx" />
     <Content Include="生产管理\生产部\订单跟踪\读取订单.ashx" />
     <Content Include="生产管理\生产部\订单跟踪\生产进度.ashx" />
+    <Content Include="生产管理\生产部\订单跟踪\模糊搜索.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
