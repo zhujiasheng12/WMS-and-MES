@@ -619,6 +619,17 @@
           <Property Name="CraftPersonID" Type="int" />
           <Property Name="SubmitTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="PlanEndTime" Type="datetime" />
+          <Property Name="PlanPersonID" Type="int" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="PersonID" Type="int" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Order_Process_Info_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1925,6 +1936,7 @@
           <EntitySet Name="JDJS_WMS_Order_Fixture_Manager_Table" EntityType="Self.JDJS_WMS_Order_Fixture_Manager_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Guide_Schedu_Table" EntityType="Self.JDJS_WMS_Order_Guide_Schedu_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Intention_History_Table" EntityType="Self.JDJS_WMS_Order_Intention_History_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table" EntityType="Self.JDJS_WMS_Order_Machine_Scheduing_Time_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Process_Info_Table" EntityType="Self.JDJS_WMS_Order_Process_Info_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Process_Information_Table" EntityType="Self.JDJS_WMS_Order_Process_Information_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Process_Scheduling_Table" EntityType="Self.JDJS_WMS_Order_Process_Scheduling_Table" Schema="dbo" store:Type="Tables" />
@@ -2496,6 +2508,7 @@
           <EntitySet Name="JDJS_WMS_Warehouse_InBlank_History_Table" EntityType="Model.JDJS_WMS_Warehouse_InBlank_History_Table" />
           <EntitySet Name="JDJS_WMS_Warehouse_OutBlank_History_Table" EntityType="Model.JDJS_WMS_Warehouse_OutBlank_History_Table" />
           <EntitySet Name="JDJS_WMS_Warehouse_InOut_History_Table" EntityType="Model.JDJS_WMS_Warehouse_InOut_History_Table" />
+          <EntitySet Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table" EntityType="Model.JDJS_WMS_Order_Machine_Scheduing_Time_Table" />
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -4481,6 +4494,17 @@
           <Property Name="InNum" Type="Double" />
           <Property Name="OutNum" Type="Double" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="PlanEndTime" Type="DateTime" Precision="3" />
+          <Property Name="PlanPersonID" Type="Int32" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="PersonID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5679,6 +5703,18 @@
                 <ScalarProperty Name="OutNum" ColumnName="OutNum" />
                 <ScalarProperty Name="InNum" ColumnName="InNum" />
                 <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Machine_Scheduing_Time_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Order_Machine_Scheduing_Time_Table">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="PlanPersonID" ColumnName="PlanPersonID" />
+                <ScalarProperty Name="PlanEndTime" ColumnName="PlanEndTime" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

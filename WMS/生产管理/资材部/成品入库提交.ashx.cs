@@ -21,7 +21,10 @@ namespace WebApplication2.生产管理.资材部
             using(JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
             {
                 var row = entities.JDJS_WMS_Finished_Product_Manager.Where(r => r.OrderID == orderId);
-                if (row.Count() > 0){
+                if (row.Count() > 0)
+                {
+                    var count =Convert .ToInt32 ( row.FirstOrDefault().warehousingNumber);
+                    count += warehousingNumber;
                     row.FirstOrDefault().waitForWarehousing -= (warehousingNumber+defectiveProductNumber);//待入库数
                     row.FirstOrDefault().warehousingNumber += warehousingNumber;//入库数
                     row.FirstOrDefault().stock += warehousingNumber;//库存数
@@ -43,6 +46,16 @@ namespace WebApplication2.生产管理.资材部
                         Time =DateTime .Now 
                     };
                     entities.JDJS_WMS_Finished_Defective_Product_In_History_Manager.Add(jd);
+
+                    var order = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        if (count >= order.Product_Output)
+                        {
+                            order.Intention = 4;
+                            order.Order_Actual_End_Time = DateTime.Now;
+                        }
+                    }
                 }
                 entities.SaveChanges();
                 context.Response.Write("ok");

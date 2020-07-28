@@ -77,7 +77,7 @@ namespace WebApplication2.Model.生产管理.市场部
                                 Product_Material = form[4],
                                 Product_Output = int.Parse(form[5]),
                                 ProjectName =projectName ,
-                                 CtratPersonID =loginUserId  ,
+                                CtratPersonID =loginUserId  ,
                                 Priority =priority ,
                                 Intention = 5,//意向未提交
                                 CreateTime = DateTime.Now,

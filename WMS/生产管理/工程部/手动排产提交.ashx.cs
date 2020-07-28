@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
 
 namespace WebApplication2.生产管理.工程部
 {
     /// <summary>
     /// 手动排产提交 的摘要说明
     /// </summary>
-    public class 手动排产提交 : IHttpHandler
+    public class 手动排产提交 : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
@@ -16,6 +17,7 @@ namespace WebApplication2.生产管理.工程部
             var form = context.Request.Form;
             var orderId = form[0];
             int orderID = int.Parse(orderId);
+            var personId = Convert.ToInt32(context.Session["id"]);
             Dictionary<int, List<int>> ProcessCncInfo = new Dictionary<int, List<int>>();
             using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
             {
@@ -100,11 +102,11 @@ namespace WebApplication2.生产管理.工程部
                     var flag = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderID).First().ProofingORProduct;
                     if (flag == -1)
                     {
-                        context.Response.Write(virScheduling.MassScheduling(ProcessCncInfo, orderID));
+                        context.Response.Write(virScheduling.MassScheduling(ProcessCncInfo, orderID, personId));
                     }
                     else
                     {
-                        context.Response.Write(virScheduling.ManualScheduling(ProcessCncInfo, orderID));
+                        context.Response.Write(virScheduling.ManualScheduling(ProcessCncInfo, orderID, personId));
                     }
                    
                     return;
@@ -143,11 +145,11 @@ namespace WebApplication2.生产管理.工程部
                     var flag = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderID).First().ProofingORProduct;
                     if (flag == -1)
                     {
-                        context.Response.Write(virScheduling.MassScheduling(ProcessCncInfo, orderID));
+                        context.Response.Write(virScheduling.MassScheduling(ProcessCncInfo, orderID, personId));
                     }
                     else
                     {
-                        context.Response.Write(virScheduling.ManualScheduling(ProcessCncInfo, orderID));
+                        context.Response.Write(virScheduling.ManualScheduling(ProcessCncInfo, orderID, personId));
                     }
 
 

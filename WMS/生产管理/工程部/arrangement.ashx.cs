@@ -80,7 +80,7 @@ namespace WebApplication2.生产管理.工程部
 
                             entities.SaveChanges();
                             db.Commit();
-                            context.Response.Write(virScheduling.ProcessSchedule(orderNumberId));
+                            context.Response.Write(virScheduling.ProcessSchedule(orderNumberId, personId));
                             return;
                         }
                         else
@@ -99,7 +99,7 @@ namespace WebApplication2.生产管理.工程部
 
                             entities.SaveChanges();
                             db.Commit();
-                            context.Response.Write(virScheduling.ProcessSchedule(orderNumberId));
+                            context.Response.Write(virScheduling.ProcessSchedule(orderNumberId, personId));
                           
                           
                             return;

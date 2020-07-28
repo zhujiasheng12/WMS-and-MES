@@ -25,6 +25,7 @@ namespace WebApplication2.生产管理.市场部
                     var orderId = int.Parse(form[i]);
                     if (str == "下推")
                     {
+                        DateTime time =Convert.ToDateTime( context.Request.Form["time"]);//下推or撤销
                         var output = Convert.ToInt32(context.Request.Form["Product_Output"]);
                         var pattern = int.Parse(context.Request.Form["pattern"]);
                         var row = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId);
@@ -44,6 +45,7 @@ namespace WebApplication2.生产管理.市场部
                             return;
                         }
                         row.First().AuditResult = "待审核";
+                        row.First().Order_Plan_End_Time = time;
                         row.First().Intention = 3;
                         row.First().Product_Output = output;
                         row.First().ProofingORProduct = pattern;

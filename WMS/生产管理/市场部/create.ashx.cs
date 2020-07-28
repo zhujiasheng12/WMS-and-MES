@@ -189,7 +189,7 @@ namespace WebApplication2.Model.生产管理.市场部
                                                         Order_Plan_Start_Time = null,
                                                         Order_Actual_Start_Time = null,
                                                         Order_Actual_End_Time = null,
-                                                        Order_Plan_End_Time = OverTime,
+                                                        Order_Plan_End_Time = Order_Plan_End_Time,
                                                         Engine_Program_Manager = OldOrderInfo.FirstOrDefault().Engine_Program_Manager,
                                                         Engine_Technology_Manager = OldOrderInfo.FirstOrDefault().Engine_Technology_Manager,
                                                         Engine_Program_ManagerId = OldOrderInfo.FirstOrDefault().Engine_Program_ManagerId,

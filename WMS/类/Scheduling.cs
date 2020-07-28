@@ -676,7 +676,7 @@ namespace WebApplication2
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static string ProcessSchedule(int orderID)
+        public static string ProcessSchedule(int orderID,int personId)
         {
             {
                 using (JDJS_WMS_DB_USEREntities JDJSWMS = new JDJS_WMS_DB_USEREntities())
@@ -975,6 +975,29 @@ namespace WebApplication2
                                 }
                                 JDJSWMS.JDJS_WMS_Order_Process_Scheduling_Table.BulkInsert<JDJS_WMS_Order_Process_Scheduling_Table>(tables);
                                 JDJSWMS.BulkSaveChanges();
+
+                                var order = JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Where(r => r.OrderID == orderID).FirstOrDefault();
+                                if (order == null)
+                                {
+                                    JDJS_WMS_Order_Machine_Scheduing_Time_Table jd = new JDJS_WMS_Order_Machine_Scheduing_Time_Table()
+                                    {
+                                        OrderID = orderID,
+                                        PersonID = personId,
+                                        PlanPersonID = personId,
+                                        PlanEndTime = DateTime .Now ,
+                                        EndTime = DateTime.Now
+                                    };
+                                    JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Add(jd);
+                                }
+                                else
+                                {
+                                    order.PlanEndTime = time;
+                                    order.PlanEndTime = DateTime.Now;
+                                    order.EndTime = DateTime.Now;
+                                    order.PersonID = personId;
+                                    order.PlanPersonID = personId;
+                                }
+                                JDJSWMS.SaveChanges();
                                 mytran.Commit();
                             }
                             catch (Exception ex)
@@ -999,7 +1022,7 @@ namespace WebApplication2
         /// <param name="ProcessCncInfo"></param>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        public static string ManualScheduling(Dictionary<int, List<int>> ProcessCncInfo, int orderID)
+        public static string ManualScheduling(Dictionary<int, List<int>> ProcessCncInfo, int orderID,int personId)
         {
             List<int> cncIDs = new List<int>();
             foreach (var item in ProcessCncInfo)
@@ -1288,6 +1311,28 @@ namespace WebApplication2
                             //    }
 
                             //}
+                            var order = JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Where(r => r.OrderID == orderID).FirstOrDefault();
+                            if (order == null)
+                            {
+                                JDJS_WMS_Order_Machine_Scheduing_Time_Table jd = new JDJS_WMS_Order_Machine_Scheduing_Time_Table()
+                                {
+                                    OrderID = orderID,
+                                    PersonID = personId,
+                                    PlanPersonID = personId,
+                                    PlanEndTime = DateTime.Now,
+                                    EndTime = DateTime.Now
+                                };
+                                JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Add(jd);
+                            }
+                            else
+                            {
+                                order.PlanEndTime = time;
+                                order.PlanEndTime = DateTime.Now;
+                                order.EndTime = DateTime.Now;
+                                order.PersonID = personId;
+                                order.PlanPersonID = personId;
+                            }
+                            JDJSWMS.SaveChanges();
                             JDJSWMS.SaveChanges();
                             mytran.Commit();
                         }
@@ -1354,7 +1399,7 @@ namespace WebApplication2
         /// <param name="ProcessCncInfo"></param>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        public static string MassScheduling(Dictionary<int, List<int>> ProcessCncInfo, int orderID)
+        public static string MassScheduling(Dictionary<int, List<int>> ProcessCncInfo, int orderID, int personId)
         {
             List<int> cncIDs = new List<int>();
             foreach (var item in ProcessCncInfo)
@@ -1545,6 +1590,29 @@ namespace WebApplication2
                                 }
 
                             }
+
+                            var order = JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Where(r => r.OrderID == orderID).FirstOrDefault();
+                            if (order == null)
+                            {
+                                JDJS_WMS_Order_Machine_Scheduing_Time_Table jd = new JDJS_WMS_Order_Machine_Scheduing_Time_Table()
+                                {
+                                    OrderID = orderID,
+                                    PersonID = personId,
+                                    PlanPersonID = personId,
+                                    PlanEndTime = DateTime.Now,
+                                    EndTime = DateTime.Now
+                                };
+                                JDJSWMS.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Add(jd);
+                            }
+                            else
+                            {
+                                order.PlanEndTime = time;
+                                order.PlanEndTime = DateTime.Now;
+                                order.EndTime = DateTime.Now;
+                                order.PersonID = personId;
+                                order.PlanPersonID = personId;
+                            }
+                            JDJSWMS.SaveChanges();
                             mytran.Commit();
                         }
                         catch (Exception ex)

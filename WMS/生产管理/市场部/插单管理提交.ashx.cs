@@ -80,7 +80,7 @@ namespace WebApplication2.生产管理.市场部
 
 
                     virScheduling virScheduling = new virScheduling();
-                    string str = virScheduling.ProcessSchedule(1);
+                    string str = virScheduling.ProcessSchedule(1,0);
                     context.Response.Write(str);
                     //调用排产程序    
                 }

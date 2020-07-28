@@ -37,8 +37,17 @@ namespace WebApplication2.Model.生产管理.生产部
                                 time = guide.ExpectEndTime.ToString();
                             }
                         }
+                        string planTime = "";
+                        var sche = entities.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Where(r => r.OrderID == item.Order_ID).FirstOrDefault();
+                        if (sche != null)
+                        {
+                            if (sche.PlanEndTime != null)
+                            {
+                                planTime = sche.PlanEndTime.ToString();
+                            }
+                        }
                    
-                        orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag =0, time = time,orderName =item.Product_Name ,projectName =item.ProjectName ==null?"":item.ProjectName  });
+                        orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag =0, time = time,orderName =item.Product_Name ,projectName =item.ProjectName ==null?"":item.ProjectName, planTime=planTime });
 
                         
 
@@ -75,5 +84,6 @@ namespace WebApplication2.Model.生产管理.生产部
         public string time;
         public string orderName;
         public string projectName;
+        public string planTime;
     }
 }

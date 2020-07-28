@@ -29,10 +29,14 @@ namespace WebApplication2.生产管理.生产部.订单跟踪
                     info.Id = item.Order_ID;
                     info.State = "生产中";
                     info.orderState = OrderState.生产中;
-                    info.EndTime = item.Order_Plan_End_Time==null?"-":item.Order_Plan_End_Time.ToString();
+                    info.PlanEndTime = item.Order_Plan_End_Time==null?"-":item.Order_Plan_End_Time.ToString();
                     if (item.Order_Actual_End_Time != null)
                     {
                         info.EndTime = item.Order_Actual_End_Time.ToString();
+                    }
+                    else
+                    {
+                        info.EndTime = "-";
                     }
                     info.OrderNum = item.Order_Number;
                     info.ProductName = item.Product_Name;
@@ -102,6 +106,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪
         public string ProjectName { get; set; }
         public int Output { get; set; }
         public string EndTime { get; set; }
+        public string PlanEndTime { get; set; }
         public bool IsOver { get; set; }
         public string State { get; set; }
         public OrderState orderState { get; set; }

@@ -191,6 +191,32 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 mach.PlanEndTime = "-";
                 mach.IsOver = false;
                 mach.Person = "-";
+                var paichan = wms.JDJS_WMS_Order_Machine_Scheduing_Time_Table.Where(r => r.OrderID == orderId).FirstOrDefault();
+                if (paichan != null)
+                {
+                    mach.EndTime = paichan.EndTime == null ? "-" : Convert.ToDateTime(paichan.EndTime).ToString ();
+                    mach.PlanEndTime = paichan.PlanEndTime == null ? "-" : Convert.ToDateTime(paichan.PlanEndTime).ToString();
+                    if (paichan.PersonID == null)
+                    {
+                        if (paichan.PlanPersonID != null)
+                        {
+                            var staff = wms.JDJS_WMS_Staff_Info.Where(r => r.id == paichan.PlanPersonID).FirstOrDefault();
+                            if (staff != null)
+                            {
+                                mach.Person = staff.staff;
+                            }
+                        }
+                       
+                    }
+                    else
+                    {
+                        var staff = wms.JDJS_WMS_Staff_Info.Where(r => r.id == paichan.PersonID).FirstOrDefault();
+                        if (staff != null)
+                        {
+                            mach.Person = staff.staff;
+                        }
+                    }
+                }
                 var sche = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && r.isFlag != 0);
                 if (sche.Count() > 0)
                 {
@@ -201,9 +227,9 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 #region 毛坯准备
                 Order_Trace_Content_Info blank = new Order_Trace_Content_Info();
                 blank.Content = "毛坯准备";
-                blank.EndTime = "";
+                blank.EndTime = "-";
                 blank.IsOver = false;
-                blank.Person = "";
+                blank.Person = "姜渊博";
                 blank.PlanEndTime = "-";
                 var blankDelay = wms.JDJS_WMS_Order_DelayTime_Table.Where(r => r.OrderID == order.Order_ID).FirstOrDefault();
                 if (blankDelay != null)
@@ -233,7 +259,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 jia.Content = "夹具准备";
                 jia.EndTime = "-";
                 jia.IsOver = true;
-                jia.Person = "-";
+                jia.Person = "高杰";
                 jia.PlanEndTime = "-";
                 if (process != null)
                 {
@@ -301,7 +327,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 tool.Content = "刀具准备";
                 tool.EndTime = "-";
                 tool.IsOver = true;
-                tool.Person = "-";
+                tool.Person = "王府城";
                 tool.PlanEndTime = "-";
                 var toolDelay = wms.JDJS_WMS_Order_DelayTime_Table.Where(r => r.OrderID == order.Order_ID).FirstOrDefault();
                 if (toolDelay != null)
