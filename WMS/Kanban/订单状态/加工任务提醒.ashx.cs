@@ -55,6 +55,7 @@ namespace WebApplication2.Kanban.订单状态
                     info.ProductName = order.Product_Name;
                     info.ProjectName = order.ProjectName;
                     info.time =Convert.ToDateTime ( item.StartTime);
+                    #region 毛坯
                     var row = model.JDJS_WMS_Order_Blank_Table.Where(r => r.OrderID == order.Order_ID).FirstOrDefault();
                     if (row != null)
                     {
@@ -63,7 +64,8 @@ namespace WebApplication2.Kanban.订单状态
                             info.BlankPrepareFlag = true;
                         }
                     }
-
+                    #endregion 
+                    #region 治具
                     var fixtureInfo =model.JDJS_WMS_Order_Fixture_Manager_Table.Where(r => r.ProcessID == item.ProcessID);
                     if (fixtureInfo.Count() > 0)
                     {
@@ -98,7 +100,7 @@ namespace WebApplication2.Kanban.订单状态
 
 
                     }
-
+                    #endregion 
                     #region 刀具
                     int cncID =Convert.ToInt32 ( item.CncID);
                     #region 是否完成
