@@ -352,7 +352,7 @@
                         }
                     }
                     , { field: 'Product_Output', title: '订单数量', width: 90 }
-                    , { field: 'Order_State', title: '订单状态', width: 90, }
+                    , { field: 'Order_State', title: '订单状态', width: 90 }
                         , { field: 'audit', title: '审核状态', width: 90 }
                     , { field: 'virtualProgPers', title: '虚拟方案责任人', width: 135 }
                     , { field: 'virtualFile', title: '虚拟加工方案文档', width:150,templet: function (d) {
@@ -363,6 +363,28 @@
                     , { field: 'operation', title: '操作',  toolbar: '#barDemo', width: 160, fixed: 'right'}
                     , { field: 'Order_ID', title: 'id', hide: true }
                 ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                    sort.push(...res.filter(item => item.Order_State == -2))
+                    sort.push(...res.filter(item => item.Order_State == 5))
+                    sort.push(...res.filter(item => item.Order_State == -3))
+                    sort.push(...res.filter(item => item.Order_State == -1))
+                    sort.push(...res.filter(item => item.Order_State == 1))
+                    sort.push(...res.filter(item => item.Order_State == 0))
+                    sort.push(...res.filter(item => item.Order_State == 3))
+                    sort.push(...res.filter(item => item.Order_State == 2))
+                    sort.push(...res.filter(item => item.Order_State == 4))
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data//解析数据列表
+                    };
+                },
                 done: function (res) {//
                       const limit =JSON.parse(sessionStorage.getItem('limit'))
                     limit.forEach(item => {

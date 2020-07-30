@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <script src="/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <form class="layui-form" action="">
+
+        <div class="layui-form-item" style="margin-right:10px">
+            <label class="layui-form-label" style="width:100px">产量<span style="color:red">*</span></label>
+            <div class="layui-input-block" style="margin-left:130px">
+                <input type="text" name="Product_Output" required lay-verify="number" placeholder="请输入数字" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+         <div class="layui-form-item" style="margin-right:10px">
+            <label class="layui-form-label" style="width:100px">预计完成时间<span style="color:red">*</span></label>
+            <div class="layui-input-block" style="margin-left:130px">
+                <input type="text" name="time" required lay-verify="required" placeholder="必填" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item"style="margin-right:10px" hidden>
+            <label class="layui-form-label">生产模式<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="radio" name="pattern" value="-1" title="大批量" checked>
+                <input type="radio" name="pattern" value="1" title="小批量" >
+            </div>
+        </div>
+
+         <div class="layui-form-item"style="text-align:center">
+    <div class="layui-input-block"style="margin-left:0;text-align:center">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+  <!--    <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+    </div>
+  </div>
+
+    </form>
+    <script>
+        function fun(formData1) {
+            formData2 = formData1;
+
+        }
+        layui.use(['form', 'laydate'], function () {
+            var form = layui.form;
+            layui.laydate.render({
+                elem: '[name="time"]' //指定元素\
+                ,type:'datetime'
+                , trigger: 'click' //采用click弹出
+            });
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.confirm("是否提交", function () {
+                    var formData = formData2;
+                    debugger
+                    formData.delete('Product_Output')
+                    formData.delete('pattern')
+                    formData.delete('time')
+                    formData.append("Product_Output", $('[name="Product_Output"]').val())
+                    formData.append('time',data.field.time)
+                    formData.append("pattern", $('[name="pattern"]').val())
+                    $.ajax({
+                        url: 'pushDown.ashx',
+                        data: formData,
+                        type: 'post',
+                        contentType: false,
+                        processData: false,
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("下推成功", { icon: 1, time: 1000 }, function () {
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭  
+                                    tableReload.reload()
+                                })
+                            } else {
+                                layer.alert(d)
+                            }
+
+                        }
+                    });
+                })
+
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

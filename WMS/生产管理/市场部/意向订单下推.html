@@ -56,8 +56,10 @@
             form.on('submit(formDemo)', function (data) {
                 layer.confirm("是否提交", function () {
                     var formData = formData2;
+                    debugger
                     formData.delete('Product_Output')
                     formData.delete('pattern')
+                    formData.delete('time')
                     formData.append("Product_Output", $('[name="Product_Output"]').val())
                     formData.append('time',data.field.time)
                     formData.append("pattern", $('[name="pattern"]').val())

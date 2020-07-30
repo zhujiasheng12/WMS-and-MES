@@ -55,31 +55,31 @@ namespace WebApplication2.Model.生产管理.市场部
                     }
       
                 }
-                var order1 = order.Skip((page - 1) * limit).Take(limit);
+                //var order1 = order.Skip((page - 1) * limit).Take(limit);
 
-                var order2 = order1.ToList();
-                var number = limit - order1.Count();
-                if (number > 0)
-                {
-                    for (int i = 0; i < number; i++)
-                    {
-                        order2.Add(new OrderRead { Order_Number = " " });
-                    }
-                }
+                //var order2 = order1.ToList();
+                //var number = limit - order1.Count();
+                //if (number > 0)
+                //{
+                //    for (int i = 0; i < number; i++)
+                //    {
+                //        order2.Add(new OrderRead { Order_Number = " " });
+                //    }
+                //}
 
                 var key = context.Request["key"];
                 if (key != null)
                 {
                     var search = order.Where(r => r.Order_Leader == key | r.Order_Number == key | r.Product_Name == key | r.virtualProgPers == key | r.Engine_Program_Manager == key | r.Engine_Technology_Manager == key);
 
-                    var orderKey = search.Skip((page - 1) * limit).Take(limit);
-                    var modelKey = new { msg = "", code = 0, count = search.Count(), data = orderKey };
-                    var jsonKey = serializer.Serialize(modelKey);
+                    //var orderKey = search.Skip((page - 1) * limit).Take(limit);
+                    //var modelKey = new { msg = "", code = 0, count = search.Count(), data = orderKey };
+                    var jsonKey = serializer.Serialize(search);
                     context.Response.Write(jsonKey);
                     return;
                 }
-                var model = new { msg = "", code = 0, count = rows.Count(), data = order1};
-                var json = serializer.Serialize(model);
+                //var model = new { msg = "", code = 0, count = rows.Count(), data = order1};
+                var json = serializer.Serialize(order);
                 context.Response.Write(json);
             }
 

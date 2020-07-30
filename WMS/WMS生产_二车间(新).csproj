@@ -3016,6 +3016,12 @@
     <Compile Include="Kanban\订单ashx\订单数目.ashx.cs">
       <DependentUpon>订单数目.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Kanban\订单状态\加工任务提醒.ashx.cs">
+      <DependentUpon>加工任务提醒.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Kanban\订单状态\订单排产提醒.ashx.cs">
+      <DependentUpon>订单排产提醒.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Kanban\设备监控\getAccessToken.ashx.cs">
       <DependentUpon>getAccessToken.ashx</DependentUpon>
     </Compile>
@@ -3951,6 +3957,8 @@
     <Content Include="libman.json" />
     <Content Include="Kanban\2020.7.24\OrderPragram.ashx" />
     <Content Include="Kanban\2020.7.24\DownLoadTool.ashx" />
+    <Content Include="Kanban\订单状态\订单排产提醒.ashx" />
+    <Content Include="Kanban\订单状态\加工任务提醒.ashx" />
     <None Include="packages.config" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
     <Content Include="Resources\js\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />

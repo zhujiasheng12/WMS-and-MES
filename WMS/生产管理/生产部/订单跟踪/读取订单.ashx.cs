@@ -20,7 +20,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪
             List<Order_Trace_AllOrderInfo> infos = new List<Order_Trace_AllOrderInfo>();
             using (JDJS_WMS_DB_USEREntities wms = new JDJS_WMS_DB_USEREntities())
             {
-                var orders = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention != -1 && r.Intention != 1 && r.Intention != 5 && r.Intention != -2&&(r.Order_Leader .Contains (str)||r.Order_Number .Contains (str)||r.Product_Name .Contains (str)||r.ProjectName .Contains (str)));
+                var orders = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention != -1 && r.Intention != 1 && r.Intention != 5 && r.Intention != -2 && r.Intention != -3&& (r.Order_Leader .Contains (str)||r.Order_Number .Contains (str)||r.Product_Name .Contains (str)||r.ProjectName .Contains (str)));
                 foreach (var item in orders)
                 {
                     Order_Trace_AllOrderInfo info = new Order_Trace_AllOrderInfo();

@@ -118,7 +118,7 @@ namespace WebApplication2.Model.生产管理.市场部
                     context.Response.Write(jsonKey);
                     return;
                 }
-                var order1 = order.Skip((page - 1) * limit).Take(limit);
+                //var order1 = order.Skip((page - 1) * limit).Take(limit);
                 //var order2 = order1.ToList();
                 //var number = limit - order1.Count();
                 //if (number > 0)
@@ -130,8 +130,8 @@ namespace WebApplication2.Model.生产管理.市场部
                 //}
              
 
-                var model = new { msg = "", code = 0, count = order.Count(), data = order1};
-                var json = serializer.Serialize(model);
+                //var model = new { msg = "", code = 0, count = order.Count(), data = order1};
+                var json = serializer.Serialize(order);
                 context.Response.Write(json);
             }
         }
