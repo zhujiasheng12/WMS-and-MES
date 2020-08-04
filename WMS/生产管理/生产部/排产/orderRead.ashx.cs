@@ -20,7 +20,7 @@ namespace WebApplication2.Model.生产管理.生产部
             var page =int.Parse( context.Request["page"]);
             using(JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
             {
-                var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r =>(r.Intention==3|r.Intention==2|r.Intention==4));
+                var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r =>(r.Intention==3|r.Intention==2/*|r.Intention==4*/));
                 List<Order> orders = new List<Order>();
 
                 if (rows.Count() > 0)
@@ -46,8 +46,12 @@ namespace WebApplication2.Model.生产管理.生产部
                                 planTime = sche.PlanEndTime.ToString();
                             }
                         }
-                   
-                        orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag =0, time = time,orderName =item.Product_Name ,projectName =item.ProjectName ==null?"":item.ProjectName, planTime=planTime });
+                        Order info = new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, orderName = item.Product_Name, projectName = item.ProjectName == null ? "" : item.ProjectName, planTime = planTime };
+                        if (item.Intention == 3)
+                        {
+                            info.flag = 1;
+                        }
+                        orders.Add(info);
 
                         
 

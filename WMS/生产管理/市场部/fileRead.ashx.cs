@@ -59,5 +59,6 @@ namespace WebApplication2.生产管理.市场部
         public string filePath;
         public string  fileSize;
         public string fileTime;
+
     }
 }

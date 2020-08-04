@@ -582,6 +582,7 @@
           <Property Name="CreatePersonID" Type="int" />
           <Property Name="AuditResult" Type="varchar(max)" />
           <Property Name="AuditAdvice" Type="varchar(max)" />
+          <Property Name="ParentId" Type="int" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -3144,6 +3145,7 @@
           <NavigationProperty Name="JDJS_WMS_Quality_Confirmation_History_Table" Relationship="Model.FK_JDJS_WMS_Quality_Confirmation_History_Table_JDJS_WMS_Order_Entry_Table" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Quality_Confirmation_History_Table" />
           <Property Name="AuditResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AuditAdvice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ParentId" Type="Int32" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -5087,6 +5089,7 @@
           <EntitySetMapping Name="JDJS_WMS_Order_Entry_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Entry_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Order_Entry_Table">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="AuditAdvice" ColumnName="AuditAdvice" />
                 <ScalarProperty Name="AuditResult" ColumnName="AuditResult" />
                 <ScalarProperty Name="CreatePersonID" ColumnName="CreatePersonID" />

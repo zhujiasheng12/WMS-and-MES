@@ -3325,6 +3325,12 @@
     <Compile Include="生产管理\工程部\写治具数量.ashx.cs">
       <DependentUpon>写治具数量.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\工程部\处理生产关联订单\直接下推到排产.ashx.cs">
+      <DependentUpon>直接下推到排产.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\工程部\处理生产关联订单\需要修改工艺.ashx.cs">
+      <DependentUpon>需要修改工艺.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\工程部\审核.ashx.cs">
       <DependentUpon>审核.ashx</DependentUpon>
     </Compile>
@@ -3402,6 +3408,12 @@
     </Compile>
     <Compile Include="生产管理\市场部\pushDown.ashx.cs">
       <DependentUpon>pushDown.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\市场部\关联生产订单\创建生产关联订单.ashx.cs">
+      <DependentUpon>创建生产关联订单.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\市场部\关联生产订单\读取可关联订单.ashx.cs">
+      <DependentUpon>读取可关联订单.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\市场部\审核不通过确认.ashx.cs">
       <DependentUpon>审核不通过确认.ashx</DependentUpon>
@@ -4272,6 +4284,10 @@
     <Content Include="生产管理\生产部\订单跟踪\生产进度.ashx" />
     <Content Include="生产管理\生产部\订单跟踪\模糊搜索.ashx" />
     <Content Include="生产管理\生产部\排产\排产提交预计完成时间.ashx" />
+    <Content Include="生产管理\市场部\关联生产订单\读取可关联订单.ashx" />
+    <Content Include="生产管理\市场部\关联生产订单\创建生产关联订单.ashx" />
+    <Content Include="生产管理\工程部\处理生产关联订单\直接下推到排产.ashx" />
+    <Content Include="生产管理\工程部\处理生产关联订单\需要修改工艺.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

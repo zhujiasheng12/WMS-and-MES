@@ -18,7 +18,7 @@ namespace WebApplication2.Model.生产管理.市场部
             {
                 var page = int.Parse(context.Request["page"]);
                 var limit = int.Parse(context.Request["limit"]);
-                var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r=>r.Intention==2| r.Intention == 3| r.Intention == 4);
+                var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r=>r.Intention==2| r.Intention == 3| r.Intention == 4 | r.Intention == 6);
                                             
                List< OrderRead >order = new List<OrderRead>();
                 foreach (var item in rows)

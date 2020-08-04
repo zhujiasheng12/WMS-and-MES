@@ -21,7 +21,7 @@ namespace WebApplication2.Model.生产管理.工程部
                 var type=context.Request["type"];
               var  rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Intention ==1000);
                 if (type == "生产订单") {
-                     rows = entities.JDJS_WMS_Order_Entry_Table.Where(r =>( r.Intention == 2 || r.Intention == 3) && r.AuditResult =="审核通过");
+                     rows = entities.JDJS_WMS_Order_Entry_Table.Where(r =>( r.Intention == 2 || r.Intention == 3 || r.Intention == 6) && r.AuditResult =="审核通过");
                 } else if(type == "意向订单"){
                      rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => (r.Intention == -1 | r.Intention == 0 | r.Intention == 1));
                 }

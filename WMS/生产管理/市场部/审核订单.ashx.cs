@@ -22,7 +22,7 @@ namespace WebApplication2.生产管理.市场部
                 string str = "";
                 using (JDJS_WMS_DB_USEREntities model = new JDJS_WMS_DB_USEREntities())
                 {
-                    var order = model.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId && r.AuditResult == "待审核" && (r.Intention == 2 || r.Intention == 3) ).FirstOrDefault();
+                    var order = model.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId && r.AuditResult == "待审核" && (r.Intention == 2 || r.Intention == 3 || r.Intention == 6) ).FirstOrDefault();
                     if (order == null)
                     {
                         str = "该订单不存在或者该订单暂不符合审核条件！";
