@@ -178,7 +178,7 @@ namespace WebApplication2.生产管理.市场部.关联生产订单
         {
             try
             {
-                if (Directory.Exists(aimPath))
+                if (!Directory.Exists(aimPath))
                 {
                     Directory.CreateDirectory(aimPath);
                 }

@@ -27,6 +27,15 @@ namespace WebApplication2.Model.生产管理.生产部
                 {
                     foreach (var item in rows)
                     {
+                        var process = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID && r.sign != 0).FirstOrDefault();
+                        if (process == null)
+                        {
+                            continue;
+                        }
+                        if (process.sign != 1 || process.program_audit_sign != 1)
+                        {
+                            continue;
+                        }
                         int orderID = item.Order_ID;
                         string time = "";
                         var guide = entities.JDJS_WMS_Order_Guide_Schedu_Table.Where(r => r.OrderID == orderID).FirstOrDefault ();
