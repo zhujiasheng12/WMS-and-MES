@@ -112,5 +112,6 @@ namespace WebApplication2
         public virtual DbSet<JDJS_WMS_Warehouse_OutBlank_History_Table> JDJS_WMS_Warehouse_OutBlank_History_Table { get; set; }
         public virtual DbSet<JDJS_WMS_Warehouse_InOut_History_Table> JDJS_WMS_Warehouse_InOut_History_Table { get; set; }
         public virtual DbSet<JDJS_WMS_Order_Machine_Scheduing_Time_Table> JDJS_WMS_Order_Machine_Scheduing_Time_Table { get; set; }
+        public virtual DbSet<JDJS_WMS_Quality_Detection_Measurement_Table> JDJS_WMS_Quality_Detection_Measurement_Table { get; set; }
     }
 }

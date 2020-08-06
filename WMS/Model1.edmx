@@ -751,6 +751,22 @@
           <Property Name="PefectiveProductNumber" Type="int" />
           <Property Name="PassRate" Type="float" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Quality_Detection_Measurement_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="ProcessNum" Type="int" />
+          <Property Name="WorkpieceNumber" Type="varchar(max)" />
+          <Property Name="Type" Type="varchar(max)" />
+          <Property Name="SizeName" Type="varchar(max)" />
+          <Property Name="StandardValue" Type="float" />
+          <Property Name="ToleranceRangeMin" Type="float" />
+          <Property Name="ToleranceRangeMax" Type="float" />
+          <Property Name="Measurements" Type="float" />
+          <Property Name="OutOfTolerance" Type="float" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Quality_ManualInput_Measurement_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1219,6 +1235,20 @@
               <PropertyRef Name="Order_ID" />
             </Principal>
             <Dependent Role="JDJS_WMS_Quality_Confirmation_Table">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__JDJS_WMS___Order__Qualiy">
+          <End Role="JDJS_WMS_Order_Entry_Table" Type="Self.JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JDJS_WMS_Quality_Detection_Measurement_Table" Type="Self.JDJS_WMS_Quality_Detection_Measurement_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JDJS_WMS_Order_Entry_Table">
+              <PropertyRef Name="Order_ID" />
+            </Principal>
+            <Dependent Role="JDJS_WMS_Quality_Detection_Measurement_Table">
               <PropertyRef Name="OrderID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1947,6 +1977,7 @@
           <EntitySet Name="JDJS_WMS_Order_Tool_Prepare_History_table" EntityType="Self.JDJS_WMS_Order_Tool_Prepare_History_table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_History_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_History_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Quality_Detection_Measurement_Table" EntityType="Self.JDJS_WMS_Quality_Detection_Measurement_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_ManualInput_Measurement_Table" EntityType="Self.JDJS_WMS_Quality_ManualInput_Measurement_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Onmachine_Measurement_Data" EntityType="Self.JDJS_WMS_Quality_Onmachine_Measurement_Data" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quickchangbaseplate_Table" EntityType="Self.JDJS_WMS_Quickchangbaseplate_Table" Schema="dbo" store:Type="Tables" />
@@ -2004,6 +2035,10 @@
           <AssociationSet Name="FK__JDJS_WMS___Order__7C1A6C5A" Association="Self.FK__JDJS_WMS___Order__7C1A6C5A">
             <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
             <End Role="JDJS_WMS_Quality_Confirmation_Table" EntitySet="JDJS_WMS_Quality_Confirmation_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK__JDJS_WMS___Order__Qualiy" Association="Self.FK__JDJS_WMS___Order__Qualiy">
+            <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+            <End Role="JDJS_WMS_Quality_Detection_Measurement_Table" EntitySet="JDJS_WMS_Quality_Detection_Measurement_Table" />
           </AssociationSet>
           <AssociationSet Name="FK__JDJS_WMS___Proce__03BB8E22" Association="Self.FK__JDJS_WMS___Proce__03BB8E22">
             <End Role="JDJS_WMS_Order_Process_Info_Table" EntitySet="JDJS_WMS_Order_Process_Info_Table" />
@@ -2510,6 +2545,11 @@
           <EntitySet Name="JDJS_WMS_Warehouse_OutBlank_History_Table" EntityType="Model.JDJS_WMS_Warehouse_OutBlank_History_Table" />
           <EntitySet Name="JDJS_WMS_Warehouse_InOut_History_Table" EntityType="Model.JDJS_WMS_Warehouse_InOut_History_Table" />
           <EntitySet Name="JDJS_WMS_Order_Machine_Scheduing_Time_Table" EntityType="Model.JDJS_WMS_Order_Machine_Scheduing_Time_Table" />
+          <EntitySet Name="JDJS_WMS_Quality_Detection_Measurement_Table" EntityType="Model.JDJS_WMS_Quality_Detection_Measurement_Table" />
+          <AssociationSet Name="FK__JDJS_WMS___Order__Qualiy" Association="Model.FK__JDJS_WMS___Order__Qualiy">
+            <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
+            <End Role="JDJS_WMS_Quality_Detection_Measurement_Table" EntitySet="JDJS_WMS_Quality_Detection_Measurement_Table" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -3146,6 +3186,7 @@
           <Property Name="AuditResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AuditAdvice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ParentId" Type="Int32" />
+          <NavigationProperty Name="JDJS_WMS_Quality_Detection_Measurement_Table" Relationship="Model.FK__JDJS_WMS___Order__Qualiy" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Quality_Detection_Measurement_Table" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -4507,6 +4548,37 @@
           <Property Name="EndTime" Type="DateTime" Precision="3" />
           <Property Name="PersonID" Type="Int32" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Quality_Detection_Measurement_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="ProcessNum" Type="Int32" />
+          <Property Name="WorkpieceNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SizeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StandardValue" Type="Double" />
+          <Property Name="ToleranceRangeMin" Type="Double" />
+          <Property Name="ToleranceRangeMax" Type="Double" />
+          <Property Name="Measurements" Type="Double" />
+          <Property Name="OutOfTolerance" Type="Double" />
+          <NavigationProperty Name="JDJS_WMS_Order_Entry_Table" Relationship="Model.FK__JDJS_WMS___Order__Qualiy" FromRole="JDJS_WMS_Quality_Detection_Measurement_Table" ToRole="JDJS_WMS_Order_Entry_Table" />
+        </EntityType>
+        <Association Name="FK__JDJS_WMS___Order__Qualiy">
+          <End Type="Model.JDJS_WMS_Order_Entry_Table" Role="JDJS_WMS_Order_Entry_Table" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.JDJS_WMS_Quality_Detection_Measurement_Table" Role="JDJS_WMS_Quality_Detection_Measurement_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JDJS_WMS_Order_Entry_Table">
+              <PropertyRef Name="Order_ID" />
+            </Principal>
+            <Dependent Role="JDJS_WMS_Quality_Detection_Measurement_Table">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5717,6 +5789,23 @@
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="PlanPersonID" ColumnName="PlanPersonID" />
                 <ScalarProperty Name="PlanEndTime" ColumnName="PlanEndTime" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Quality_Detection_Measurement_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_Detection_Measurement_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Quality_Detection_Measurement_Table">
+                <ScalarProperty Name="OutOfTolerance" ColumnName="OutOfTolerance" />
+                <ScalarProperty Name="Measurements" ColumnName="Measurements" />
+                <ScalarProperty Name="ToleranceRangeMax" ColumnName="ToleranceRangeMax" />
+                <ScalarProperty Name="ToleranceRangeMin" ColumnName="ToleranceRangeMin" />
+                <ScalarProperty Name="StandardValue" ColumnName="StandardValue" />
+                <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="WorkpieceNumber" ColumnName="WorkpieceNumber" />
+                <ScalarProperty Name="ProcessNum" ColumnName="ProcessNum" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

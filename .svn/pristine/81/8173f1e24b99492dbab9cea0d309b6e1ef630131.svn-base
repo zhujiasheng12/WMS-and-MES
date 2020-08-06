@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.品质.品质检测导表
+{
+    public class ImportErCiYuan : IDetectionResult
+    {
+        public bool ImportExcel(string path, string workPieceNum, ref string errMsg)
+        {
+            return true;
+        }
+    }
+}

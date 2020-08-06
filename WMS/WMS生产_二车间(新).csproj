@@ -2777,6 +2777,9 @@
     <Compile Include="JDJS_WMS_Quality_Confirmation_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JDJS_WMS_Quality_Detection_Measurement_Table.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="JDJS_WMS_Quality_ManualInput_Measurement_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3175,6 +3178,8 @@
     <Compile Include="生产管理\品质\addWorkpiece.ashx.cs">
       <DependentUpon>addWorkpiece.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\品质\品质检测导表\DataInPutSql.cs" />
+    <Compile Include="生产管理\品质\品质检测导表\IDetectionResult.cs" />
     <Compile Include="生产管理\品质\importExcel.ashx.cs">
       <DependentUpon>importExcel.ashx</DependentUpon>
     </Compile>
@@ -3204,6 +3209,13 @@
     </Compile>
     <Compile Include="生产管理\品质\workpieceRead.ashx.cs">
       <DependentUpon>workpieceRead.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\品质检测导表\ExcelType.cs" />
+    <Compile Include="生产管理\品质\品质检测导表\ImportErCiYuan.cs" />
+    <Compile Include="生产管理\品质\品质检测导表\ImportExcelFactory.cs" />
+    <Compile Include="生产管理\品质\品质检测导表\ImportSanZuoBiao.cs" />
+    <Compile Include="生产管理\品质\品质检测导表\解析表格.ashx.cs">
+      <DependentUpon>解析表格.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\品质\在机测量表格读数据.ashx.cs">
       <DependentUpon>在机测量表格读数据.ashx</DependentUpon>
@@ -4288,6 +4300,7 @@
     <Content Include="生产管理\市场部\关联生产订单\创建生产关联订单.ashx" />
     <Content Include="生产管理\工程部\处理生产关联订单\直接下推到排产.ashx" />
     <Content Include="生产管理\工程部\处理生产关联订单\需要修改工艺.ashx" />
+    <Content Include="生产管理\品质\品质检测导表\解析表格.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -32,6 +32,7 @@ namespace WebApplication2
             this.JDJS_WMS_Order_Process_Info_Table = new HashSet<JDJS_WMS_Order_Process_Info_Table>();
             this.JDJS_WMS_Order_Queue_Table = new HashSet<JDJS_WMS_Order_Queue_Table>();
             this.JDJS_WMS_Quality_Confirmation_History_Table = new HashSet<JDJS_WMS_Quality_Confirmation_History_Table>();
+            this.JDJS_WMS_Quality_Detection_Measurement_Table = new HashSet<JDJS_WMS_Quality_Detection_Measurement_Table>();
         }
     
         public int Order_ID { get; set; }
@@ -97,5 +98,7 @@ namespace WebApplication2
         public virtual ICollection<JDJS_WMS_Order_Queue_Table> JDJS_WMS_Order_Queue_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JDJS_WMS_Quality_Confirmation_History_Table> JDJS_WMS_Quality_Confirmation_History_Table { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JDJS_WMS_Quality_Detection_Measurement_Table> JDJS_WMS_Quality_Detection_Measurement_Table { get; set; }
     }
 }

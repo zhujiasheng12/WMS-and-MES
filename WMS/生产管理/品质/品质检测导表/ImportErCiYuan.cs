@@ -1,0 +1,269 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System.IO;
+using System.Data;
+
+namespace WebApplication2.生产管理.品质.品质检测导表
+{
+    public class ImportErCiYuan : IDetectionResult
+    {
+        public List<QualityDataInfo> ImportExcel(string path,ref string errMsg)
+        {
+            List<QualityDataInfo> infos = new List<QualityDataInfo>();
+            try
+            {
+                string err = "";
+                string[,] data =GetExcelData(path, ref err);
+                #region 解析数组
+                bool isOk = false;
+                for (int i = 0; i < data.GetLength(0); i++)
+                {
+                    if (isOk)
+                    {
+                        if (data[i, 0] == "")
+                        {
+                            continue;
+                        }
+                        QualityDataInfo info = new QualityDataInfo();
+                        float value = 0;
+                        info.Measurements = float.TryParse(data[i, 1], out value) ? value : 0;
+                        info.SizeName = data[i, 0];
+                        info.StandardValue = float.TryParse(data[i, 2], out value) ? value : 0;
+                        info.ToleranceRangeMax = float.TryParse(data[i, 3], out value) ? value : 0;
+                        info.ToleranceRangeMin = float.TryParse(data[i, 4], out value) ? value : 0;
+                        info.OutOfTolerance = float.TryParse(data[i, 6], out value) ? value : 0;
+                        infos.Add(info);
+                    }
+                    else
+                    {
+                        if (data[i, 0] == "名称")
+                        {
+                            isOk = true;
+                        }
+                    }
+                }
+                #endregion
+                errMsg = "ok";
+                return infos;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取excel表格数据
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="strMsg">错误信息</param>
+        /// <returns>返回二维数组</returns>
+        public static string[,] GetExcelData(string path, ref string strMsg)
+        {
+            string[,] dataExcel;
+            var DATA = ExcelToDataSet(path, out strMsg);
+            if (DATA == null)
+            {
+                return null;
+            }
+            dataExcel = new string[DATA.Tables[0].Rows.Count, DATA.Tables[0].Columns.Count];
+            int i = 0;
+
+            foreach (DataRow mDr in DATA.Tables[0].Rows)
+            {
+                int j = 0;
+                foreach (DataColumn mDc in DATA.Tables[0].Columns)
+                {
+                    dataExcel[i, j] = mDr[mDc].ToString();
+                    j++;
+                }
+                i++;
+
+            }
+            return dataExcel;
+
+        }
+
+        /// <summary>
+        /// Excel转换成DataSet（.xlsx/.xls）
+        /// </summary>
+        /// <param name="filePath">Excel文件路径</param>
+        /// <param name="strMsg"></param>
+        /// <returns></returns>
+        public static DataSet ExcelToDataSet(string filePath, out string strMsg)
+        {
+            strMsg = "";
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+            string fileType = Path.GetExtension(filePath).ToLower();
+            string fileName = Path.GetFileName(filePath).ToLower();
+            try
+            {
+                ISheet sheet = null;
+                int sheetNumber = 0;
+                FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                if (fileType == ".xlsx")
+                {
+                    // 2007版本
+                    XSSFWorkbook workbook = new XSSFWorkbook(fs);
+                    sheetNumber = workbook.NumberOfSheets;
+                    //for (int i = 0; i < sheetNumber; i++)
+                    {
+                        string sheetName = workbook.GetSheetName(1);
+                        sheet = workbook.GetSheet(sheetName);
+                        if (sheet != null)
+                        {
+                            dt = GetSheetDataTable(sheet, out strMsg);
+                            if (dt != null)
+                            {
+                                dt.TableName = sheetName.Trim();
+                                ds.Tables.Add(dt);
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                    }
+                }
+                else if (fileType == ".xls")
+                {
+                    // 2003版本
+                    HSSFWorkbook workbook = new HSSFWorkbook(fs);
+                    sheetNumber = workbook.NumberOfSheets;
+                    //for (int i = 0; i < sheetNumber; i++)
+                    {
+                        string sheetName = workbook.GetSheetName(1);
+                        sheet = workbook.GetSheet(sheetName);
+                        if (sheet != null)
+                        {
+                            dt = GetSheetDataTable(sheet, out strMsg);
+                            if (dt != null)
+                            {
+                                dt.TableName = sheetName.Trim();
+                                ds.Tables.Add(dt);
+                            }
+                            else
+                            {
+                                return null;
+                                //messageBox.Show("Sheet数据获取失败，原因：" + strMsg);
+                            }
+                        }
+                    }
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                strMsg = ex.Message;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取sheet表对应的DataTable
+        /// </summary>
+        /// <param name="sheet">Excel工作表</param>
+        /// <param name="strMsg"></param>
+        /// <returns></returns>
+        private static DataTable GetSheetDataTable(ISheet sheet, out string strMsg)
+        {
+            strMsg = "";
+            DataTable dt = new DataTable();
+            string sheetName = sheet.SheetName;
+            int startIndex = 0;// sheet.FirstRowNum;
+            int lastIndex = sheet.LastRowNum;
+            //最大列数
+            int cellCount = 0;
+            IRow maxRow = sheet.GetRow(0);
+            for (int i = startIndex; i <= lastIndex; i++)
+            {
+                IRow row = sheet.GetRow(i);
+                if (row != null && cellCount < row.LastCellNum)
+                {
+                    cellCount = row.LastCellNum;
+                    maxRow = row;
+                }
+            }
+            //列名设置
+            try
+            {
+                for (int i = 0; i < maxRow.LastCellNum; i++)//maxRow.FirstCellNum
+                {
+                    dt.Columns.Add(Convert.ToChar(((int)'A') + i).ToString());
+                    //DataColumn column = new DataColumn("Column" + (i + 1).ToString());
+                    //dt.Columns.Add(column);
+                }
+            }
+            catch
+            {
+                strMsg = "工作表" + sheetName + "中无数据";
+                return null;
+            }
+            //数据填充
+            for (int i = startIndex; i <= lastIndex; i++)
+            {
+                IRow row = sheet.GetRow(i);
+                DataRow drNew = dt.NewRow();
+                if (row != null)
+                {
+                    for (int j = row.FirstCellNum; j < row.LastCellNum; ++j)
+                    {
+                        if (row.GetCell(j) != null)
+                        {
+                            ICell cell = row.GetCell(j);
+                            switch (cell.CellType)
+                            {
+                                case CellType.Blank:
+                                    drNew[j] = "";
+                                    break;
+                                case CellType.Numeric:
+                                    short format = cell.CellStyle.DataFormat;
+                                    //对时间格式（2015.12.5、2015/12/5、2015-12-5等）的处理
+                                    if (format == 14 || format == 31 || format == 57 || format == 58)
+                                        drNew[j] = cell.DateCellValue;
+                                    else
+                                        drNew[j] = cell.NumericCellValue;
+                                    if (cell.CellStyle.DataFormat == 177 || cell.CellStyle.DataFormat == 178 || cell.CellStyle.DataFormat == 188)
+                                        drNew[j] = cell.NumericCellValue.ToString("#0.00");
+                                    break;
+                                case CellType.String:
+                                    drNew[j] = cell.StringCellValue;
+                                    break;
+                                case CellType.Formula:
+                                    try
+                                    {
+                                        drNew[j] = cell.NumericCellValue;
+                                        if (cell.CellStyle.DataFormat == 177 || cell.CellStyle.DataFormat == 178 || cell.CellStyle.DataFormat == 188)
+                                            drNew[j] = cell.NumericCellValue.ToString("#0.00");
+                                    }
+                                    catch
+                                    {
+                                        try
+                                        {
+                                            drNew[j] = cell.StringCellValue;
+                                        }
+                                        catch { }
+                                    }
+                                    break;
+                                default:
+                                    drNew[j] = cell.StringCellValue;
+                                    break;
+                            }
+                        }
+                    }
+                }
+                dt.Rows.Add(drNew);
+            }
+            return dt;
+        }
+    }
+
+   
+}

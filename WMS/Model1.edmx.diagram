@@ -147,6 +147,8 @@
         <EntityTypeShape EntityType="Model.JDJS_WMS_Warehouse_OutBlank_History_Table" Width="1.5" PointX="19.375" PointY="18.75" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Warehouse_InOut_History_Table" Width="1.5" PointX="20.375" PointY="0.75" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Machine_Scheduing_Time_Table" Width="1.5" PointX="21.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Detection_Measurement_Table" Width="1.5" PointX="5.25" PointY="125.375" />
+        <AssociationConnector Association="Model.FK__JDJS_WMS___Order__Qualiy" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
