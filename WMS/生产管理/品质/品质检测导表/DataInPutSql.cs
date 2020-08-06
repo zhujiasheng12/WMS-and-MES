@@ -59,6 +59,7 @@ namespace WebApplication2.生产管理.品质.品质检测导表
 
     public struct QualityDataInfo
     { 
+        public int Id { get; set; }
         public string SizeName { get; set; }
         public float StandardValue { get; set; }
         public float ToleranceRangeMin { get; set; }
