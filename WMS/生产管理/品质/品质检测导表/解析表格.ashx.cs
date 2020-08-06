@@ -29,12 +29,12 @@ namespace WebApplication2.生产管理.品质.品质检测导表
                 string formatPath = pathInfo.upLoadPath();
 
                 string filePath = "";
-                filePath= System.IO.Path.Combine(formatPath, orderNum,"品质检测-工件"+ num, type);
+                filePath= System.IO.Path.Combine(formatPath, orderNum,@"品质检测-工件"+ num, type);
                 if (!Directory.Exists(filePath))
                 {
                     Directory.CreateDirectory(filePath);
                 }
-                filePath = System.IO.Path.Combine(formatPath, orderNum, "品质检测-工件" + num,type,file.FileName);
+                filePath = System.IO.Path.Combine(formatPath, orderNum, @"品质检测-工件" + num,type,file.FileName);
                 file.SaveAs(filePath);
                 string errMsg = "";
                 ExcelType excelType;
