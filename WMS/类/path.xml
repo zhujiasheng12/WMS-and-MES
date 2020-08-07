@@ -6,4 +6,7 @@
 <ftpUrl>ftp://106.12.40.102/</ftpUrl>
 <ftpUser>FTPUSER</ftpUser>
   <ftpPassword>@ftp123456789</ftpPassword>
+  <QualituInspectApplyRobot>https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=6e21300e-8a65-4efb-86c9-f4eb5e6ad4c5</QualituInspectApplyRobot>
+  <QualituInspectAuditRobot>https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=6e21300e-8a65-4efb-86c9-f4eb5e6ad4c5</QualituInspectAuditRobot>
+  <QualituInspectOverRobot>https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=6e21300e-8a65-4efb-86c9-f4eb5e6ad4c5</QualituInspectOverRobot>
 </root>

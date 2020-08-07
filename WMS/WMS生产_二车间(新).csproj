@@ -2771,6 +2771,9 @@
     <Compile Include="JDJS_WMS_Order_Tool_Prepare_History_table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JDJS_WMS_Quality_Apply_Measure_Table.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="JDJS_WMS_Quality_Confirmation_History_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3249,6 +3252,36 @@
     </Compile>
     <Compile Include="生产管理\品质\读订单编号.ashx.cs">
       <DependentUpon>读订单编号.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\CompanyWeChatRobotRemind.cs" />
+    <Compile Include="生产管理\品质\送检模块ashx\InspectManage.cs" />
+    <Compile Include="生产管理\品质\送检模块ashx\InspectStateType.cs" />
+    <Compile Include="生产管理\品质\送检模块ashx\上传测量报告文件.ashx.cs">
+      <DependentUpon>上传测量报告文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\删除测量报告文件.ashx.cs">
+      <DependentUpon>删除测量报告文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\删除送检申请.ashx.cs">
+      <DependentUpon>删除送检申请.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\处理送检申请.ashx.cs">
+      <DependentUpon>处理送检申请.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\完成检测.ashx.cs">
+      <DependentUpon>完成检测.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\录入测量结果.ashx.cs">
+      <DependentUpon>录入测量结果.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\查看测量报告文件.ashx.cs">
+      <DependentUpon>查看测量报告文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\读取送检申请.ashx.cs">
+      <DependentUpon>读取送检申请.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\品质\送检模块ashx\送检预约申请.ashx.cs">
+      <DependentUpon>送检预约申请.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\工程部\blankJigFileRead.ashx.cs">
       <DependentUpon>blankJigFileRead.ashx</DependentUpon>
@@ -4329,6 +4362,15 @@
     <Content Include="生产管理\工程部\检测工程图\上传检测工程图.ashx" />
     <Content Include="生产管理\工程部\检测工程图\查看检测工程图.ashx" />
     <Content Include="生产管理\工程部\检测工程图\删除检测工程图.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\送检预约申请.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\处理送检申请.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\录入测量结果.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\查看测量报告文件.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\上传测量报告文件.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\删除测量报告文件.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\读取送检申请.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\完成检测.ashx" />
+    <Content Include="生产管理\品质\送检模块ashx\删除送检申请.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

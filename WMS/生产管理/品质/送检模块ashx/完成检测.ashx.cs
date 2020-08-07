@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.品质.送检模块ashx
+{
+    /// <summary>
+    /// 完成检测 的摘要说明
+    /// </summary>
+    public class 完成检测 : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            try
+            {
+                int id = int.Parse(context.Request["id"]);//处理的申请主键ID
+                using (JDJS_WMS_DB_USEREntities model = new JDJS_WMS_DB_USEREntities())
+                {
+                    var inspect = model.JDJS_WMS_Quality_Apply_Measure_Table.Where(r => r.ID == id).FirstOrDefault();
+                    if (inspect == null)
+                    {
+                        context.Response.Write("该送检申请不存在，请确认后再试！");
+                        return;
+                    }
+                    if (inspect.State != Enum.GetName(typeof(InspectStateType), 1))
+                    {
+                        context.Response.Write("该测量记录状态不符，请确认后再试！");
+                        return;
+                    }
+                    using (System.Data.Entity.DbContextTransaction mytran = model.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            inspect.State = Enum.GetName(typeof(InspectStateType), 2);
+                            model.SaveChanges();
+                            mytran.Commit();
+                            PathInfo pathInfo = new PathInfo();
+                            bool z = true;
+                            SendTextToWechat sendTextToWechat = new CompanyWeChatRobotRemind();
+                            sendTextToWechat.SendText(inspect .ApplyPersonName +"提交的工件：" + inspect.WorkPieceName + "的测量已完成。结果为"+ inspect.MeasureResult, pathInfo.GetQualituInspectAuditRobot(), new List<string>(), out z);
+                            context.Response.Write("ok");
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            context.Response.Write(ex.Message);
+                            return;
+                        }
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write(ex.Message);
+                return;
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

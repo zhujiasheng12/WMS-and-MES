@@ -727,6 +727,34 @@
           <Property Name="Num" Type="int" />
           <Property Name="PrepareTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Quality_Apply_Measure_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InspectTime" Type="datetime" />
+          <Property Name="ApplyTime" Type="datetime" />
+          <Property Name="WorkPieceName" Type="varchar(max)" />
+          <Property Name="MeasureContent" Type="varchar(max)" />
+          <Property Name="MeasureGoal" Type="varchar(max)" />
+          <Property Name="DepartmentName" Type="varchar(max)" />
+          <Property Name="ApplyPersonName" Type="varchar(max)" />
+          <Property Name="ApplyPersonId" Type="int" />
+          <Property Name="ApplyPersonTel" Type="varchar(max)" />
+          <Property Name="WorkPieceNum" Type="int" />
+          <Property Name="AcceptTime" Type="datetime" />
+          <Property Name="AcceptPersonId" Type="int" />
+          <Property Name="AcceptPersonName" Type="varchar(max)" />
+          <Property Name="MeasureDevice" Type="varchar(max)" />
+          <Property Name="MeasurePersonName" Type="varchar(max)" />
+          <Property Name="MeasurePersonId" Type="int" />
+          <Property Name="MeasureTime" Type="datetime" />
+          <Property Name="MeasureResult" Type="varchar(max)" />
+          <Property Name="IsHaveReport" Type="int" />
+          <Property Name="Remark" Type="varchar(max)" />
+          <Property Name="SavePath" Type="varchar(max)" />
+          <Property Name="State" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Quality_Confirmation_History_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -1975,6 +2003,7 @@
           <EntitySet Name="JDJS_WMS_Order_Queue_Table" EntityType="Self.JDJS_WMS_Order_Queue_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Schedule_Table" EntityType="Self.JDJS_WMS_Order_Schedule_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Tool_Prepare_History_table" EntityType="Self.JDJS_WMS_Order_Tool_Prepare_History_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Self.JDJS_WMS_Quality_Apply_Measure_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_History_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_History_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Detection_Measurement_Table" EntityType="Self.JDJS_WMS_Quality_Detection_Measurement_Table" Schema="dbo" store:Type="Tables" />
@@ -2550,6 +2579,7 @@
             <End Role="JDJS_WMS_Order_Entry_Table" EntitySet="JDJS_WMS_Order_Entry_Table" />
             <End Role="JDJS_WMS_Quality_Detection_Measurement_Table" EntitySet="JDJS_WMS_Quality_Detection_Measurement_Table" />
           </AssociationSet>
+          <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" />
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -4579,6 +4609,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="JDJS_WMS_Quality_Apply_Measure_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplyTime" Type="DateTime" Precision="3" />
+          <Property Name="WorkPieceName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MeasureContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MeasureGoal" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyPersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyPersonId" Type="Int32" />
+          <Property Name="ApplyPersonTel" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WorkPieceNum" Type="Int32" />
+          <Property Name="AcceptTime" Type="DateTime" Precision="3" />
+          <Property Name="AcceptPersonId" Type="Int32" />
+          <Property Name="AcceptPersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MeasureDevice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MeasurePersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MeasurePersonId" Type="Int32" />
+          <Property Name="MeasureTime" Type="DateTime" Precision="3" />
+          <Property Name="MeasureResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsHaveReport" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="InspectTime" Type="DateTime" Precision="3" />
+          <Property Name="SavePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5807,6 +5865,35 @@
                 <ScalarProperty Name="WorkpieceNumber" ColumnName="WorkpieceNumber" />
                 <ScalarProperty Name="ProcessNum" ColumnName="ProcessNum" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Quality_Apply_Measure_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Quality_Apply_Measure_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Quality_Apply_Measure_Table">
+                <ScalarProperty Name="SavePath" ColumnName="SavePath" />
+                <ScalarProperty Name="InspectTime" ColumnName="InspectTime" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="IsHaveReport" ColumnName="IsHaveReport" />
+                <ScalarProperty Name="MeasureResult" ColumnName="MeasureResult" />
+                <ScalarProperty Name="MeasureTime" ColumnName="MeasureTime" />
+                <ScalarProperty Name="MeasurePersonId" ColumnName="MeasurePersonId" />
+                <ScalarProperty Name="MeasurePersonName" ColumnName="MeasurePersonName" />
+                <ScalarProperty Name="MeasureDevice" ColumnName="MeasureDevice" />
+                <ScalarProperty Name="AcceptPersonName" ColumnName="AcceptPersonName" />
+                <ScalarProperty Name="AcceptPersonId" ColumnName="AcceptPersonId" />
+                <ScalarProperty Name="AcceptTime" ColumnName="AcceptTime" />
+                <ScalarProperty Name="WorkPieceNum" ColumnName="WorkPieceNum" />
+                <ScalarProperty Name="ApplyPersonTel" ColumnName="ApplyPersonTel" />
+                <ScalarProperty Name="ApplyPersonId" ColumnName="ApplyPersonId" />
+                <ScalarProperty Name="ApplyPersonName" ColumnName="ApplyPersonName" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="MeasureGoal" ColumnName="MeasureGoal" />
+                <ScalarProperty Name="MeasureContent" ColumnName="MeasureContent" />
+                <ScalarProperty Name="WorkPieceName" ColumnName="WorkPieceName" />
+                <ScalarProperty Name="ApplyTime" ColumnName="ApplyTime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

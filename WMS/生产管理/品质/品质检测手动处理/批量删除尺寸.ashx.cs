@@ -15,8 +15,8 @@ namespace WebApplication2.生产管理.品质.品质检测手动处理
         {
             try
             {
-                var ids = int.Parse(context.Request["ids"]);//需要删除的尺寸主键ID列表，以逗号,分隔
-                List<string> idStrList = ids.ToString().Split(',').ToList();
+                var ids = context.Request["ids"];//需要删除的尺寸主键ID列表，以逗号,分隔
+                List<string> idStrList = ids.Split(',').ToList();
                 List<int> idList = new List<int>();
                 foreach (var item in idStrList)
                 {

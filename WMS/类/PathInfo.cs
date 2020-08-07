@@ -59,5 +59,29 @@ namespace WebApplication2
             XmlNode root = doc.SelectSingleNode("/root/ftpPassword");
             return @root.InnerText;
         }
+
+        public  string GetQualituInspectApplyRobot()//获取送检新建申请消息机器人url
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);
+            XmlNode root = doc.SelectSingleNode("/root/QualituInspectApplyRobot");
+            return root.InnerText;
+        }
+
+        public string GetQualituInspectAuditRobot()//获取送检审核消息机器人url
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);
+            XmlNode root = doc.SelectSingleNode("/root/QualituInspectAuditRobot");
+            return root.InnerText;
+        }
+
+        public string GetQualituInspectOverRobot()//获取送检完成消息机器人url
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);
+            XmlNode root = doc.SelectSingleNode("/root/QualituInspectOverRobot");
+            return root.InnerText;
+        }
     }
 }
