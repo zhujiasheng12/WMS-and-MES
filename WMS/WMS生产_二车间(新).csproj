@@ -3556,6 +3556,9 @@
     <Compile Include="生产管理\生产部\换产\机台间调整加工任务.ashx.cs">
       <DependentUpon>机台间调整加工任务.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\生产部\换产\读取可换产机床.ashx.cs">
+      <DependentUpon>读取可换产机床.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\生产部\换产\读取机台当前加工任务.ashx.cs">
       <DependentUpon>读取机台当前加工任务.ashx</DependentUpon>
     </Compile>
@@ -4371,6 +4374,7 @@
     <Content Include="生产管理\品质\送检模块ashx\读取送检申请.ashx" />
     <Content Include="生产管理\品质\送检模块ashx\完成检测.ashx" />
     <Content Include="生产管理\品质\送检模块ashx\删除送检申请.ashx" />
+    <Content Include="生产管理\生产部\换产\读取可换产机床.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
