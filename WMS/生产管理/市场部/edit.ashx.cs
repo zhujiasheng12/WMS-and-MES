@@ -33,6 +33,7 @@ namespace WebApplication2.Model.生产管理.市场部
                 var pattern = int.Parse(form["pattern"]);
                 var ProjectName = form["ProjectName"];
                 var ClientName = form["ClientName"];
+                var remark= form["remark"];
 
                 List<EditRead> editReads = new List<EditRead>();
                 using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
@@ -65,6 +66,7 @@ namespace WebApplication2.Model.生产管理.市场部
                         row.Order_State = Order_State;
                         row.ProofingORProduct = pattern;
                         row.ProjectName = ProjectName;
+                        row.Remark = remark;
                         var guide = entities.JDJS_WMS_Order_Guide_Schedu_Table.Where(r => r.OrderID == id).FirstOrDefault();
                         if (guide != null) {
                             guide.ClientName = ClientName;

@@ -38,7 +38,9 @@ namespace WebApplication2.Model.生产管理.工程部
                 Engine_Technology_ManagerId=Convert.ToInt32(row.Engine_Technology_ManagerId),
                                         craftId = Convert.ToInt32(row.craftPersonId),
                                         projectName=row.ProjectName ,
-                                        virtualProgPersId = row.virtualProgPersId == null ? "" : row.virtualProgPersId.ToString()
+                                        virtualProgPersId = row.virtualProgPersId == null ? "" : row.virtualProgPersId.ToString(),
+                    Remark = row.Remark == null ? "" : row.Remark,
+                    IntentionPlanEndTime = row.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(row.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
                 });
                
                 var json = serializer.Serialize(reads);
@@ -69,7 +71,8 @@ namespace WebApplication2.Model.生产管理.工程部
         public int Engine_Technology_ManagerId;
         public int craftId;
         public string projectName;
-
+        public string Remark;
+        public string IntentionPlanEndTime;
         public string virtualProgPersId;
     }
 }

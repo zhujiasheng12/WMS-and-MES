@@ -20,7 +20,7 @@ namespace WebApplication2.Model.生产管理.市场部
             var form = context.Request.Form;
             var file = context.Request.Files;
             var projectName = form["projectName"];
-        
+            var remark = form["remark"];//备注
             var loginID = Convert.ToInt32(context.Session["id"]);
             int priority = 1;//优先级
             string year = DateTime.Now.Year.ToString().Substring(2, 2);
@@ -100,7 +100,8 @@ namespace WebApplication2.Model.生产管理.市场部
                                 Priority = priority,
                                 CreateTime = DateTime.Now,
                                 CreatePersonID = loginID,
-                                AuditResult ="待审核"
+                                AuditResult ="待审核",
+                                Remark =remark 
                                 
                             };
                             entities.JDJS_WMS_Order_Entry_Table.Add(row);
@@ -203,7 +204,8 @@ namespace WebApplication2.Model.生产管理.市场部
                                                         virtualProgPersId = OldOrderInfo.FirstOrDefault().virtualProgPersId,
                                                         virtualReturnTime = OldOrderInfo.FirstOrDefault().virtualReturnTime,
                                                        // audit_Result = "待审核",
-                                                        AuditResult ="待审核"
+                                                        AuditResult ="待审核",
+                                                        Remark = remark
                                                     };
                                                     wms.JDJS_WMS_Order_Entry_Table.Add(orderentry);
                                                     wms.SaveChanges();

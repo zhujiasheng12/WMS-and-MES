@@ -18,6 +18,7 @@ namespace WebApplication2
         public Nullable<int> PlanID { get; set; }
         public Nullable<int> StaffID { get; set; }
         public Nullable<System.DateTime> ConfirmTime { get; set; }
+        public Nullable<System.DateTime> StartTime { get; set; }
     
         public virtual JDJS_WMS_Maintenance_Plan_Table JDJS_WMS_Maintenance_Plan_Table { get; set; }
         public virtual JDJS_WMS_Staff_Info JDJS_WMS_Staff_Info { get; set; }

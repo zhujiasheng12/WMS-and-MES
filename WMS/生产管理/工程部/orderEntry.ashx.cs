@@ -62,7 +62,9 @@ namespace WebApplication2.Model.生产管理.工程部
                         craftPerson=item.craftPerson,
                         craftPersonId= Convert.ToInt32( item.craftPersonId),
                         clientName = clientName,
-                        virtualProgPers = virtualProgPers
+                        virtualProgPers = virtualProgPers,
+                        Remark = item.Remark == null ? "" : item.Remark,
+                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
                     });
                 }
                 var key = context.Request["key"];
@@ -115,5 +117,7 @@ namespace WebApplication2.Model.生产管理.工程部
         public int Engine_Technology_ManagerId;
         public string clientName;
         public string virtualProgPers;
+        public string Remark;
+        public string IntentionPlanEndTime;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.HSSF.Record.Aggregates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -38,6 +39,8 @@ namespace WebApplication2.生产管理.市场部
                         var Product_Output = int.Parse(form["Product_Output"]);
                         var ProjectName = form["ProjectName"];
                         var ClientName = form["ClientName"];
+                        var remark = form["remark"];
+                        var planEndTime =Convert.ToDateTime( form["planEndTime"]);
                         var rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_Number == Order_Number);
                         foreach (var item in rows)
                         {
@@ -67,7 +70,8 @@ namespace WebApplication2.生产管理.市场部
                                     //context.Response.Write(String.Format("该订单负责人为{0}，当前登录用户没有修改订单权限！", loginName));
                                     if (intention == "5")
                                     {
-
+                                        row1.FirstOrDefault().Remark = remark;
+                                        row1.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                         row1.FirstOrDefault().Order_Number = Order_Number;
                                         row1.FirstOrDefault().Order_Leader = Order_Leader;
                                         row1.FirstOrDefault().Product_Name = Product_Name;
@@ -84,7 +88,8 @@ namespace WebApplication2.生产管理.市场部
                                     }
                                     else if (intention == "6")
                                     {
-
+                                        row1.FirstOrDefault().Remark = remark;
+                                        row1.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                         row1.FirstOrDefault().Order_Number = Order_Number;
                                         row1.FirstOrDefault().Order_Leader = Order_Leader;
 
@@ -102,7 +107,8 @@ namespace WebApplication2.生产管理.市场部
                                     else if (intention == "1")
                                     {
 
-
+                                        row1.FirstOrDefault().Remark = remark;
+                                        row1.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                         row1.FirstOrDefault().Product_Output = Product_Output;
 
                                         entities.SaveChanges();
@@ -133,6 +139,8 @@ namespace WebApplication2.生产管理.市场部
                             if (intention == "5")
                             {
                                 var row = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId);
+                                row.FirstOrDefault().Remark = remark;
+                                row.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                 row.FirstOrDefault().Order_Number = Order_Number;
                                 row.FirstOrDefault().Order_Leader = Order_Leader;
                                 row.FirstOrDefault().Product_Name = Product_Name;
@@ -152,6 +160,8 @@ namespace WebApplication2.生产管理.市场部
                             else if (intention == "6")
                             {
                                 var row = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId);
+                                row.FirstOrDefault().Remark = remark;
+                                row.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                 row.FirstOrDefault().Order_Number = Order_Number;
                                 row.FirstOrDefault().Order_Leader = Order_Leader;
 
@@ -169,7 +179,8 @@ namespace WebApplication2.生产管理.市场部
                             else if (intention == "1")
                             {
                                 var row = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId);
-
+                                row.FirstOrDefault().Remark = remark;
+                                row.FirstOrDefault().IntentionPlanEndTime = planEndTime;
                                 row.FirstOrDefault().Product_Output = Product_Output;
 
                                 entities.SaveChanges();

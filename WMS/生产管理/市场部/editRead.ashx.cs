@@ -34,7 +34,9 @@ namespace WebApplication2.Model.生产管理.市场部
                 Order_State=row.Order_State,id=row.Order_ID,
                 pattern=row.ProofingORProduct.ToString(),
                 ProjectName=row.ProjectName,
-                  ClientName = ClientName
+                  ClientName = ClientName,
+                  Remark =row.Remark ==null?"":row.Remark ,
+                    IntentionPlanEndTime=row.IntentionPlanEndTime ==null?DateTime .Now .ToString ("yyyy-MM-dd HH:mm:ss:fff") :Convert .ToDateTime(row.IntentionPlanEndTime).ToString ("yyyy-MM-dd HH:mm:ss:fff")
 
                 });
 
@@ -65,5 +67,7 @@ namespace WebApplication2.Model.生产管理.市场部
         public int id;
         public string ProjectName;
         public string ClientName;
+        public string Remark;
+        public string IntentionPlanEndTime;
     }
 }

@@ -28,6 +28,7 @@ namespace WebApplication2.生产管理.市场部.关联生产订单
             DateTime Order_Plan_End_Time = Convert.ToDateTime(context.Request["Order_Plan_End_Time"]);//计划结束时间
             var Order_Plan_Start_Time = DateTime.Now;
             var Customer = context.Request["Customer"];//客户名称
+            var remark = context.Request["remark"];
             #region 订单号
             string year = DateTime.Now.Year.ToString().Substring(2, 2);
             string month = DateTime.Now.Month.ToString();
@@ -118,7 +119,8 @@ namespace WebApplication2.生产管理.市场部.关联生产订单
                             craftPersonId = OldOrder.craftPersonId,
                             ProofingORProduct =pattern ,
                             program_audit_result = null,
-                            ParentId =orderId
+                            ParentId =orderId,
+                            Remark =remark 
                         };
                         entities.JDJS_WMS_Order_Entry_Table.Add(orderentry);
                         entities.SaveChanges();

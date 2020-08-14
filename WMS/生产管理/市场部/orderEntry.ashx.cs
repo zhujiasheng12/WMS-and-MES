@@ -50,7 +50,9 @@ namespace WebApplication2.Model.生产管理.市场部
                             craftPerson = item.craftPerson,
                             projectName = item.ProjectName,
                             Priority = item.Priority.ToString(),
-                            clientName = clientName
+                            clientName = clientName,
+                            remark =item.Remark==null?"":item.Remark  ,
+                            IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
                         }) ;
                     }
       
@@ -116,5 +118,7 @@ namespace WebApplication2.Model.生产管理.市场部
         public string projectName;
         public string Priority;
         public string clientName;
+        public string remark;
+        public string IntentionPlanEndTime;
     }
 }

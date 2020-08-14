@@ -20,6 +20,8 @@ namespace WebApplication2.Model.生产管理.市场部
             var form = context.Request.Form;
             var file = context.Request.Files;
             var projectName = form["projectName"];
+            var intentionEndTime = Convert.ToDateTime(form["intentionEndTime"]);//预计评估完成时间
+            var remark = form["remark"];//备注
             var loginUserId=Convert .ToInt32 ( context.Session["id"]);
             int priority = 1;//优先级
             // var folder = @"D:\服务器文件勿动\"+ form[0];
@@ -81,7 +83,10 @@ namespace WebApplication2.Model.生产管理.市场部
                                 Priority =priority ,
                                 Intention = 5,//意向未提交
                                 CreateTime = DateTime.Now,
-                                CreatePersonID = loginUserId  
+                                CreatePersonID = loginUserId  ,
+                                IntentionPlanEndTime =intentionEndTime ,
+                                Remark =remark 
+
                             };
 
                             entities.JDJS_WMS_Order_Entry_Table.Add(row);
@@ -180,7 +185,9 @@ namespace WebApplication2.Model.生产管理.市场部
                                                         CtratPersonID = loginUserId,
                                                         Priority = priority,
                                                         CreateTime = DateTime.Now,
-                                                        CreatePersonID = loginUserId 
+                                                        CreatePersonID = loginUserId ,
+                                                        IntentionPlanEndTime = intentionEndTime,
+                                                        Remark = remark
                                                     };
 
                                                     entities.JDJS_WMS_Order_Entry_Table.Add(row);

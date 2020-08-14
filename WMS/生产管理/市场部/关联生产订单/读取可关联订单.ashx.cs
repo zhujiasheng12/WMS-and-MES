@@ -50,8 +50,9 @@ namespace WebApplication2.生产管理.市场部.关联生产订单
                             craftPerson = item.craftPerson,
                             projectName = item.ProjectName,
                             Priority = item.Priority.ToString(),
-                            clientName = clientName
-                        });
+                            clientName = clientName,
+                            remark = item.Remark == null ? "" : item.Remark
+                        }) ;
                     }
 
                 }

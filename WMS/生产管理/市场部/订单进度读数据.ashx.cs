@@ -22,6 +22,8 @@ namespace WebApplication2.生产管理.市场部
                     foreach (var order in orders)
                     {
                         OrderProcessRead orderProcessRead = new OrderProcessRead();
+                        orderProcessRead.Remark = order.Remark == null ? "" : order.Remark;
+                        orderProcessRead.IntentionPlanEndTime = order.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(order.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff");
                         orderProcessRead.audit = order.AuditResult == null ? "" : order.AuditResult;
                         orderProcessRead.orderName = order.Product_Name;
                         orderProcessRead.projectName = order.ProjectName;
@@ -334,5 +336,7 @@ namespace WebApplication2.生产管理.市场部
         public string EngineState;
         public string projectName;
         public string clientName;
+        public string Remark;
+        public string IntentionPlanEndTime;
     }
 }

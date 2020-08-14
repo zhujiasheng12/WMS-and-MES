@@ -500,6 +500,7 @@
           <Property Name="PlanID" Type="int" />
           <Property Name="StaffID" Type="int" />
           <Property Name="ConfirmTime" Type="datetime" />
+          <Property Name="StartTime" Type="datetime" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Maintenance_Plan_Table">
           <Key>
@@ -512,6 +513,8 @@
           <Property Name="Cycle" Type="float" />
           <Property Name="isFlag" Type="int" />
           <Property Name="TimeStr" Type="varchar(max)" />
+          <Property Name="MaintenanceName" Type="varchar" MaxLength="50" />
+          <Property Name="start" Type="datetime" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Alter_History_Table">
           <Key>
@@ -583,6 +586,9 @@
           <Property Name="AuditResult" Type="varchar(max)" />
           <Property Name="AuditAdvice" Type="varchar(max)" />
           <Property Name="ParentId" Type="int" />
+          <Property Name="IntentionPlanEndTime" Type="datetime" />
+          <Property Name="IntentionEndTime" Type="datetime" />
+          <Property Name="Remark" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -3115,6 +3121,7 @@
           <Property Name="ConfirmTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="JDJS_WMS_Maintenance_Plan_Table" Relationship="Model.FK_JDJS_WMS_Maintenance_Confirm_Table_JDJS_WMS_Maintenance_Plan_Table" FromRole="JDJS_WMS_Maintenance_Confirm_Table" ToRole="JDJS_WMS_Maintenance_Plan_Table" />
           <NavigationProperty Name="JDJS_WMS_Staff_Info" Relationship="Model.FK_JDJS_WMS_Maintenance_Confirm_Table_JDJS_WMS_Staff_Info" FromRole="JDJS_WMS_Maintenance_Confirm_Table" ToRole="JDJS_WMS_Staff_Info" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Maintenance_Plan_Table">
           <Key>
@@ -3129,6 +3136,8 @@
           <Property Name="TimeStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="JDJS_WMS_Device_Info" Relationship="Model.FK_JDJS_WMS_Maintenance_Plan_Table_JDJS_WMS_Device_Info" FromRole="JDJS_WMS_Maintenance_Plan_Table" ToRole="JDJS_WMS_Device_Info" />
           <NavigationProperty Name="JDJS_WMS_Maintenance_Confirm_Table" Relationship="Model.FK_JDJS_WMS_Maintenance_Confirm_Table_JDJS_WMS_Maintenance_Plan_Table" FromRole="JDJS_WMS_Maintenance_Plan_Table" ToRole="JDJS_WMS_Maintenance_Confirm_Table" />
+          <Property Name="MaintenanceName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="start" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Alter_History_Table">
           <Key>
@@ -3217,6 +3226,9 @@
           <Property Name="AuditAdvice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ParentId" Type="Int32" />
           <NavigationProperty Name="JDJS_WMS_Quality_Detection_Measurement_Table" Relationship="Model.FK__JDJS_WMS___Order__Qualiy" FromRole="JDJS_WMS_Order_Entry_Table" ToRole="JDJS_WMS_Quality_Detection_Measurement_Table" />
+          <Property Name="IntentionPlanEndTime" Type="DateTime" Precision="3" />
+          <Property Name="IntentionEndTime" Type="DateTime" Precision="3" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -5159,6 +5171,7 @@
           <EntitySetMapping Name="JDJS_WMS_Maintenance_Confirm_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Maintenance_Confirm_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Maintenance_Confirm_Table">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="ConfirmTime" ColumnName="ConfirmTime" />
                 <ScalarProperty Name="StaffID" ColumnName="StaffID" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
@@ -5169,6 +5182,8 @@
           <EntitySetMapping Name="JDJS_WMS_Maintenance_Plan_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Maintenance_Plan_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Maintenance_Plan_Table">
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="MaintenanceName" ColumnName="MaintenanceName" />
                 <ScalarProperty Name="TimeStr" ColumnName="TimeStr" />
                 <ScalarProperty Name="isFlag" ColumnName="isFlag" />
                 <ScalarProperty Name="Cycle" ColumnName="Cycle" />
@@ -5219,6 +5234,9 @@
           <EntitySetMapping Name="JDJS_WMS_Order_Entry_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Entry_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Order_Entry_Table">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="IntentionEndTime" ColumnName="IntentionEndTime" />
+                <ScalarProperty Name="IntentionPlanEndTime" ColumnName="IntentionPlanEndTime" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="AuditAdvice" ColumnName="AuditAdvice" />
                 <ScalarProperty Name="AuditResult" ColumnName="AuditResult" />

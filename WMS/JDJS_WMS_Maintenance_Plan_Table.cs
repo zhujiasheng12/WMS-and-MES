@@ -27,6 +27,8 @@ namespace WebApplication2
         public Nullable<double> Cycle { get; set; }
         public Nullable<int> isFlag { get; set; }
         public string TimeStr { get; set; }
+        public string MaintenanceName { get; set; }
+        public Nullable<System.DateTime> start { get; set; }
     
         public virtual JDJS_WMS_Device_Info JDJS_WMS_Device_Info { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

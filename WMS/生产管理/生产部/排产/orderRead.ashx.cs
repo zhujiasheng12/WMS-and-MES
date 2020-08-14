@@ -55,17 +55,14 @@ namespace WebApplication2.Model.生产管理.生产部
                                 planTime = sche.PlanEndTime.ToString();
                             }
                         }
-                        Order info = new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, orderName = item.Product_Name, projectName = item.ProjectName == null ? "" : item.ProjectName, planTime = planTime };
+                        Order info = new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, orderName = item.Product_Name, projectName = item.ProjectName == null ? "" : item.ProjectName, planTime = planTime,orderPlanEndTime =item.Order_Plan_End_Time ==null?DateTime .Now:Convert .ToDateTime(item.Order_Plan_End_Time),orderPlanEndTimeStr = item.Order_Plan_End_Time == null ? "" : Convert.ToDateTime(item.Order_Plan_End_Time).ToString () ,output =item.Product_Output };
                         if (item.Intention == 3)
                         {
                             info.flag = 1;
                         }
                         orders.Add(info);
-
-                        
-
                     }
-                    var sort = orders.OrderByDescending(r => r.flag);
+                    var sort = orders.OrderByDescending(r => r.flag).ThenBy(r=>r.orderPlanEndTime);
                     var layPage = sort.Skip((page - 1) * limit).Take(limit);
                     var model = new { code = 0, msg = "", count = orders.Count(), data = layPage };
                     var json = serializer.Serialize(model);
@@ -98,5 +95,8 @@ namespace WebApplication2.Model.生产管理.生产部
         public string orderName;
         public string projectName;
         public string planTime;
+        public int output;
+        public string orderPlanEndTimeStr;
+        public DateTime orderPlanEndTime;
     }
 }

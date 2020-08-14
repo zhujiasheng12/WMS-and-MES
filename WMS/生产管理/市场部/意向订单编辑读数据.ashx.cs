@@ -43,7 +43,8 @@ namespace WebApplication2.生产管理.市场部
                               orders.virtualProgPersId,
                               orders.virtualReturnTime,
                               orders.ProjectName ,
-
+                              orders.Remark ,
+                              orders.IntentionPlanEndTime ,
                               orders .Priority ,
                             guide.ClientName
 

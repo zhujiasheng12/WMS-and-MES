@@ -49,6 +49,7 @@ namespace WebApplication2.生产管理.市场部
                             if (result == "ok")
                             {
                                 entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).First().Intention = 1;
+                                entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).First().IntentionEndTime =DateTime .Now ;
                                 var orderInter = entities.JDJS_WMS_Order_Intention_History_Table.Where(r => r.OrderID == orderId).FirstOrDefault();
                                 if (orderInter != null)
                                 {

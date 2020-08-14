@@ -39,11 +39,18 @@ namespace WebApplication2.Model.生产管理.工程部
                         }
                         if (item.Engine_Program_ManagerId == id|item.craftPersonId==id)
                         {
-                            orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 1, time = time, creatTime = Convert.ToDateTime(item.CreateTime), orderName = item.Product_Name ,projectName =item.ProjectName==null?"":item.ProjectName  });
+                            orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 1, time = time, creatTime = Convert.ToDateTime(item.CreateTime), orderName = item.Product_Name ,projectName =item.ProjectName==null?"":item.ProjectName,
+                                Remark = item.Remark == null ? "" : item.Remark,
+                                IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
+                            });
                         }
                         else
                         {
-                            orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, creatTime = Convert.ToDateTime(item.CreateTime),orderName =item.Product_Name ,projectName =item.ProjectName==null?"":item.ProjectName  });
+                            orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 0, time = time, creatTime = Convert.ToDateTime(item.CreateTime),orderName =item.Product_Name ,projectName =item.ProjectName==null?"":item.ProjectName,
+                                Remark = item.Remark == null ? "" : item.Remark,
+                                IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff"),
+                                processPerson =item.Engine_Program_Manager 
+                            });
 
                         }
 
@@ -86,5 +93,8 @@ namespace WebApplication2.Model.生产管理.工程部
         public int flag;
         public string time;
         public DateTime creatTime;
+        public string processPerson;
+        public string Remark;
+        public string IntentionPlanEndTime;
     }
 }

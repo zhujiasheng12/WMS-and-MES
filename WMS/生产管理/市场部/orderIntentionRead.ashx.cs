@@ -47,7 +47,9 @@ namespace WebApplication2.Model.生产管理.市场部
                                orders.ProjectName ,
                                 orders .Priority ,
                                 orders.AuditResult ,
-                                client.ClientName
+                                client.ClientName,
+                                orders .Remark ,
+                                orders.IntentionPlanEndTime ,
                            };
 
 
@@ -102,7 +104,9 @@ namespace WebApplication2.Model.生产管理.市场部
                         virtualReturnTime=virtualReturnTime,
                         projectName =item.ProjectName ,
                         Priority = item.Priority.ToString(),
-                        clientName=item.ClientName
+                        clientName=item.ClientName,
+                        remark = item.Remark == null ? "" : item.Remark,
+                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
                     }); ;
                     
       

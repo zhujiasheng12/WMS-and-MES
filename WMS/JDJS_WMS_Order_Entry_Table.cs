@@ -67,6 +67,9 @@ namespace WebApplication2
         public string AuditResult { get; set; }
         public string AuditAdvice { get; set; }
         public Nullable<int> ParentId { get; set; }
+        public Nullable<System.DateTime> IntentionPlanEndTime { get; set; }
+        public Nullable<System.DateTime> IntentionEndTime { get; set; }
+        public string Remark { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JDJS_WMS_Blank_Additional_History_Table> JDJS_WMS_Blank_Additional_History_Table { get; set; }
