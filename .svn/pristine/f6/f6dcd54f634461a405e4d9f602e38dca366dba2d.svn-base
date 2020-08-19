@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单号<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <select name="orderNum" lay-verify="required" lay-search>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">工件编号<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="num" required lay-verify="required" placeholder="请输入工件编号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="二次元" title="二次元">
+                <input type="radio" name="type" value="三坐标" title="三坐标" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文件<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="file" id="file" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        //Demo
+
+        function method(orderId) {
+            layui.use('form', function () {
+                var form = layui.form, $ = layui.$;
+                $.ajax({
+                    url: '/生产管理/品质/order_orderId.ashx',
+                    success: function (res) {
+                        const arr = JSON.parse(res)
+                        arr.forEach(item => {
+                            if (item.orderId == orderId.split('-')[0]) {
+                                $('select').append(`<option value="${item.order},${item.orderId}" selected>${item.order}</option>`)
+                            } else {
+                                $('select').append(`<option value="${item.order},${item.orderId}" >${item.order}</option>`)
+                            }
+
+                        })
+                        form.render('select')
+                    }
+                })
+                form.render()
+                //监听提交
+                form.on('submit(formDemo)', function (data) {
+                    const index = layer.load(1)
+                    let formData = new FormData();
+                    let file = document.getElementById('file').files[0]
+                    formData.append('file', file)
+                    formData.append('type', data.field.type)
+                    formData.append('num', data.field.num)
+                    let order = data.field.orderNum.split(',')
+
+                    formData.append('orderNum', order[0])
+                    formData.append('orderId', order[1])
+                    $.ajax({
+                        url: '解析表格.ashx',
+                        type: 'post',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            if (res == 'ok') {
+                                layer.msg('导入成功', { icon: 1, time: 1000 }, function () {
+                                    layer.close(index);     
+                                })
+                            } else {
+                                layer.alert(res)
+                                layer.close(index);     
+                            }
+                        },
+                        error(err) {
+                            layer.alert(err)
+                            layer.close(index);     
+                        }
+                    })
+                    return false;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

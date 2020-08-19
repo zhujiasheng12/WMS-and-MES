@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../easyui/jquery.min.js"></script>
+    <script src="../../easyui/jquery.easyui.min.js"></script>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+
+    
+</head>
+<body >
+    <table id="demo" lay-filter="test"></table>
+
+    <script type="text/html" id="toolbarDemo">
+        当前机床:
+        <p1></p1>
+        <!--当前刀号<p2></p2>
+        主轴转速<p3></p3>-->
+    </script>
+   
+    <script>
+        function init(id) {
+            layui.use(['table', 'laypage'], function () {
+                var table = layui.table, $ = layui.$, laypage = layui.laypage;
+
+                //第一个实例
+                tableReload1 = table.render({
+                    elem: '#demo'
+
+                    , url: 'knifeRead.ashx' //数据接口
+                    , where: { id: id }
+                    , page: true //开启分页
+                    , limit: 90
+                    , toolbar: '#toolbarDemo'
+                    , cols: [[ //表头
+                        { field: 'number', type: 'numbers', title: '序号', width: '5%' }
+                        , { field: 'RepairTime', title: '报修时间', width: '14%' }
+                        , { field: 'RepairDesc', title: '报修描述', width: '10%', }
+                        , { field: 'Receptiontime', title: '受理时间', width: '14%', }
+                        , { field: 'StartTime', title: '维修起始时间', width: '14%', }
+                        , { field: 'EndTime', title: '维修结束时间', width: '14%', }
+                        , { field: 'Staff', title: '维修人员', width: '10%' }
+                        , { field: 'State', title: '报修状态', width: '10%' }
+                        , { field: 'CncID', title: '机床ID', width: '10%', hide: true }
+                        , {
+                            field: 'do', title: '操作', width: '10%', templet: function (d) {
+                                return '<button class="layui-btn layui-btn-sm">受理</button>'
+                            }
+                        }
+
+
+                    ]],//
+                    done: function (dd) {
+                        var arr = $('td[data-field="State"]')
+                        for (var i = 0; i < arr.length; i++) {
+                            if (arr[i].children[0].innerText != "未受理") {
+                                $(arr[i]).siblings('[data-field="do"]').find('button').addClass(' layui-btn-disabled').attr('disabled', "true")
+
+                            }
+                        };
+
+                        $('[data-field="do"] button').click(function () {
+                            var arrs = $(this)[0].className.split(" ")
+                            for (var i = 0; i < arrs.length; i++) {
+                                if (arrs[i] == "layui-btn-disabled") {
+                                    return;
+                                }
+                            };
+                            var cncId = $(this).parents('[data-field="do"]').siblings('[data-field="CncID"]')[0].children[0].innerText
+                            $.ajax({
+                                url: '../../人员管理/session/Jurisdiction.ashx',
+                                success: function (d) {
+                                    var obj = JSON.parse(d)
+                                    //
+                                    $.ajax({
+                                        url: '受理.ashx',
+                                        data: { "cncId": cncId, "userName": obj.UserName },
+                                        success: function (d) {
+                                            if (d == "ok") {
+                                                layui.layer.msg("受理成功", { icon: 1, time: 1000 }, function () {
+                                                    tableReload1.reload({})
+                                                    layui.table.render({})
+
+                                                    $.ajax({
+                                                        url: 'stateNumberRead.ashx',
+                                                        success: function (d) {
+                                                            var obj = JSON.parse(d);
+                                                            $('#black').text(obj.black);
+                                                            $('#green').text(obj.green);
+                                                            $('#orange').text(obj.orange);
+                                                            $('#red').text(obj.red);
+                                                        }
+                                                    });
+
+                                                    $('#tt').treegrid({
+                                                        url: 'PositionHandler.ashx',
+                                                        idField: 'id',
+                                                        animate: true,
+                                                        treeField: 'name',
+                                                        method: 'get',
+                                                        rownumbers: true,
+                                                        checkbox: true,
+                                                        columns: [[
+                                                            { title: '位置名称', field: 'name', width: '120%' },
+
+                                                            { field: 'id', title: 'id', width: 80, hidden: true },
+                                                            { field: 'CncID', title: 'CncID', width: 80, hidden: true },
+                                                            { field: 'flag', title: 'flag', width: 80, hidden: true }
+                                                        ]],
+
+                                                    });
+
+
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        });
+                        //
+                        $.ajax({
+                            url: 'nowTool.ashx',
+                            data: { "cncId": id },
+                            success: function (d) {
+                                var arr = d.split(',')
+                                $("p1").text(arr[0])
+                                $('p2').text(arr[1])
+                                $('p3').text(arr[2])
+                            }
+                        })
+
+
+                        var max = $('td[data-field="toolMaxTime"]')
+                        var now = $('td[data-field="toolCurrTime"]')
+                        for (var i = 0; i < max.length; i++) {
+                            var ma = new Number(max[i].children[0].innerText)
+                            var no = new Number(now[i].children[0].innerText)
+                            if (ma <= no & ma > 0) {
+                                $(max[i]).parent('tr').css({ 'background-color': 'red', 'color': 'white' })
+                            } else if (no > ma * 0.8 & ma > 0) {
+                                $(max[i]).parent('tr').css('background-color', '#F8B62D')
+                            }
+                        }
+                    }
+                });
+
+            });
+        }
+    </script>
+  
+</body>
+</html>

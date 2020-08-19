@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div action="" method="" class="layui-form" style="margin:10px 10px">
+        <div style="display: flex;">
+            <div class="layui-input-block" style="margin-left: 0;width: 500px;">
+                <input type="text" name="HandoverCompany" id="HandoverCompany" class="layui-input"
+                       style="position:absolute;z-index:2;width:80%;" lay-verify="required" value="" onkeyup="search()"
+                       autocomplete="off" onblur="blur1()">
+
+                <select type="text" id="hc_select" lay-filter="hc_select" autocomplete="off" placeholder="移交单位全称"
+                        lay-verify="required" class="layui-select" lay-search>
+                </select>
+                <!-- <span onclick="getData()" style="position: absolute;z-index: 999;right: 90px;top: 10px;"><i class="layui-icon layui-icon-search"></i>  </span>
+                          <span onclick="getData()" style="position: absolute;z-index: 999;right: 110px;top: 10px;"><i class="layui-icon layui-icon-search"></i>  </span> -->
+            </div>
+            <button style="height: 38px;margin-left: 10px;" class="layui-btn layui-btn-sm "
+                    onclick="getData()">
+                搜索
+            </button>
+            <button style="height: 38px;" class="layui-btn layui-btn-sm layui-btn-danger"
+                    onclick="clear1()">
+                清空
+            </button>
+        </div>
+    </div>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        init()
+        function getData() {
+            const str = $("#HandoverCompany").val()
+            window.tableRender(str)
+        }
+        function clear1() {
+            $("#HandoverCompany").val('')
+            window.tableRender('')
+        }
+        function init() {
+            layui.use(['form'], function () {
+                var form = layui.form
+                form.on('select(hc_select)', function (data) { //选择移交单位 赋值给input框
+                    $("#HandoverCompany").val(data.value);
+                    $("#hc_select").next().find("dl").css({
+                        "display": "none"
+                    });
+                    form.render();
+                });
+                window.blur1 = function () {
+                    // setTimeout(() => {
+                    //     $('.layui-anim.layui-anim-upbit').hide()
+                    // }, 10);
+                    setTimeout(() => {
+                        $("#hc_select").next().find("dl").css({
+                            "display": "none"
+                        });
+                    }, 200);
+                }
+                window.search = function () {
+                    var value = $("#HandoverCompany").val();
+                    $("#hc_select").val(value);
+                    form.render();
+                    $("#hc_select").next().find("dl").css({
+                        "display": "block"
+                    });
+                    var dl = $("#hc_select").next().find("dl").children();
+                    var j = -1;
+                    for (var i = 0; i < dl.length; i++) {
+                        if (dl[i].innerHTML.indexOf(value) <= -1) {
+                            dl[i].style.display = "none";
+                            j++;
+                        }
+                        if (j == dl.length - 1) {
+                            $("#hc_select").next().find("dl").css({
+                                "display": "none"
+                            });
+                        }
+                    }
+
+                }
+            });
+            layui.use(['element', 'form'], function () {
+                element = layui.element,
+                    form = layui.form;
+                $.ajax({
+                    url: '/生产管理/生产部/订单跟踪/模糊搜索.ashx',
+                    success: function (res) {
+                        arr = JSON.parse(res)
+                        arr.forEach(item => {
+                            $('#hc_select').append(
+                                `<option value="${item.str}">${item.str}</option>`
+                            )
+                        })
+                        form.render('select')
+                    }
+                })
+                //…
+            });
+        }
+        layui.use('table', function () {
+            var table = layui.table;
+            //第一个实例
+            window.tableRender = function (str) {
+                table.render({
+                    elem: '#demo'
+                    //, height: 312
+                    , method: 'post'
+                    , where: { str: str }
+                    , url: '../../生产部/订单跟踪/读取订单.ashx' //数据接口
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'Id', title: 'ID', width: 80, sort: true, fixed: 'left' }
+                        , { field: 'OrderNum', title: '订单单号' }
+                        , { field: 'ProjectName', title: '项目名称' }
+                        , { field: 'ProductName', title: '产品名称' }
+                        , { field: 'Leader', title: '订单责任人' }
+                        , { field: 'Output', title: '订单数量' }
+                        , { field: 'PlanEndTime', title: '计划完成' }
+                        , { field: 'EndTime', title: '实际完成' }
+                        , { field: 'State', title: '订单状态' }
+
+                    ]],
+                    parseData(res) {
+                        let currPage
+                        if (this.page === true) {
+                            currPage = 1
+                        } else {
+                            currPage = this.page.curr
+                        }
+                        const data = res.slice((currPage - 1) * this.limit, currPage * this.limit)
+                        return {
+                            code: 0,
+                            data: data,
+                            count: res.length
+                        }
+                    }
+                });
+            }
+            window.tableRender('')
+            table.on('row(test)', function (obj) {
+                console.log(obj.data) //得到当前行数据
+                sessionStorage.setItem('orderInfo', JSON.stringify(obj.data))
+                sessionStorage.setItem('Id', obj.data.Id)
+                layer.open({
+                    type: 2,
+                    area: ['95%', '500px'],
+                    title: '订单详情',
+                    content: './detail.html',
+                    success: function (layero, index) {
+                        //  var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    }
+                });
+                //open('./detail.html')
+            });
+        });
+    </script>
+</body>
+</html>

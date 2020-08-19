@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+
+    <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+   
+       <div class="layui-form-item">
+        <label class="layui-form-label">审核信息</label>
+        <div class="layui-input-block" style="line-height:36px">
+          <textarea id="info"  class="layui-textarea" readonly></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">说明</label>
+        <div class="layui-input-block">
+            <textarea id="text" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+  <!--  <div class="layui-form-item">
+        <label class="layui-form-label">附件</label>
+        <div class="layui-input-block">
+            <input type="file"id="file" placeholder="请输入" autocomplete="off" class="layui-input" multiple="multiple">
+        </div>
+    </div>-->
+    <div style="display:flex">
+        <div style="flex:auto;text-align:center">
+             <button class="layui-btn" style="" onclick="submit(true)">通过</button>
+        </div>
+         <div style="flex:auto;text-align:center">
+               <button class="layui-btn" onclick="submit(false)">不通过</button>
+        </div>
+       <!--  <div style="flex:auto;text-align:left">
+               <button class="layui-btn" style="" onclick="again()">重新发起审核</button>
+        </div>-->
+    </div>
+   
+  
+   
+    <script>
+    function method(orderId1) {
+        orderId = orderId1
+      
+       
+        $.ajax({
+            url:'查看订单审核情况.ashx',
+            data:{orderId:orderId},
+            success: function (res) {
+                res=JSON.parse(res).data
+                $("#info").text("审核结果：" + (res.state == null ? "无" : res.state) + "\n\n审核说明：" + (res.advice == null ? "无" : res.advice))
+                console.log(res)
+            }
+
+        })
+        layui.use('layer', function () {
+            layer = layui.layer;
+        })
+    }
+    function submit(d) {
+        if (d) {
+            var form = new FormData();
+            form.append("result", "审核通过")
+            form.append("orderId", orderId)
+            form.append("advice", $("#text").val())
+            
+            //var files = $("#file")[0].files
+            //if (files.length > 0) {
+            //    for (var i = 0; i < files.length; i++) {
+            //        form.append(i,files[i])
+            //    }
+            //}
+            $.ajax({
+                url: '审核订单.ashx',
+                data: form,
+                processData: false,
+                contentType: false,
+                type: 'post',
+                success: function (d) {
+                    if (d == "ok") {
+                        layer.msg("审核成功", { icon: 1, time: 1000 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index);
+                        })
+                    } else {
+                              layer.msg(d, { icon: 2, time: 1000 }, function () {
+                            //var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            //parent.layer.close(index);
+                        })
+                    }
+                }
+
+            })
+
+        } else {
+            //var files = $("#file")[0].files
+            //if ($("#text").val() == "" & files.length == 0) {
+            //    layer.alert("请填写说明或者上传文件");
+            //    return;
+            //}
+              var form = new FormData();
+            form.append("result", "审核不通过")
+              form.append("orderId", orderId)
+              form.append("advice", $("#text").val())
+         
+            //if (files.length > 0) {
+            //    for (var i = 0; i < files.length; i++) {
+            //        form.append(i,files[i])
+            //    }
+            //}
+            $.ajax({
+                url: '审核订单.ashx',
+                data: form,
+                processData: false,
+                contentType: false,
+                type: 'post',
+                success: function (d) {
+                           if (d == "ok") {
+                        layer.msg("审核成功", { icon: 1, time: 1000 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index);
+                        })
+                    } else {
+                            layer.msg(d, { icon: 2, time: 1000 }, function () {
+                            //var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            //parent.layer.close(index);
+                        })
+                    }
+                }
+
+            })
+        }
+    }
+    function again(){
+        $.ajax({
+            url: '审核不通过确认.ashx',
+            data: { orderId: orderId },
+            success: function (res) {
+                if (res == "ok") {
+                    layer.msg("操作成功", { icon: 1, time: 1000 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index);
+                    })
+                } else {
+                    layer.msg(res, { icon: 2, time: 1000 }, function () {
+                        //var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        //parent.layer.close(index);
+                    })
+                }
+            }
+        })
+    }
+    </script>
+</body>
+</html>

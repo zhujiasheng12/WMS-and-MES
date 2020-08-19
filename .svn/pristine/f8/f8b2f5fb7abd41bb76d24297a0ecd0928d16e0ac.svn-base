@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+        function method(Id0, WorkPieceName, MeasureContent ) {
+           id= Id0
+            $('[name="WorkPieceName"]').val(WorkPieceName)
+            $('[name="MeasureContent"]').val(MeasureContent)
+        }
+    </script>
+    <div class="layui-form">
+        <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+        <div class="layui-form-item" style="color:gray">
+            <label class="layui-form-label">工件名称</label>
+            <div class="layui-input-block">
+                <input style="color:gray" type="text" name="WorkPieceName" placeholder="请输入" autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item" style="color:gray">
+            <label class="layui-form-label">测量内容</label>
+            <div class="layui-input-block">
+                <input style="color:gray" type="text" name="MeasureContent" placeholder="请输入" autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">测量仪器<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="measureDevice" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">检测结果<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="radio" name="measureResult" value="OK" title="OK" checked>
+                <input type="radio" name="measureResult" value="NG" title="NG">
+            
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">检测报告是否提供</label>
+            <div class="layui-input-block">
+                <input name="switch" type="checkbox" lay-skin="switch" lay-text="是|否" lay-filter="switch1">
+            </div>
+        </div>
+        <div class="layui-form-item" id="fileDiv" style="display:none">
+            <label class="layui-form-label">检测报告<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="file" type="file"  class="layui-input" multiple>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </div>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(*)', function (data) {
+                layer.confirm('是否提交?', function () {
+                    data.field.id = id
+                    if (data.field.switch) {
+                        data.field.isHaveReport = 1
+                    } else {
+                        data.field.isHaveReport = 0
+                    }
+
+
+                    let formData = new FormData()
+                    if (data.field.switch) {
+                        let files = $('#file')[0].files
+                        for (let i = 0; i < files.length; i++) {
+                            if (files[i].name.indexOf('#') > -1) {
+                                return layer.alert('文件名不能包含#')
+                            }
+                           
+                            formData.append(`file${i}`, files[i])
+                        }
+                    }
+                    formData.append('id', data.field.id)
+                    formData.append('isHaveReport', data.field.isHaveReport)
+                    formData.append('measureDevice', data.field.measureDevice)
+                    formData.append('measureResult', data.field.measureResult)
+                    formData.append('remark', data.field.remark)
+                    $.ajax({
+                        url: '录入测量结果.ashx',
+                        type: 'post',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success(res) {
+                            if (res === 'ok') {
+                                layer.msg('录入成功', { icon: 1, time: 1000 }, function () {
+                                    parent.table1.reload()
+                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                    parent.layer.close(index); //再执行关闭  
+                                })
+                            } else {
+                                layer.alert(res)
+                            }
+                        },
+                        error(err) {
+                            layer.alert(err)  
+                        }
+                    })
+                })
+              
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+            layui.code
+            form.on('switch(switch1)', function (data) {
+            
+                console.log(data.elem.checked); //开关是否开启，true或者false
+                if (data.elem.checked) {
+                    $('#fileDiv').show()
+                } else {
+                    $('#fileDiv').hide()
+                }
+            });  
+            //各种基于事件的操作，下面会有进一步介绍
+        });
+    </script>
+</body>
+</html>

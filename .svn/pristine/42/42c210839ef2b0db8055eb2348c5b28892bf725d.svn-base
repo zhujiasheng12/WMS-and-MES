@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+          table1=  table.render({
+                elem: '#demo'
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , url: '读取送检申请.ashx' //数据接口
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { type: 'checkbox' },
+                    { field: 'ApplyDate', title: '申请时间',hide:true },
+                    { field: 'InspectDate', title: '送检时间' },
+                    { field: 'WorkPieceName', title: '工件名称' },
+                    { field: 'MeasureContent', title: '测量内容' },
+                    { field: 'MeasureGoal', title: '测量目的' },
+                    { field: 'DepartmentName', title: '送检部门' },
+                    { field: 'ApplyPersonName', title: '送检人员' },
+                    { field: 'InspectNum', title: '送检数量' },
+                    { field: 'MeasureDevice', title: '测量仪器' },
+                    { field: 'MeasurePersonName', title: '检测人员' },
+                    { field: 'MeasureDate', title: '检测时间' },
+                    { field: 'MeasureResult', title: '检测结果' },
+                    {
+                        field: 'IsHaveRepaot', title: '检测报告是否提供', templet(row) {
+                            let text = row.IsHaveRepaot ? '是' : '否'
+                            return `<span style='color:${text === '是' ? 'blue' : 'black'}'>${text}</span>`
+                        }
+                    },
+                    { field: 'Remark', title: '备注' },
+                    { field: 'State', title: '状态' },
+                    {field:'Id',hide:true}
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                   sort.push(...res.filter(item=>item.State!=="测量完成").sort((a,b)=>{
+                        return a.InspectTime>b.InspectTime?-1:1
+                    }))
+                    sort.push(...res.filter(item=>item.State==="测量完成"))
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data//解析数据列表
+                    };
+                },
+                done() {
+                  JSON.parse(sessionStorage.getItem('limit')).forEach(item=>{
+                      if(item==="品质_送检管理_操作"){
+                          $('button').remove()
+                          return
+                      }
+                  })
+                    $('td[data-field="IsHaveRepaot"]').click(function () {
+                        if ($(this).children().children().text() === '是') {
+                            let id = $(this).siblings('[data-field="Id"]').children().text()
+                            layer.open({
+                                type: 2,
+                                area: ['800px', '500px'],
+                                content: '图纸.html',
+                                success: function (layero, index) {
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(id);
+                                }
+                            });
+                        }
+
+                    })
+                    //$('[data-field="IsHaveRepaot"]').forEach(item => {
+                    //    console.log(item)
+                    //})
+                    document.querySelectorAll('td[data-field="MeasureResult"]').forEach(item => {
+                        if ($(item).children().text() === 'OK') {
+                            $(item).css({ 'background-color': 'green', 'color': 'white' })
+                        } else if ($(item).children().text() === 'NG') {
+                            $(item).css({ 'background-color': 'red', 'color': 'white' })
+                        }
+                    })
+                    document.querySelectorAll('td[data-field="State"]').forEach(item => {
+                        if ($(item).children().text() === '测量完成') {
+                            $(item).css({ 'background-color': 'green', 'color': 'white' })
+                        } else {
+                            $(item).css({ 'background-color': 'red', 'color': 'white' })
+                        }
+                    })
+                }
+            });
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'import':
+                        var data = checkStatus.data;
+                        if (data.length !== 1) {
+                            return layer.alert('请勾选一项！')
+                        }
+
+                        layer.open({
+                            type: 2,
+                            area: ['500px', '500px'],
+                            content: '录入测量结果.html',
+                            success: function (layero, index) {
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(data[0].Id, data[0].WorkPieceName, data[0].MeasureContent);
+                            }
+                        });
+                        break;
+                    case 'complete':
+                        var data = checkStatus.data;
+                        if (data.length !== 1) {
+                            return layer.alert('请勾选一项！')
+                        }
+                        layer.confirm('是否完成勾选项？', function () {
+                            $.ajax({
+                                url: '完成检测.ashx',
+                                type: 'post',
+                                data: { id: data[0].Id },
+                                success: function (res) {
+                                    if (res === 'ok') {
+                                        layer.msg('完成成功', { icon: 1, time: 1000 }, function () {
+                                            table1.reload()
+                                        })
+                                    } else {
+                                        layer.alert(res)
+                                    }
+                                },
+                                error(err) {
+                                    layer.alert(err)
+                                }
+                            })
+                        })
+                        break;
+                    case 'del':
+                        var data = checkStatus.data;
+                        if (data.length !== 1) {
+                            return layer.alert('请勾选一项！')
+                        }
+                        layer.confirm('是否完成勾选项？', function () {
+                            $.ajax({
+                                url: '删除送检申请.ashx',
+                                type: 'post',
+                                data: { id: data[0].Id },
+                                success: function (res) {
+                                    if (res === 'ok') {
+                                        layer.msg('删除成功', { icon: 1, time: 1000 }, function () {
+                                            table1.reload()
+                                        })
+                                    } else {
+                                        layer.alert(res)
+                                    }
+                                },
+                                error(err) {
+                                    layer.alert(err)
+                                }
+                            })
+                        })
+                        break;
+             
+                };
+            });
+        });
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="import">录入</button>
+            <button class="layui-btn layui-btn-sm" lay-event="complete">完成</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">删除</button>
+        </div>
+    </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+
+    <link href="../../../Resources/js/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../Resources/js/easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../../Resources/js/easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../../Resources/js/easyui/jquery.min.js"></script>
+    <script src="../../../Resources/js/easyui/jquery.easyui.min.js"></script>
+
+    <link href="../../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+</head>
+<body>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">机台编号<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="cc" name="cncId">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">维保内容<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="content" id="content" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required" value="" onblur="blurContent()" onkeyup="search()" autocomplete="off">
+                <select type="text" id="hc_select" lay-filter="hc_select" autocomplete="off" placeholder="移交单位全称" lay-verify="required" class="layui-select" lay-search>
+                  
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">计划开始时间<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" id="laydate" name="time" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">维保周期<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cycle" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="number">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <select name="dateFormat" lay-filter="aihao">
+                            <option value="日">日</option>
+                            <option value="周">周</option>
+                            <option value="月">月</option>
+                            <option value="年">年</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        function fun(cncId) {
+            $('#cc').combotreegrid({
+
+                width: '100%',
+                panelWidth: 500,
+                multiple:true,
+
+                url: 'PositionHandler.ashx',
+                idField: 'CncID',
+                treeField: 'name',
+                columns: [[
+                    { field: 'name', title: '机床', width: 200 },
+
+                    { field: 'CncID', title: 'id', width: 100, hidden: true },
+                ]],
+                onLoadSuccess: function () {
+                    $('.tree-file').removeClass("tree-file")//tree-folder
+                    $('.tree-folder').removeClass("tree-folder")//
+                    $('#cc').combotreegrid('setValue', { CncID: cncId })
+                }
+            });
+        }
+    $.ajax({
+        url: 'optionRead.ashx',
+        success: function (d) {
+            var obj = JSON.parse(d)
+            for (var i = 0; i < obj.length; i++) {
+                 $("#hc_select").append(' <option value="'+obj[i]+'">'+obj[i]+'</option>')
+            }
+           
+
+            layui.use('form', function () {
+                layui.form.render()
+            })
+        }
+
+    })
+
+    var t = new Date();
+    var year = t.getFullYear();
+    var month = t.getMonth()+1;
+    var day = t.getDate();
+    var hour = t.getHours();
+    var minute = t.getMinutes();
+    var second = t.getSeconds();
+    var date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+   
+        $("#laydate").val(date);
+
+    </script>
+    <script type="text/javascript">
+   
+        layui.use(['form', 'laydate', 'upload','layer'], function () {
+            var form = layui.form;
+            layui.laydate.render({
+                elem: '#laydate' //指定元素
+                , type: 'datetime'
+                ,trigger: 'click'
+            });
+
+            form.on('submit(*)', function (data) {
+                layui.layer.confirm("是否提交", function (index) {
+                    data.field.cncId= $('#cc').val()
+                    $.ajax({
+                        url: 'createSub.ashx',
+                        data: { "data": JSON.stringify(data.field) },
+                        success: function (d) {
+                            if (d == "ok") {
+                                layui.layer.msg("创建成功", { icon: 1, time: 1000 }, function () {
+                                          layui.layer.close(index);
+                                var index1 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index1); //再执行关闭      
+                                parent.reload.reload({})
+                                })
+                          
+                            } else {
+                                layui.layer.alert(d)
+                            }
+                        }
+                    })
+                })
+
+  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+});
+
+            form.on('select(hc_select)', function (data) {   //选择移交单位 赋值给input框
+                $("#content").val(data.value);
+                $("#hc_select").next().find("dl").css({ "display": "none" });
+                form.render();
+            });
+            window.blurContent = () => {
+                setTimeout(function () {
+                    $('#hc_select').next().find("dl").css({ "display": "none" });
+                }, 200)
+
+            }
+            window.search = function () {
+                var value = $("#content").val();
+                $("#hc_select").val(value);
+                form.render();
+                $("#hc_select").next().find("dl").css({ "display": "block" });
+                var dl = $("#hc_select").next().find("dl").children();
+                var j = -1;
+                for (var i = 0; i < dl.length; i++) {
+                    if (dl[i].innerHTML.indexOf(value) <= -1) {
+                        dl[i].style.display = "none";
+                        j++;
+                    }
+                    if (j == dl.length - 1) {
+                        $("#hc_select").next().find("dl").css({ "display": "none" });
+                    }
+                }
+
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    <script src="/Resources/js/vue.min.js"></script>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,user-scalable=0,maximum-scale=1,minimum-scale=1">
+    <style type="text/css">
+        .cardBox {
+            flex:auto;
+            width:300px;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            text-align: center;
+            vertical-align: middle;
+            margin-top: 20px;
+            cursor: pointer;
+            margin: 0 20px;
+        }
+
+
+        .headerBox {
+            color: #fff;
+            padding: 10px;
+            font-size: 15px;
+            height: 25px;
+            line-height: 25px;
+            background-color: orange;
+            font-weight: bold;
+            font-size: 150%;
+        }
+
+        .bodyBox {
+            padding: 10px;
+        }
+
+        .bodyBox p {
+            margin-left: 5px;
+        }
+
+        .to_right {
+          
+            margin-top: 100px;
+          
+            /* display: inline; */
+            vertical-align: middle;
+            width: 0;
+            height: 0;
+            border-left: 15px solid grey;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .complete {
+            background-color: #4caf50 !important;
+        }
+    </style>
+</head>
+
+<body style="height:100vh">
+
+    <div id="app">
+        <!--<div style="position: absolute;margin:5px" onclick="history.back()"><i style="font-size: 30px;"
+                class="layui-icon layui-icon-left"></i></div>-->
+        <!--<h1 style="text-align: center;">订单详情</h1>-->
+
+        <div style="margin:20px;">
+            <Row :arr="['订单单号',orderInfo[0].OrderNum]"></Row>
+            <!--<Row :arr="['订单责任人',orderInfo[0].Leader]"></Row>-->
+            <Row :arr="['项目名称',orderInfo[0].ProjectName]"></Row>
+            <Row :arr="['产品名称',orderInfo[0].ProductName]"></Row>
+            <!--<Row :arr="['订单数量',orderInfo[0].Output]"></Row>
+            <Row :arr="['计划完成',orderInfo[0].PlanEndTime]"></Row>
+            <Row :arr="['实际完成',orderInfo[0].EndTime]"></Row>-->
+        </div>
+        <div style="display: flex;" v-show="dataObj.length!==0">
+            <!-- <h3 style="margin-top: 2px; margin-left: 10px; display: inline; margin-top: 15px">
+                订单号：{{orderInfo.orderNum}}</h3>
+            <h3 style="margin-top: 2px; margin-left: 10px; display: inline; margin-top: 15px">
+                订单名称：{{orderInfo.orderName}}</h3> -->
+
+            <div class="cardBox">
+                <div :class="[{ complete: isComplete('市场下单') },'headerBox']">
+                    市场下单
+                </div>
+                <div class="bodyBox">
+                    <div class="layui-collapse" lay-accordion>
+                        <div class="layui-colla-item" v-for="item in ContentList('市场下单')">
+                            <h2 class="layui-colla-title" style="padding: 0 35px;">
+
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">
+                                        {{'下单状态'}}</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;font-size: 130%">
+                                        {{item.IsOver ? '完成' : '未完成'}}</div>
+                                </div>
+                            </h2>
+                            <div class="layui-colla-content layui-show">
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;">责任人</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.Person}}</div>
+                                </div>
+                                <!-- <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">计划完成</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.PlanEndTime}}</div>
+                                </div> -->
+                                <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">下单时间</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.EndTime}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+下一步
+</div>-->
+            <div style="">
+                <div class="to_right"></div>
+            </div>
+
+            <div class="cardBox">
+                <div :class="[{ complete: isComplete('工程处理') },'headerBox']">
+                    工程处理
+                </div>
+                <div class="bodyBox">
+                    <div class="layui-collapse" lay-accordion>
+                        <div class="layui-colla-item" v-for="i in 1">
+                            <h2 class="layui-colla-title" style="padding: 0 35px;">
+
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">
+                                        {{'工艺方案'}}</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;font-size: 130%">
+                                        {{ContentList('工程处理')[1].IsOver ? '完成' : '未完成'}}</div>
+                                </div>
+                            </h2>
+                            <div class="layui-colla-content layui-show">
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;">责任人</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{ContentList('工程处理')[1].Person}}</div>
+                                </div>
+                                <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">计划完成</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{ContentList('工程处理')[1].PlanEndTime}}</div>
+                                </div>
+                                <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">实际完成</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{ContentList('工程处理')[1].EndTime}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+下一步
+</div>-->
+            <div style="">
+                <div class="to_right"></div>
+            </div>
+            <div class="cardBox">
+                <div :class="[{ complete: isComplete('生产准备') },'headerBox']">
+                    生产准备
+                </div>
+                <div class="bodyBox">
+                    <div class="layui-collapse" lay-accordion>
+                        <div class="layui-colla-item" v-for="item in ContentList('生产准备')">
+                            <h2 class="layui-colla-title" style="padding: 0 35px;">
+
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">
+                                        {{item.Content}}</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;font-size: 130%">
+                                        {{item.IsOver ? '完成' : '未完成'}}</div>
+                                </div>
+                            </h2>
+                            <div class="layui-colla-content ">
+                                <div style="display: flex;">
+                                    <div style="flex: 1 1 30%;text-align: right;">责任人</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.Person}}</div>
+                                </div>
+                                <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">计划完成</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.PlanEndTime}}</div>
+                                </div>
+                                <div style="display: flex;">
+                                    <div style="flex:  1 1 30%;text-align: right;">实际完成</div>
+                                    <div style="margin: 0 10px;">:</div>
+                                    <div style="flex:  1 1 30%;text-align: left;"> {{item.EndTime}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+下一步
+</div>-->
+            <div style="">
+                <div class="to_right"></div>
+            </div>
+            <div class="cardBox" @click="cardClick()">
+                <div
+                    :class="[{ complete: productionSchedule.waitNum == 0 && productionSchedule.Finish > 0 },'headerBox']">
+                    生产进度
+                </div>
+                <div class="bodyBox">
+
+                    <div style="display: flex;">
+                        <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">待加工数</div>
+                        <div style="margin: 0 10px;">:</div>
+                        <div style="flex:  1 1 30%;text-align: left;font-size: 130%;"> {{productionSchedule.waitNum}}
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">已加工数</div>
+                        <div style="margin: 0 10px;">:</div>
+                        <div style="flex:  1 1 30%;text-align: left;font-size: 130%;"> {{productionSchedule.Finish}}
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">良品数</div>
+                        <div style="margin: 0 10px;">:</div>
+                        <div style="flex:  1 1 30%;text-align: left;font-size: 130%;"> {{productionSchedule.Good}}</div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="flex: 1 1 30%;text-align: right;font-weight: bold;font-size: 130%;">入库数</div>
+                        <div style="margin: 0 10px;">:</div>
+                        <div style="flex:  1 1 30%;text-align: left;font-size: 130%;"> {{productionSchedule.Storage}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <template id="row">
+        <div style="display: flex;margin:5px 0;font-size: 120%;">
+            <div style="text-align: right;overflow: auto;">
+                {{arr[0]}}
+            </div>
+            <div style="margin: 0 10px;">
+                ：
+            </div>
+            <div style="text-align: left;overflow: auto;">
+                {{arr[1]}}
+            </div>
+
+        </div>
+    </template>
+    <script>
+        let Row = {
+            template: '#row',
+            props: {
+                arr: {
+                    type: Array,
+                    default: ['', '']
+                }
+            }
+        }
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                dataObj: [],
+                productionSchedule: {},
+                orderInfo: []
+            },
+            created() {
+                let Id = sessionStorage.getItem('Id')
+                if(Id == null) {
+                    return location.href='index.html'
+                }
+                let orderInfoStr = sessionStorage.getItem('orderInfo')
+                if(orderInfoStr == null) {
+                    return location.href='index.html'
+                }
+                let orderInfo = JSON.parse(orderInfoStr)
+                this.orderInfo.push(orderInfo)
+                this.getData(Id)
+            },
+            methods: {
+                isComplete(Name) {
+                    if (this.dataObj.length == 0) {
+                        return ''
+                    } else {
+                        const data = this.dataObj.filter(item => {
+                            return item.Name == Name
+                        })
+                        return data[0].IsOver
+                    }
+
+                },
+                ContentList(Name) {
+                    if (this.dataObj.length == 0) {
+                        return []
+                    } else {
+
+                        const data = this.dataObj.filter(item => {
+                            return item.Name == Name
+                        })
+                        return data[0].ContentList
+                    }
+                },
+                getData(Id) {
+                    Promise.all([
+                        new Promise((resolve, reject) => {
+                            $.ajax({
+                                url: '/生产管理/生产部/订单跟踪/市场下单.ashx',
+                                type: 'post',
+                                data: {
+                                    "orderId": Id
+                                },
+                                success: (res) => {
+                                    resolve(JSON.parse(res))
+                                },
+                                error() {
+                                    reject()
+                                }
+                            })
+
+                        }),
+                        new Promise((resolve, reject) => {
+                            $.ajax({
+                                url: '/生产管理/生产部/订单跟踪/生产进度.ashx',
+                                type: 'post',
+                                data: {
+                                    "orderId": Id
+                                },
+                                success: res => {
+                                    resolve(JSON.parse(res))
+                                },
+                                error() {
+                                    reject()
+                                }
+                            })
+                        })
+                    ]).then(res => {
+                        this.dataObj = res[0]
+                        this.productionSchedule = res[1]
+                      
+                        layui.use('element', function () {
+                            let element = layui.element
+                            element.render()
+                        })
+                        // layer.msg('搜索成功', {
+                        //     icon: 1,
+                        //     time: 1000
+                        // })
+                    }).catch(err => {
+                        // layer.msg('搜索失败', {
+                        //     icon: 2,
+                        //     time: 1000
+                        // })
+                        // clear1()
+                    })
+                }
+
+            },
+            components: {
+                Row
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <!--   <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    
+</head>
+<body>
+    
+                <div id="word" >
+                    <div id="" style="text-align: center; width: 100%">
+                        <p style="margin-bottom: 10px; font-size: 200%; margin-top: 50px">五轴打样流程进度表</p>
+
+
+                        <table id="tablePrint" lay-filter="tablePrint" style="width:50vw"></table>
+
+                    </div>
+                </div>
+ <script>
+     function fun(d) {
+         layui.use(['table', 'form'], function () {
+             var table = layui.table, form = layui.form;
+             var ordernumber = d;
+             //第一个实例
+             ddd = table.render({
+                 elem: '#tablePrint'
+                        , where: { ordernumber: ordernumber }
+                        , url: 'orderProgresstotal.ashx' //数据接口
+                      , limit: 9999
+
+                       , toolbar: '#toolbarProcess'
+                       , defaultToolbar: []
+                        , cols: [[ //表头
+
+                    { field: 'workStage', title: '工作阶段', },
+                   { field: 'workContent', title: '工作内容', },
+                   { field: 'responsible', title: '责任人', },
+                   { field: 'planningTime', title: '计划时间', },
+                   { field: 'completionTime', title: '完成时间', },
+                   { field: 'progressStatus', title: '进度状态', }
+                        ]],
+
+                 done: function (d) {
+                     $('p2').text(ordernumber);
+                     $('p4').text(d.projectName);
+                     count = 0;
+                     str = "";
+                     var tds = $('td[data-field="workStage"]')
+                     for (var i = 0; i < tds.length; i++) {
+                         var text = $(tds[i]).children("div").text()
+
+
+                         if (text == str) {
+                             count++
+                         }
+                         else {
+                             str = text
+                             if (count != 0) {
+                                 for (var j = 1; j <= count; j++) {
+                                     $(tds[i - j]).hide()
+                                 }
+                                 $(tds[i - count - 1]).attr("rowspan", count + 1)
+
+                             }
+                             count = 0
+                         }
+                     }
+
+                     var tds = $('td[data-field="workStage"]')
+                     for (var i = 0; i < tds.length; i++) {
+                         var text = $(tds[i]).children("div").text()
+                         if (text == "WatchDog") {
+                             $(tds[i]).children("div").text($(tds[i]).next().children("div").text())
+                             $(tds[i]).next().hide();
+                             $(tds[i]).next().next().hide();
+                             $(tds[i]).next().next().next().hide();
+                             $(tds[i]).next().next().next().next().hide();
+                             $(tds[i]).children("div").css({ width: "100%", "text-align": "center", "font-size": "130%", "font-weight": "bold" })
+                             $(tds[i]).next().next().next().next().next().children("div").css({ "font-size": "130%", "font-weight": "bold" })
+
+                             $(tds[i]).attr("colspan", 5)
+                             $(tds[i]).parents("tr").css("background-color", "lightgray")
+                         }
+                     }
+
+                     //var states = $('td[data-field="progressStatus"]')
+                     //for (var i = 0; i < states.length; i++) {
+                     //    if ($(states[i]).children("div").text() == "N") {
+                     //        $(states[i]).css("background-color", "orange")
+
+                     //    }
+                     //    else { $(states[i]).css("background-color", "#4caf50") }
+                     //}
+
+                     //$($('[title="打印"]')[1]).click()
+                     // $('[lay-id="tablePrint"]').css('width','400px')
+                 }
+             });
+         })
+
+         setTimeout('print1()', 500);
+     }
+
+
+        
+
+     
+
+     function print1() {
+         window.print()
+
+         //var printHtml = document.getElementById('word').innerHTML
+         //debugger
+         //var oldstr = document.body.innerHTML
+         //window.document.body.innerHTML = printHtml
+         //window.print()
+         // document.body.innerHTML = oldstr
+         //假设这是iframe页
+         var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+         parent.layer.close(index); //再执行关闭       
+         return false
+     }
+    </script>
+
+    
+
+    <script type="text/html" id="toolbarProcess">
+
+        <p1 style="float: left">订单单号:</p1>
+        <p2 style="float: left"> </p2>
+
+         <p3 style="float: left;margin-left:200px">项目名称:</p3>
+        <p4 style="float: left"> </p4>
+    </script>
+</body>
+</html>

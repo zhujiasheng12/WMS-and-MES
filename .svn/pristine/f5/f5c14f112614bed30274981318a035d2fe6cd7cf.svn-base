@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+
+    <link href="../../../easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../easyui/themes/icon.css" rel="stylesheet" />
+    <link href="../../../easyui/demo/demo.css" rel="stylesheet" />
+    <script src="../../../easyui/jquery.min.js"></script>
+    <script src="../../../easyui/jquery.easyui.min.js"></script>
+    <link href="../../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../layui-v2.4.5/layui/layui.js"></script>
+
+    
+</head>
+<body >
+    <table id="tt" style="width:100%;"></table>
+
+    <script>
+
+        $('#tt').treegrid({
+            url: '../PositionHandler.ashx',
+            idField: 'id',
+            animate: true,
+            treeField: 'name',
+            method: 'get',
+            rownumbers: true,
+
+            columns: [[
+                { title: '位置名称', field: 'name', width: '20%'},
+                { title: '报警列表', field: 'alarmList', width: '20%' },
+                { title: '报修管理', field: 'warrantyManagement', width: '20%' },
+                { title: '维保计划', field: 'maintenancePlan', width: '20%', formatter: function () {
+                        return `<span style="color: blue;cursor:pointer">计划详情</span>`
+                } },
+                { title: '精度校验', field: 'accuracyVerification', width: '20%', formatter: function () {
+                    return `<span style="color: blue;cursor:pointer">计划详情</span>`
+                } },
+                { field: 'id', title: 'id', width: 80, hidden: true },
+                { field: 'CncID', title: 'CncID', width: 80, hidden: true },
+                { field: 'flag', title: 'flag', width: 80, hidden: true }
+            ]],
+            onLoadSuccess: function (data) {
+                // $('td').css('border', 'none')
+                $('.tree-folder.tree-folder-open').removeClass('tree-folder tree-folder-open')
+                $('.tree-icon').removeClass('tree-icon tree-file')
+
+                $(".panel-body").css({ 'background-color': 'white', 'border-color': 'white' })
+
+                $('[node-id="67"]').find('[field="action"]').hide()
+
+
+                $('.icon-ok').remove()
+                $(".datagrid-view1").remove()
+                var arr = $('[field="flag"]');
+                for (var i = 0; i < arr.length; i++) {
+                    var state = arr[i].children[0].innerText
+                    if (state == 1) {
+                        $(arr[i]).siblings('[field="warrantyManagement"]').css('background-color', 'red')
+                        var fathers = $(arr[i]).parents('.treegrid-tr-tree')
+                        for (var ii = 0; ii < fathers.length; ii++) {
+                            var fatherPrev = $(fathers[ii]).prev().children('[field="warrantyManagement"]').css('background-color')
+                            if (fatherPrev != "rgb(255, 0, 0)") {
+                                $(fathers[ii]).prev().children('[field="warrantyManagement"]').css('background-color', 'red')
+                            }
+                        }
+
+
+                    }
+                    if (state == 2) {
+                        $(arr[i]).siblings('[field="warrantyManagement"]').css('background-color', 'yellow')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().children('[field="warrantyManagement"]').css('background-color', 'red')
+
+                    }
+                    if (state == 3) {
+                        $(arr[i]).siblings('[field="warrantyManagement"]').css('background-color', 'grey')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().children('[field="warrantyManagement"]').css('background-color', 'red')
+
+                    }
+                    if (state == 4) {
+                        $(arr[i]).siblings('[field="warrantyManagement"]').css('background-color', 'white')
+
+                        //$(arr[i]).parents('.treegrid-tr-tree').prev().css('background-color', 'white')
+
+                    }
+                    if (state == 5) {
+                        $(arr[i]).siblings('[field="warrantyManagement"]').css('background-color', 'orange')
+
+                        $(arr[i]).parents('.treegrid-tr-tree').prev().children('[field="warrantyManagement"]').css('background-color', 'red')
+
+                    }
+
+                }
+            },
+            onClickCell(field, row) {
+                layui.use('layer', function () {
+                    const layer = layui.layer;
+                    switch (field) {
+                        case 'alarmList':
+                            layer.open({
+                                type: 2,
+                                maxmin: true,
+                                area:['900px','500px'],
+                                content: '../报警历史/报警历史弹窗.html',
+                                success: function (layero, index) {
+                                    layero.find('.layui-layer-min').remove();
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.init(row.CncID)
+                                }
+                            });
+                            break;
+                        case 'warrantyManagement':
+                            layer.open({
+                                type: 2,
+                                maxmin: true,
+                                area: ['900px', '500px'],
+                                content: '../报修管理弹窗.html',
+                                success: function (layero, index) {
+                                    layero.find('.layui-layer-min').remove();
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.init(row.CncID)
+                                }
+                            });
+                            break
+                        case 'maintenancePlan':
+                            layer.open({
+                                type: 2,
+                                maxmin: true,
+                                area: ['900px', '500px'],
+                                content: '../维保计划/维保计划弹窗.html',
+                                success: function (layero, index) {
+                                    layero.find('.layui-layer-min').remove();
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+
+                                    iframeWin.init(row.name, row.CncID)
+                                }
+                            });
+                            break
+                        case 'accuracyVerification':
+                            layer.open({
+                                type: 2,
+                                maxmin: true,
+                                area: ['900px', '500px'],
+                                content: '../精度校验/维保计划弹窗.html',
+                                success: function (layero, index) {
+                                    layero.find('.layui-layer-min').remove();
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.init(row.name, row.CncID)
+                                }
+                            });
+                            break
+                    }
+                    console.log(field, row)
+                })
+        
+            }
+        });
+    </script>
+</body>
+</html>

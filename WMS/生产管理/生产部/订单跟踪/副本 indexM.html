@@ -1,0 +1,592 @@
+﻿<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    <script src="/Resources/js/vue.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=0,maximum-scale=1,minimum-scale=1">
+    <style type="text/css">
+        .cardBox {
+            width: 100vw;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            /*border:0.5px solid grey;*/
+            text-align: center;
+            /* display: inline; */
+            vertical-align: middle;
+            /* margin-right: 10px; */
+            margin-top: 20px;
+            /* padding: 5px; */
+            padding-top: 10px;
+            cursor: pointer;
+            margin: 0 20px;
+        }
+
+
+        .headerBox {
+            color: #fff;
+            padding: 10px;
+            font-size: 15px;
+            height: 25px;
+            background-color: orange;
+        }
+
+        .bodyBox {
+            padding: 10px;
+        }
+
+        .bodyBox p {
+            margin-left: 5px;
+        }
+
+        .to_right {
+            margin-left: 50%;
+            transform: translate(-50%, 0);
+            margin-right: 15px;
+            margin-top: 20px;
+            /* display: inline; */
+            vertical-align: middle;
+            width: 0;
+            height: 0;
+            border-top: 10px solid grey;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+
+        .complete {
+            background-color: #4caf50 !important;
+        }
+
+        .layui-collapse {
+            margin-top: 10px;
+        }
+
+        .layui-colla-content {
+            padding: 0;
+        }
+
+        .layui-table,
+        .layui-table-view {
+            margin: 0;
+        }
+
+        .layui-table th {
+            text-align: center;
+        }
+        .layui-colla-content{
+            width: 70%;
+        }
+    </style>
+</head>
+
+<body style="height: 100%" class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin" style="height: 100%">
+
+        <div class="layui-body" style="bottom: 0; top: 70px; top: 0; left: 0px;">
+            <!-- 内容主体区域 -->
+            <div style="height: 100%">
+
+
+                <div class="layui-row"
+                    style="height:100%; border: solid 1px gray; overflow-x: scroll; white-space: nowrap;">
+                    <div class="layui-col-md12">
+                        <h1 style="text-align: center; margin-left: 10px;">流程跟踪</h1>
+
+                        <div action="" method="" class="layui-form">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md2" style="display: flex;">
+                                    <div class="layui-input-block" style="margin-left: 0;width: 80%;">
+                                        <input type="text" name="HandoverCompany" id="HandoverCompany"
+                                            class="layui-input" style="position:absolute;z-index:2;width:80%;"
+                                            lay-verify="required" value="" onkeyup="search()" autocomplete="off"
+                                            onblur="blur1()">
+
+                                        <select type="text" id="hc_select" lay-filter="hc_select" autocomplete="off"
+                                            placeholder="移交单位全称" lay-verify="required" class="layui-select" lay-search>
+                                        </select>
+                                        <!-- <span onclick="getData()" style="position: absolute;z-index: 999;right: 90px;top: 10px;"><i class="layui-icon layui-icon-search"></i>  </span>
+                                          <span onclick="getData()" style="position: absolute;z-index: 999;right: 110px;top: 10px;"><i class="layui-icon layui-icon-search"></i>  </span> -->
+                                    </div>
+                                    <button style="height: 38px;margin-left: 10px;"
+                                        class="layui-btn layui-btn-sm layui-btn-primary" onclick="getData()">搜索</button>
+                                    <button style="height: 38px;" class="layui-btn layui-btn-sm layui-btn-primary"
+                                        onclick="clear1()">清空</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;flex-wrap: wrap;" id="app" v-show="dataObj.length!==0">
+                            <!-- <h3 style="margin-top: 2px; margin-left: 10px; display: inline; margin-top: 15px">
+                                订单号：{{orderInfo.orderNum}}</h3>
+                            <h3 style="margin-top: 2px; margin-left: 10px; display: inline; margin-top: 15px">
+                                订单名称：{{orderInfo.orderName}}</h3> -->
+                           
+                                <div class="cardBox">
+                                    <div :class="[{ complete: isComplete('市场下单') },'headerBox']">
+                                        <p>
+                                            <a style="cursor: pointer; color: white">市场下单</a>
+                                        </p>
+                                    </div>
+                                    <div class="bodyBox">
+                                        <p v-for="item in ContentList('市场下单')">
+                                            {{item.Content}}:{{item.IsOver ? '完成' : '未完成'}}
+                                        </p>
+                                        <div class="layui-collapse">
+                                            <div class="layui-colla-item">
+                                                <h2 class="layui-colla-title">点击展开</h2>
+                                                <div class="layui-colla-content ">
+                                                    <table id="process市场下单" lay-filter="process"></table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+            下一步
+        </div>-->
+                            <div style="width: 100%;text-align: center;">
+                                <div class="to_right"></div>
+                            </div>
+
+                            <div class="cardBox">
+                                <div :class="[{ complete: isComplete('工程处理') },'headerBox']">
+                                    <p>工程处理</p>
+                                </div>
+                                <div class="bodyBox">
+                                    <p v-for="item in ContentList('工程处理')">
+                                        {{item.Content}}:{{item.IsOver ? '完成' : '未完成'}}
+                                    </p>
+                                    <div class="layui-collapse">
+                                        <div class="layui-colla-item">
+                                            <h2 class="layui-colla-title">点击展开</h2>
+                                            <div class="layui-colla-content ">
+                                                <table id="process工程处理" lay-filter="process"></table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+            下一步
+        </div>-->
+                            <div style="width: 100%;">
+                                <div class="to_right"></div>
+                            </div>
+                            <div class="cardBox">
+                                <div :class="[{ complete: isComplete('生产准备') },'headerBox']">
+                                    <p>生产准备</p>
+                                </div>
+                                <div class="bodyBox">
+                                    <p v-for="item in ContentList('生产准备')">
+                                        {{item.Content}}:{{item.IsOver ? '完成' : '未完成'}}
+                                    </p>
+                                    <!-- <p>机台排产：完成</p>
+                                    <p>毛坯准备：完成</p>
+                                    <p>夹具准备：完成</p>
+                                    <p>刀具准备：完成</p> -->
+                                    <div class="layui-collapse">
+                                        <div class="layui-colla-item">
+                                            <h2 class="layui-colla-title">点击展开</h2>
+                                            <div class="layui-colla-content ">
+                                                <table id="process生产准备" lay-filter="process"></table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="cardBox" style="width: 80px; cursor: default">
+            下一步
+        </div>-->
+                            <div style="width: 100%;">
+                                <div class="to_right"></div>
+                            </div>
+                            <div class="cardBox" @click="cardClick()">
+                                <div :class="[{ complete: productionSchedule.waitNum!==0 },'headerBox']">
+                                    <p>生产进度</p>
+                                </div>
+                                <div class="bodyBox">
+                                    <p>待加工数：{{productionSchedule.waitNum}}</p>
+                                    <p>已加工数：{{productionSchedule.Finish}}</p>
+                                    <p>良品数：{{productionSchedule.Good}}</p>
+                                    <p>入库数：{{productionSchedule.Storage}}</p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+    <script type="text/javascript">
+        layui.use(['form', 'layedit', 'upload'], function () {
+            var form = layui.form
+            form.on('select(hc_select)', function (data) { //选择移交单位 赋值给input框
+                $("#HandoverCompany").val(data.value);
+                $("#hc_select").next().find("dl").css({
+                    "display": "none"
+                });
+                form.render();
+            });
+            window.blur1 = function () {
+                // setTimeout(() => {
+                //     $('.layui-anim.layui-anim-upbit').hide() 
+                // }, 10);
+                setTimeout(() => {
+                    $("#hc_select").val('');
+                    form.render();
+                }, 50);
+            }
+            window.search = function () {
+                var value = $("#HandoverCompany").val();
+                $("#hc_select").val(value);
+                form.render();
+                $("#hc_select").next().find("dl").css({
+                    "display": "block"
+                });
+                var dl = $("#hc_select").next().find("dl").children();
+                var j = -1;
+                for (var i = 0; i < dl.length; i++) {
+                    if (dl[i].innerHTML.indexOf(value) <= -1) {
+                        dl[i].style.display = "none";
+                        j++;
+                    }
+                    if (j == dl.length - 1) {
+                        $("#hc_select").next().find("dl").css({
+                            "display": "none"
+                        });
+                    }
+                }
+
+            }
+        });
+    </script>
+
+
+    <script>
+        layui.use(['element', 'form'], function () {
+            var element = layui.element,
+                form = layui.form;
+            $.ajax({
+                url: '模糊搜索.ashx',
+                success: function (res) {
+                    arr = JSON.parse(res)
+                    arr.forEach(item => {
+                        $('#hc_select').append(
+                            `<option value="${item.str}">${item.str}</option>`)
+                    })
+                    form.render('select')
+                }
+            })
+            //…
+        });
+
+        function getData() {
+            const str = $("#HandoverCompany").val()
+            arr1 = arr.filter(item => item.str == str)
+            if (arr1.length == 0) {
+                vm.dataObj = []
+                return layer.msg('查无此项', {
+                    icon: 2,
+                    time: 1000
+                })
+            }
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '市场下单.ashx',
+                        type: 'post',
+                        data: {
+                            "orderId": arr1[0].id
+                        },
+                        success: function (res) {
+                            vm.dataObj = JSON.parse(res)
+                            resolve()
+                        }
+                    })
+
+                }),
+                new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '生产进度.ashx',
+                        type: 'post',
+                        data: {
+                            "orderId": arr1[0].id
+                        },
+                        success(res) {
+                            vm.productionSchedule = JSON.parse(res)
+                            resolve()
+                        }
+                    })
+                })
+            ]).then(res => {
+                layer.msg('搜索成功',{icon:1,time:1000})
+            })
+
+
+        }
+
+        function clear1() {
+            $("#HandoverCompany").val('')
+            vm.dataObj = []
+        }
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                orderInfo: {
+                    orderNum: '',
+                    orderName: ''
+                },
+                dataObj: [],
+                productionSchedule: {}
+            },
+            created() {},
+            watch: {
+                dataObj() {
+                    this.cardClick('市场下单')
+                    this.cardClick('工程处理')
+                    this.cardClick('生产准备')
+                    // $('.layui-colla-content').addClass('layui-show')
+                }
+            },
+            methods: {
+                cardClick(Name) {
+                    const data = this.dataObj.filter(item => {
+                        return item.Name == Name
+                    })
+                    data[0].ContentList.forEach(item => {
+                        item.stage = data[0].Name
+                    })
+                    this.tableRender(data[0].ContentList, `#process${Name}`)
+                },
+                isComplete(Name) {
+                    if (this.dataObj.length == 0) {
+                        return ''
+                    } else {
+                        const data = this.dataObj.filter(item => {
+                            return item.Name == Name
+                        })
+                        return data[0].IsOver
+                    }
+
+                },
+                ContentList(Name) {
+                    if (this.dataObj.length == 0) {
+                        return []
+                    } else {
+
+                        const data = this.dataObj.filter(item => {
+                            return item.Name == Name
+                        })
+                        return data[0].ContentList
+                    }
+                },
+                tableRender(data, elem) {
+                    layui.use('table', () => {
+                        layui.table.render({
+                            elem: elem,
+                            limit: 9999,
+                            // toolbar: '#toolbarProcess',
+                            cols: [
+                                [ //表头
+                                    {
+                                        field: 'stage',
+                                        title: '工作阶段',
+                                        width: 90
+                                    },
+                                    {
+                                        field: 'Content',
+                                        title: '工作内容',
+                                        width: 90
+                                    },
+                                    {
+                                        field: 'Person',
+                                        title: '责任人',
+                                        width: 90,
+                                        // templet: function (d) {
+                                        //     return d.Person
+                                        // }
+                                    },
+                                    {
+                                        field: 'PlanEndTime',
+                                        title: '计划完成时间',
+                                        width: 120,
+                                        // templet: function (d) {
+                                        //     return d.PlanEndTime
+                                        // }
+                                    },
+                                    {
+                                        field: 'EndTime',
+                                        title: '实际完成时间',
+                                        width: 120
+                                    },
+                                    {
+                                        field: 'IsOver',
+                                        title: '进度状态',
+                                        width: 90
+                                    }
+                                ]
+                            ],
+                            data: data,
+                            done: function (d) {
+                                let arr = $('td[data-field="IsOver"]')
+                                for (let item of arr) {
+                                    if ($(item).children().text() == 'true') {
+                                        $(item).children().text('Y')
+                                        $(item).css({
+                                            'background-color': 'green',
+                                            color: 'white'
+                                        })
+                                    } else {
+                                        $(item).children().text("N")
+                                        $(item).css({
+                                            'background-color': 'orange',
+                                            color: 'white'
+                                        })
+                                    }
+                                }
+                                var tds = $(elem).siblings().find('td[data-field="stage"]')
+                                for (let i in tds) {
+                                    if (i > 0) {
+                                        $(tds[i]).hide()
+                                    }
+                                }
+                                $(tds[0]).attr('rowSpan', tds.length)
+                            }
+                        });
+                    })
+
+                }
+            }
+        })
+
+        function printOrder(obj) {
+
+            layer.open({
+                type: 2,
+                area: ['716px', '1000px'],
+                content: 'printTable.html',
+                success: function (layero, index) {
+                    //setTimeout(function () {
+                    //    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    //    iframeWin.method(obj);
+                    //    iframeWin.Warehousing(obj);
+                    //    iframeWin.BadHistory(obj);
+                    //}, 50);
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.fun($("#odnum").text())
+
+                }
+            })
+
+            // layui.use(['table', 'form'], function () {
+            //     var table = layui.table, form = layui.form;
+            //     var ordernumber = $("#odnum").text()
+            //     //第一个实例
+            //ddd= table.render({
+            //         elem: '#tablePrint'
+            //           , where: { ordernumber: ordernumber }
+            //           , url: 'orderProgresstotal.ashx' //数据接口
+            //         , limit: 9999
+
+            //          , toolbar: '#toolbarProcess'
+            //          //, defaultToolbar: []
+            //           , cols: [[ //表头
+            //               $("table").width("100%"),
+            //       { field: 'workStage', title: '工作阶段', },
+            //      { field: 'workContent', title: '工作内容', },
+            //      {field: 'responsible', title: '责任人',},
+            //      {field: 'planningTime', title: '计划时间',},
+            //      { field: 'completionTime', title: '完成时间', },
+            //      { field: 'progressStatus', title: '进度状态', }
+            //           ]],
+
+            //         done: function (d) {
+
+            //             count = 0;
+            //             str = "";
+            //             var tds = $('td[data-field="workStage"]')
+            //             for (var i = 0; i < tds.length; i++) {
+            //                 var text = $(tds[i]).children("div").text()
+
+
+            //                 if (text == str) {
+            //                     count++
+            //                 }
+            //                 else {
+            //                     str = text
+            //                     if (count != 0) {
+            //                         for (var j = 1; j <= count; j++) {
+            //                             $(tds[i - j]).hide()
+            //                         }
+            //                         $(tds[i - count - 1]).attr("rowspan", count + 1)
+
+            //                     }
+            //                     count = 0
+            //                 }
+            //             }
+
+            //             var tds = $('td[data-field="workStage"]')
+            //             for (var i = 0; i < tds.length; i++) {
+            //                 var text = $(tds[i]).children("div").text()
+            //                 if (text == "WatchDog") {
+            //                     $(tds[i]).children("div").text($(tds[i]).next().children("div").text())
+            //                     $(tds[i]).next().hide();
+            //                     $(tds[i]).next().next().hide();
+            //                     $(tds[i]).next().next().next().hide();
+            //                     $(tds[i]).next().next().next().next().hide();
+            //                     $(tds[i]).children("div").css({ width: "100%", "text-align": "center", "font-size": "130%", "font-weight": "bold" })
+            //                     $(tds[i]).next().next().next().next().next().children("div").css({ "font-size": "130%", "font-weight": "bold" })
+
+            //                     $(tds[i]).attr("colspan", 5)
+            //                     $(tds[i]).parents("tr").css("background-color", "lightgray")
+            //                 }
+            //             }
+
+            //             var states = $('td[data-field="progressStatus"]')
+            //             for (var i = 0; i < states.length; i++) {
+            //                 if ($(states[i]).children("div").text() == "N") {
+            //                     $(states[i]).css("background-color", "orange")
+
+            //                 }
+            //                 else { $(states[i]).css("background-color", "#4caf50") }
+            //             }
+
+            //             //$($('[title="打印"]')[1]).click()
+            //         }
+            //     });
+            // })
+
+            //  setTimeout('print1()', 500);
+
+        }
+
+        function print1() {
+            // window.print()
+
+            var printHtml = document.getElementById('word').innerHTML
+            debugger
+            var oldstr = document.body.innerHTML
+            window.document.body.innerHTML = printHtml
+            window.print()
+            // document.body.innerHTML = oldstr
+            // location.reload()
+            return false
+        }
+    </script>
+</body>
+
+</html>
