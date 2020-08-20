@@ -37,6 +37,20 @@ namespace WebApplication2.Model.生产管理.工程部
                                 time = guide.ExpectEndTime.ToString();
                             }
                         }
+                            bool isOut = true;
+                            var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID && r.sign != 0);
+                            foreach (var process in processes)
+                            {
+                                if (process.program_audit_sign != 1)
+                                {
+                                    isOut = false;
+                                    break;
+                                }
+                            }
+                            if (isOut)
+                            {
+                                continue;
+                            }
                         if (item.Engine_Program_ManagerId == id|item.craftPersonId==id)
                         {
                             orders.Add(new Order { orderId = item.Order_ID, orderNumber = item.Order_Number, flag = 1, time = time, creatTime = Convert.ToDateTime(item.CreateTime), orderName = item.Product_Name ,projectName =item.ProjectName==null?"":item.ProjectName,

@@ -33,6 +33,28 @@ namespace WebApplication2.生产管理.生产部.产能计数
                         {
                             continue;
                         }
+                        int maxProcessNum = 0;
+                        int processId = 0;
+                        var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID);
+                        
+                        foreach (var real in processes)
+                        {
+                            if (maxProcessNum <Convert.ToInt32 ( real.ProcessID))
+                            {
+                                maxProcessNum =Convert.ToInt32 ( real.ProcessID);
+                                processId = real.ID;
+                            }
+                        }
+                        var work = shchedu.Where(r => r.ProcessID == processId);
+                        int workCount = 0;
+                        foreach (var real in work)
+                        {
+                            workCount += (real.WorkCount==null?0:Convert.ToInt32 (real.WorkCount));
+                        }
+                        if (workCount >= item.Product_Output)
+                        {
+                            continue;
+                        }
                         int orderID = item.Order_ID;
                         string time = "";
                         var guide = entities.JDJS_WMS_Order_Guide_Schedu_Table.Where(r => r.OrderID == orderID).FirstOrDefault();
@@ -48,6 +70,7 @@ namespace WebApplication2.生产管理.生产部.产能计数
                         {
                             flag = 1;
                         }
+
                         var max = entities.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == item.Order_ID && r.isFlag != 0).OrderByDescending(r => r.ProcessID).FirstOrDefault() ;
                         if (max != null)
                         {

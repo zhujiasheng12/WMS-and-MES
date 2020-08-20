@@ -3382,6 +3382,15 @@
     <Compile Include="生产管理\工程部\写治具数量.ashx.cs">
       <DependentUpon>写治具数量.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\工程部\历史订单\读取工程已编程历史订单.ashx.cs">
+      <DependentUpon>读取工程已编程历史订单.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\工程部\历史订单\读取工程意向历史订单.ashx.cs">
+      <DependentUpon>读取工程意向历史订单.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\工程部\填写意向订单评估预计完成时间.ashx.cs">
+      <DependentUpon>填写意向订单评估预计完成时间.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\工程部\处理生产关联订单\直接下推到排产.ashx.cs">
       <DependentUpon>直接下推到排产.ashx</DependentUpon>
     </Compile>
@@ -3493,6 +3502,9 @@
     <Compile Include="生产管理\市场部\往期订单.ashx.cs">
       <DependentUpon>往期订单.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\市场部\意向订单已评估确认\意向订单已评估确认.ashx.cs">
+      <DependentUpon>意向订单已评估确认.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\市场部\意向订单提交.ashx.cs">
       <DependentUpon>意向订单提交.ashx</DependentUpon>
     </Compile>
@@ -3546,6 +3558,12 @@
     </Compile>
     <Compile Include="生产管理\生产部\区域显示\打印.ashx.cs">
       <DependentUpon>打印.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\历史订单\产能计数历史订单.ashx.cs">
+      <DependentUpon>产能计数历史订单.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\历史订单\排产历史订单.ashx.cs">
+      <DependentUpon>排产历史订单.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\生产部\换产\排序修改提交.ashx.cs">
       <DependentUpon>排序修改提交.ashx</DependentUpon>
@@ -4375,6 +4393,12 @@
     <Content Include="生产管理\品质\送检模块ashx\完成检测.ashx" />
     <Content Include="生产管理\品质\送检模块ashx\删除送检申请.ashx" />
     <Content Include="生产管理\生产部\换产\读取可换产机床.ashx" />
+    <Content Include="生产管理\工程部\填写意向订单评估预计完成时间.ashx" />
+    <Content Include="生产管理\市场部\意向订单已评估确认\意向订单已评估确认.ashx" />
+    <Content Include="生产管理\工程部\历史订单\读取工程意向历史订单.ashx" />
+    <Content Include="生产管理\工程部\历史订单\读取工程已编程历史订单.ashx" />
+    <Content Include="生产管理\生产部\历史订单\产能计数历史订单.ashx" />
+    <Content Include="生产管理\生产部\历史订单\排产历史订单.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

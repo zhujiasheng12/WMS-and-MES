@@ -50,6 +50,8 @@ namespace WebApplication2.Model.生产管理.市场部
                                 client.ClientName,
                                 orders .Remark ,
                                 orders.IntentionPlanEndTime ,
+                                orders.IntentionAssessPlanEndTime ,
+                                orders.IntentionOverConfirm
                            };
 
 
@@ -86,7 +88,8 @@ namespace WebApplication2.Model.生产管理.市场部
                     //virtualReturnTime = (time *( item.Product_Output==null?1:Convert.ToInt32 (item.Product_Output ))).ToString ();
                     order.Add(new OrderRead
                     {
-                        audit =item.AuditResult ==null?"":item.AuditResult,
+                        Intention = item.Intention.ToString(),
+                        audit = item.AuditResult == null ? "" : item.AuditResult,
                         Engine_Program_Manager = item.Engine_Program_Manager,
                         Order_Number = item.Order_Number.ToString(),
                         Engine_Status = item.Engine_Status,
@@ -101,13 +104,16 @@ namespace WebApplication2.Model.生产管理.市场部
                         Order_State = item.Intention.ToString(),
                         Engine_Technology_Manager = item.Engine_Technology_Manager,
                         virtualProgPers = virtualProgPers,
-                        virtualReturnTime=virtualReturnTime,
-                        projectName =item.ProjectName ,
+                        virtualReturnTime = virtualReturnTime,
+                        projectName = item.ProjectName,
                         Priority = item.Priority.ToString(),
-                        clientName=item.ClientName,
+                        clientName = item.ClientName,
                         remark = item.Remark == null ? "" : item.Remark,
-                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
-                    }); ;
+                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff"),
+                        IntentionAssessPlanEndTime = item.IntentionAssessPlanEndTime == null ? "" : item.IntentionAssessPlanEndTime.ToString(),
+                        IntentionOverConfirm =item.IntentionOverConfirm ==null?"":item.IntentionOverConfirm .ToString ()
+
+                    }) ; 
                     
       
                 }

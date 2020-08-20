@@ -40,6 +40,27 @@ namespace WebApplication2.生产管理.生产部
                                 pruduction.OutPut = order.Product_Output.ToString();
                                 var processes = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == order.Order_ID && r.sign != 0);
                                 int chuliao = 0;
+                                int maxProcessNum = 0;
+                                int processId = 0;
+                                foreach (var real in processes)
+                                {
+                                    if (maxProcessNum < Convert.ToInt32(real.ProcessID))
+                                    {
+                                        maxProcessNum = Convert.ToInt32(real.ProcessID);
+                                        processId = real.ID;
+                                    }
+                                }
+                                var shchedu = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.OrderID == order.Order_ID && r.isFlag != 0);
+                                var work = shchedu.Where(r => r.ProcessID == processId);
+                                int workCount = 0;
+                                foreach (var real in work)
+                                {
+                                    workCount += (real.WorkCount == null ? 0 : Convert.ToInt32(real.WorkCount));
+                                }
+                                if (workCount >= order.Product_Output)
+                                {
+                                    continue;
+                                }
                                 foreach (var process in processes)
                                 {
                                     int moudel = Convert.ToInt32(process.Modulus);

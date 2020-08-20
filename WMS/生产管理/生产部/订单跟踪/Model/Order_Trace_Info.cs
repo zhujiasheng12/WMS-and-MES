@@ -229,7 +229,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 blank.Content = "毛坯准备";
                 blank.EndTime = "-";
                 blank.IsOver = false;
-                blank.Person = "姜渊博";
+                blank.Person = "王克全";
                 blank.PlanEndTime = "-";
                 var blankDelay = wms.JDJS_WMS_Order_DelayTime_Table.Where(r => r.OrderID == order.Order_ID).FirstOrDefault();
                 if (blankDelay != null)
@@ -327,7 +327,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 tool.Content = "刀具准备";
                 tool.EndTime = "-";
                 tool.IsOver = true;
-                tool.Person = "王府城";
+                tool.Person = "于欢";
                 tool.PlanEndTime = "-";
                 var toolDelay = wms.JDJS_WMS_Order_DelayTime_Table.Where(r => r.OrderID == order.Order_ID).FirstOrDefault();
                 if (toolDelay != null)

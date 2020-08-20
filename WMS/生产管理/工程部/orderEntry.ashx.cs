@@ -23,12 +23,29 @@ namespace WebApplication2.Model.生产管理.工程部
                 if (type == "生产订单") {
                      rows = entities.JDJS_WMS_Order_Entry_Table.Where(r =>( r.Intention == 2 || r.Intention == 3 || r.Intention == 6) && r.AuditResult =="审核通过");
                 } else if(type == "意向订单"){
-                     rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => (r.Intention == -1 | r.Intention == 0 | r.Intention == 1));
+                     rows = entities.JDJS_WMS_Order_Entry_Table.Where(r => (r.Intention == -1 | r.Intention == 0));
                 }
               
                List< OrderRead >order = new List<OrderRead>();
                 foreach (var item in rows)
                 {
+                    bool isOut = true;
+                    var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID && r.sign != 0);
+                    if (processes.Count() > 0)
+                    {
+                        foreach (var process in processes)
+                        {
+                            if (process.program_audit_sign != 1)
+                            {
+                                isOut = false;
+                                break;
+                            }
+                        }
+                        if (isOut)
+                        {
+                            continue;
+                        }
+                    }
                     string clientName = "";
                     var clientList = entities.JDJS_WMS_Order_Guide_Schedu_Table.Where(r => r.OrderID == item.Order_ID);
                     if (clientList.Count() > 0) {
@@ -46,7 +63,7 @@ namespace WebApplication2.Model.生产管理.工程部
                         Engine_Program_Manager = item.Engine_Program_Manager,
                         Order_Number = item.Order_Number.ToString(),
                         Engine_Status = item.Engine_Status,
-                        projectName =item.ProjectName ==null?"":item.ProjectName ,
+                        projectName = item.ProjectName == null ? "" : item.ProjectName,
                         Order_Leader = item.Order_Leader,
                         Order_ID = item.Order_ID.ToString(),
                         Product_Drawing = "110",
@@ -57,15 +74,16 @@ namespace WebApplication2.Model.生产管理.工程部
                         Order_Plan_Start_Time = item.Order_Plan_Start_Time.ToString(),
                         Order_State = item.Intention.ToString(),
                         Engine_Technology_Manager = item.Engine_Technology_Manager,
-                        Engine_Program_ManagerId=Convert.ToInt32(item.Engine_Program_ManagerId),
-                        Engine_Technology_ManagerId=Convert.ToInt32(item.Engine_Technology_ManagerId),
-                        craftPerson=item.craftPerson,
-                        craftPersonId= Convert.ToInt32( item.craftPersonId),
+                        Engine_Program_ManagerId = Convert.ToInt32(item.Engine_Program_ManagerId),
+                        Engine_Technology_ManagerId = Convert.ToInt32(item.Engine_Technology_ManagerId),
+                        craftPerson = item.craftPerson,
+                        craftPersonId = Convert.ToInt32(item.craftPersonId),
                         clientName = clientName,
                         virtualProgPers = virtualProgPers,
                         Remark = item.Remark == null ? "" : item.Remark,
-                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
-                    });
+                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff"),
+                        IntentionAssessPlanEndTime = item.IntentionAssessPlanEndTime == null ? "" : item.IntentionAssessPlanEndTime.ToString()
+                    }) ;
                 }
                 var key = context.Request["key"];
                 if (key != null)
@@ -119,5 +137,6 @@ namespace WebApplication2.Model.生产管理.工程部
         public string virtualProgPers;
         public string Remark;
         public string IntentionPlanEndTime;
+        public string IntentionAssessPlanEndTime;
     }
 }

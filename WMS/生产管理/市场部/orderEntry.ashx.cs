@@ -33,6 +33,7 @@ namespace WebApplication2.Model.生产管理.市场部
                     {
                         order.Add(new OrderRead
                         {
+                            Intention = item.Intention.ToString (),
                             audit = item.AuditResult == null ? "" : item.AuditResult,
                             Engine_Program_Manager = item.Engine_Program_Manager,
                             Order_Number = item.Order_Number.ToString(),
@@ -51,8 +52,10 @@ namespace WebApplication2.Model.生产管理.市场部
                             projectName = item.ProjectName,
                             Priority = item.Priority.ToString(),
                             clientName = clientName,
-                            remark =item.Remark==null?"":item.Remark  ,
-                            IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
+                            remark = item.Remark == null ? "" : item.Remark,
+                            IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff"),
+                            IntentionAssessPlanEndTime = item.IntentionAssessPlanEndTime == null ? "" : item.IntentionAssessPlanEndTime.ToString(),
+                            IntentionOverConfirm = item.IntentionOverConfirm == null ? "" : item.IntentionOverConfirm.ToString()
                         }) ;
                     }
       
@@ -120,5 +123,8 @@ namespace WebApplication2.Model.生产管理.市场部
         public string clientName;
         public string remark;
         public string IntentionPlanEndTime;
+        public string IntentionAssessPlanEndTime;
+        public string IntentionOverConfirm;
+        public string Intention;
     }
 }

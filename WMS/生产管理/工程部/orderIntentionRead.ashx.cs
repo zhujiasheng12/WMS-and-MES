@@ -19,7 +19,7 @@ namespace WebApplication2.生产管理.市场部
             {
                 var page = int.Parse(context.Request["page"]);
                 var limit = int.Parse(context.Request["limit"]);
-                var rows = from orders in entities.JDJS_WMS_Order_Entry_Table.Where(r=>r.Intention!=5&r.Intention!=6)
+                var rows = from orders in entities.JDJS_WMS_Order_Entry_Table.Where(r=>r.Intention==-1||r.Intention ==0 || r.Intention == -2 || r.Intention == -3)
                            from intention in entities.JDJS_WMS_Order_Intention_History_Table
                            from client in entities.JDJS_WMS_Order_Guide_Schedu_Table
                            where orders.Order_ID == intention.OrderID & client.OrderID == orders.Order_ID
@@ -49,7 +49,8 @@ namespace WebApplication2.生产管理.市场部
                                orders.Priority,
                                client.ClientName,
                                orders.Remark ,
-                               orders.IntentionPlanEndTime 
+                               orders.IntentionPlanEndTime ,
+                               orders.IntentionAssessPlanEndTime
                            };
                 
                 
@@ -106,7 +107,7 @@ namespace WebApplication2.生产管理.市场部
                     {
                         Engine_Program_Manager = item.Engine_Program_Manager,
                         Order_Number = item.Order_Number.ToString(),
-                        projectName =item.ProjectName ==null?"":item.ProjectName ,
+                        projectName = item.ProjectName == null ? "" : item.ProjectName,
                         Engine_Status = item.Engine_Status,
                         Order_Leader = item.Order_Leader,
                         Order_ID = item.Order_ID.ToString(),
@@ -117,16 +118,17 @@ namespace WebApplication2.生产管理.市场部
                         Order_Plan_End_Time = item.Order_Plan_End_Time.ToString(),
                         Order_Plan_Start_Time = item.Order_Plan_Start_Time.ToString(),
                         Order_State = item.Intention.ToString(),
-                        orderState =Convert.ToInt32 (item.Intention ),
+                        orderState = Convert.ToInt32(item.Intention),
                         Engine_Technology_Manager = item.Engine_Technology_Manager,
                         virtualProgPers = virtualProgPers,
                         virtualPPT = fileName,
                         virtualReturnTime = endTimeLast,
-                        examineResult =item.examineResult,
+                        examineResult = item.examineResult,
                         Priority = item.Priority.ToString(),
-                        clientName=item.ClientName,
+                        clientName = item.ClientName,
                         Remark = item.Remark == null ? "" : item.Remark,
-                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff")
+                        IntentionPlanEndTime = item.IntentionPlanEndTime == null ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") : Convert.ToDateTime(item.IntentionPlanEndTime).ToString("yyyy-MM-dd HH:mm:ss:fff"),
+                        IntentionAssessPlanEndTime = item.IntentionAssessPlanEndTime == null ? "" : item.IntentionAssessPlanEndTime.ToString()
                     }) ;
                     
       
@@ -208,5 +210,6 @@ namespace WebApplication2.生产管理.市场部
         public string clientName;
         public string Remark;
         public string IntentionPlanEndTime;
+        public string IntentionAssessPlanEndTime;
     }
 }

@@ -589,6 +589,8 @@
           <Property Name="IntentionPlanEndTime" Type="datetime" />
           <Property Name="IntentionEndTime" Type="datetime" />
           <Property Name="Remark" Type="varchar(max)" />
+          <Property Name="IntentionAssessPlanEndTime" Type="datetime" />
+          <Property Name="IntentionOverConfirm" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -3229,6 +3231,8 @@
           <Property Name="IntentionPlanEndTime" Type="DateTime" Precision="3" />
           <Property Name="IntentionEndTime" Type="DateTime" Precision="3" />
           <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IntentionAssessPlanEndTime" Type="DateTime" Precision="3" />
+          <Property Name="IntentionOverConfirm" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
@@ -5234,6 +5238,8 @@
           <EntitySetMapping Name="JDJS_WMS_Order_Entry_Table">
             <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Entry_Table">
               <MappingFragment StoreEntitySet="JDJS_WMS_Order_Entry_Table">
+                <ScalarProperty Name="IntentionOverConfirm" ColumnName="IntentionOverConfirm" />
+                <ScalarProperty Name="IntentionAssessPlanEndTime" ColumnName="IntentionAssessPlanEndTime" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="IntentionEndTime" ColumnName="IntentionEndTime" />
                 <ScalarProperty Name="IntentionPlanEndTime" ColumnName="IntentionPlanEndTime" />
