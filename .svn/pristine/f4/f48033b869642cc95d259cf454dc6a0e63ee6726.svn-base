@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html style="height:100%">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <!--<link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />-->
+
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui_table重叠.css" rel="stylesheet" />
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+</head>
+
+<body style="height:100%" class="layui-layout-body">
+    <!--初始化-->
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            table1 = table.render({
+                elem: '#orderNumber',
+                url: '../历史订单/产能计数历史订单.ashx' ,
+                height:300
+                 , limit:5
+                , limits: [5,10, 20, 30, 40, 50, 60, 70, 80, 90]
+               , page: {
+                    layout: ['prev', 'page', 'next', 'count', 'limit']
+                }
+
+                //, toolbar: '#order'
+                ,
+                cols: [
+                    [ //表头
+                        {
+                            field: 'number',
+                            type: 'numbers',
+                            title: '序号',
+                            width: 35,
+                        }, {
+                            field: 'orderNumber',
+                            title: '订单',
+                        }, {
+                            field: 'projectName',
+                            title: '项目名称',
+                        }, {
+                            field: 'orderName',
+                            title: '产品名称',
+                        },{
+                            field: 'orderPlanEndTimeStr',
+                            title:'订单计划交期'
+                        }, {
+                            field: 'output',
+                            title: '订单需求产量'
+                        }, {
+                            field: 'planTime',
+                            title: '订单当前完成个数'
+                        },{
+                            field: 'orderId',
+                            title: 'id',
+                            width: 180,
+                            hide: true
+                        }, {
+                            field: 'flag',
+                            title: 'flag',
+                            width: 180,
+                            hide: true
+                        }
+
+                    ]
+                ],
+                parseData: function (res) { //res 即为原始返回的数据
+                    res = res.data
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = res
+                  
+                 const data = sort.slice(this.limit * (current_pages - 1), this.limit *
+                     current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data //解析数据列表
+                    };
+                },
+                done: function (d) {
+                    $('tbody').find('tr').click(function () {
+                        $(this).css('background-color', 'antiquewhite').siblings().css('background-color', 'white')
+                    })
+                    var flags = $("[data-field='flag']")
+                    for (var i = 0; i < flags.length; i++) {
+                        if (flags[i].children[0].innerHTML == 1) {
+
+                            $(flags[i]).siblings('[data-field="orderNumber"]').css('color', 'blue')
+                        } else {
+                            $(flags[i]).siblings('[data-field="orderNumber"]').css('color', 'gray')
+                        }
+                    }
+                    $('tr').mouseenter(function () {
+                       // $(this).css('background-color', 'antiquewhite')
+                    })
+                    $('tr').mouseleave(function () {
+                       // $(this).css('background-color', 'white')
+                    })
+                    $('td[data-field="orderNumber"]')[0].click()
+                }
+            });
+        });
+        /**/
+    </script>
+
+    <!--事件-->
+    <script type="text/html" id="order">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i
+                class=" layui-icon layui-icon-refresh"></i>刷新</button>
+    </script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            layui.table.on('row(orderNumber)', function (obj) {
+                orderId = obj.data.orderId; //订单ID
+                orderNum = obj.data.orderNumber //订单号
+                flag = obj.data.flag //标志
+                tableReloadProcess = layui.table.render({
+                    elem: '#process',
+                    where: {
+                        id: obj.data.orderId
+                    },
+                    url: '根据订单主键读取工序信息.ashx' //数据接口
+                        ,
+                    toolbar: '#toolbarProcess',
+                    cols: [
+                        [ //表头
+                            //{ field: 'number',type:'numbers', title: '序号', width: '6%', },
+                            {
+                                field: 'workNumber',
+                                title: '工序',
+                                width: 60
+                            }
+                            //, {
+                            //    field: 'programName', title: 'NC文件', width: 200,
+                            //}
+                            //, {
+                            //    field: 'toolChartName', title: '刀具表文件', width: 200, 
+                            //}
+                            //, {
+                            //    field: 'ncFile', title: '编程文件', width: 160, 
+                            //}
+                            , {
+                                field: 'programTime',
+                                title: '加工时间',
+                            }
+
+
+                            , {
+                                field: 'deviceType',
+                                title: '设备类型',
+                            }
+                            //, { field: 'fixtureType', title: '治具类型', width: 160 }
+                            //, { field: 'nonCuttingTime', title: '辅助时间', width: 90}
+
+                            //, { field: 'coefficient', title: '一出N', /*width: 60*/ }
+                            , {
+                                field: 'systemAll',
+                                title: '系统统计产能',
+                                /*width: 60*/
+                            } //
+                            , {
+                                field: 'all',
+                                title: '人工修正产能',
+                                /*width: 60*/
+                            }, {
+                                field: 'cnc',
+                                title: '修改产能',
+                                templet: function (d) {
+                                    return '<x style="color:blue;text-decoration:underline">点击修改</x>'
+                                }
+                            }, {
+                                field: 'id',
+                                title: 'id',
+                                hide: true
+                            }, {
+                                field: 'flag',
+                                title: 'flag',
+                                hide: true
+                            }
+                        ]
+                    ],
+                    done: function (d) {
+                        $('p2').text(orderNum);
+                        $('td[data-field="cnc"]').click(function () {
+                            var orderNumber = orderNum
+                            var processId = $(this).siblings('[data-field="id"]')[0]
+                                .children[0].innerText
+                            layer.open({
+                                type: 2,
+                                content: './机台绑定弹窗.html',
+                                area: ['50%', '90%'],
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find(
+                                        'iframe')[0][
+                                        'name'
+                                    ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(processId)
+                                }
+                            })
+                        })
+
+                    }
+                });
+            });
+        })
+    </script>
+    <script type="text/html" id="toolbarProcess">
+        <div class="layui-btn-container" style="float:left">
+
+            <!--  <button id="manual" class="layui-btn layui-btn-sm" limit="工程处理_手动排产" onclick="manual()"><i class="layui-icon layui-icon-date"></i>手动排产</button>-->
+            <!--     <button id="start" class="layui-btn layui-btn-sm" onclick="start()"><i class="layui-icon layui-icon-chart"></i>自动排产</button>-->
+        </div>
+        <p1 style="float:left">订单单号:</p1>
+        <p2 style="float:left;color:blue"> </p2>
+    </script>
+    <h1 style="margin-left:10px;margin-top:2px;color:black;float:left">订单</h1>
+    <button style="margin-left:210px;margin-top:7px;" class="layui-btn layui-btn-sm" onclick="location.reload()"><i
+            class="layui-icon layui-icon-refresh-1"></i>刷新</button>
+    <table id="orderNumber" lay-filter="orderNumber"></table>
+    <h1 style="margin-top:2px;margin-left:10px">工序</h1>
+    <table id="process" lay-filter="process"></table>
+    <script>
+        function start() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "排产管理_自动排产") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+                    $.ajax({
+                        url: '../../工程部/Controller/判断编程审核.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+                                layui.layer.confirm("提交后不可修改", function (index) {
+                                    $.ajax({
+                                        url: '../../工程部/arrangement.ashx',
+                                        data: {
+                                            "orderNumberId": orderId
+                                        },
+                                        success: function (d) {
+                                            if (d == "ok") {
+                                                $.ajax({
+                                                    url: '../../工程部/写治具数量.ashx',
+                                                    data: {
+                                                        "orderId": orderId
+                                                    },
+                                                    success: function (
+                                                        d) {
+                                                        if (d ==
+                                                            "ok"
+                                                        ) {
+                                                            layer
+                                                                .msg(
+                                                                    "计算成功", {
+                                                                        icon: 1,
+                                                                        time: 1000
+                                                                    },
+                                                                    function () {
+                                                                        tableReload
+                                                                            .reload({})
+                                                                    }
+                                                                )
+                                                        } else {
+                                                            layer
+                                                                .alert(
+                                                                    d
+                                                                )
+                                                        }
+
+                                                    }
+                                                });
+                                            } else {
+                                                layer.alert(d)
+                                            }
+                                        }
+                                    })
+
+
+                                })
+
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+                }
+            })
+        }
+
+        function manual() {
+            $.ajax({
+                url: '/人员管理/session/Jurisdiction.ashx/',
+                success: function (d) {
+                    var obj = JSON.parse(d)
+                    if (obj.id == null) {
+                        parent.location.href = "/Login/Login.html"
+                    }
+                    var arr = obj.Limit
+
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == "排产管理_手动排产") {
+                            layer.alert("您无此权限");
+                            return;
+                        }
+                    }
+                    $.ajax({
+                        url: '../../工程部/Controller/判断编程审核.ashx?orderId=' + orderId,
+
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.open({
+                                    type: 2,
+                                    area: ['90%', '90%'],
+                                    content: '../../工程部/手动排产.html',
+                                    success: function (layero, index) {
+                                        var body = layer.getChildFrame('body',
+                                            index);
+                                        var iframeWin = window[layero.find(
+                                            'iframe')[0][
+                                            'name'
+                                        ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                        iframeWin.method(orderId);
+                                    }
+                                });
+
+                            } else {
+                                layer.alert(d);
+                                return;
+                            }
+                        }
+
+                    })
+                }
+            })
+
+        }
+
+        function production_Scheduling() {
+            layer.confirm("请选择", {
+                btn: ['手动排产', '自动排产'], //按钮
+                shade: false //不显示遮罩
+            }, function (index) {
+                layer.close(index)
+                manual()
+            }, function () {
+                start()
+            })
+        }
+    </script>
+</body>
+
+</html>

@@ -31,6 +31,10 @@ namespace WebApplication2.Model.生产管理.工程部
                 {
                     bool isOut = true;
                     var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID && r.sign != 0);
+                    if (processes.Count() <= 0)
+                    {
+                        isOut = false;
+                    }
                     if (processes.Count() > 0)
                     {
                         foreach (var process in processes)
@@ -99,7 +103,7 @@ namespace WebApplication2.Model.生产管理.工程部
                 }
 
                 var order1 = order.Skip((page - 1) * limit).Take(limit);
-                var model = new { msg = "", code = 0, count = rows.Count(), data = order1};
+                var model = new { msg = "", code = 0, count =order.Count(), data = order1};
                 var json = serializer.Serialize(model);
                 context.Response.Write(json);
             }

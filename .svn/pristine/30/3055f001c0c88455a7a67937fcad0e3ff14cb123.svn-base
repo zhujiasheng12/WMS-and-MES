@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../layui-v2.4.5/layui/layui.js"></script>
+    <script src="../../jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                    case 'create':
+
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '90%'],
+                            content: '新建意向订单.html'
+                        })
+                        break;
+                    case 'search':
+                        $('#searchContent').val($("#select").val())
+                        tableReload.reload({
+                            url: 'orderIntentionRead.ashx',
+                            where: {
+                                key: $("#select").val()
+
+                            }
+                        })
+
+                        break;
+                    case 'reload':
+                        $('#searchContent').val("")
+                        table.reload('idTest', function () {
+
+                        })
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'accept') {
+                    layer.open({
+                        type: 2,
+                        area:['400px','400px'],
+                        content: '订单评估接受.html',
+                        end() {
+                            location.reload()
+                        },
+                        success: function (layero, index) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.Order_ID);
+                        }
+                    });  
+                  
+                } else if (obj.event === 'complete') {
+
+                    layer.confirm('是否提交？', function (confirmIndex) {
+                        var index = layer.load();
+                        layer.close(confirmIndex)
+                        $.ajax({
+                            url: 'virSubmit.ashx',
+                            data: { "orderId": data.Order_ID },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index)
+                                        tableReload.reload()
+                                    })
+                                } else {
+                                    layer.close(index)
+                                    layer.alert(d)
+                                    //$.ajax({
+                                    //    url: 'removeQueue.ashx',
+                                    //    data: { "orderId": data.Order_ID },
+                                    //    success: function (res) {
+                                    //        if (res == "ok") {
+                                                
+                                    //        } else {
+                                    //            layer.alert(res)
+                                    //        }
+                                    //    }
+                                    //});
+                                }
+                            }
+                        })
+                    })
+                }
+               
+
+
+            });
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-row">
+            <!--<div class="layui-col-md4">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="create"><i class="layui-icon layui-icon-add-circle-fine"></i>创建</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="Push-down"><i class="layui-icon layui-icon-download-circle"></i>下推</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</button>
+
+                </div>
+            </div>-->
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="search" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="reload" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </script>
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="accept" disabled="disabled">接受</button>
+       
+        <button class="layui-btn layui-btn-xs" lay-event="complete">提交</button>
+
+    </script>
+    <input id="searchContent" hidden/>
+    <script>
+        layui.use(['table', 'form'], function () {
+            var table = layui.table, $ = layui.$, form = layui.form;
+
+            //第一个实例
+            tableReload = table.render({
+                elem: '#demo'
+
+                , url: 'orderIntentionRead.ashx' //数据接口
+                , page: true //开启分页
+                , toolbar: '#toolbarDemo'
+                , id: 'idTest'
+                , cols: [[ //表头
+                    { field: 'number', title: '序号', type: 'numbers', width:60, fixed: 'left' }
+                    , { field: 'Order_Number', title: '产品订单号', width: 105 }
+                            , { field: 'Priority', title: '优先级', width: 100 }//
+                            , { field: "clientName", title: "客户名称", width: 90 }
+                    , { field: 'Order_Leader', title: '订单负责人', width:105 }
+                    , { field: 'Product_Name', title: '产品名称', width: 120 }
+                    , { field: 'Product_Material', title: '产品材料', width:90 }
+                    , {
+                        field: 'Product_Drawing', title: '产品图纸', width: 90, templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        }
+                    }
+                    , { field: 'Product_Output', title: '订单数量', width: 90 }
+                    , { field: 'Order_State', title: '订单状态', width: 90 }
+                    , { field: 'virtualProgPers', title: '虚拟方案责任人', width: 135 }
+                    , { field: 'virtualPPT', title: '虚拟加工方案', width:120, templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        } }
+                    , { field: 'virtualReturnTime', title: '预计用时', width: 160 }
+                    , { field:'IntentionAssessPlanEndTime',title:'评估预计完成时间',width:160}
+                    , { field: 'examineResult', title: '审核说明', width: 100 }
+                    , { field: 'Remark', title: '备注', width: 160 }
+                    , { field: 'operation', title: '操作', toolbar: '#barDemo', width: 120, fixed: 'right' }
+
+                    , { field: 'Order_ID', title: 'id', hide: true }
+                ]],
+                done: function () {//
+
+                    $('[data-field="IntentionAssessPlanEndTime"]').click(function () {
+                        const Order_ID = $(this).siblings('[data-field="Order_ID"]').children().text()
+                        const IntentionAssessPlanEndTime = $(this).children().text() //
+                        layer.open({
+                            type: 2,
+                            area: ['400px', '400px'],
+                            content: '评估预计完成时间修改弹窗.html',
+                            end() {
+                                location.reload()
+                            },
+                            success: function (layero, index) {
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(Order_ID, IntentionAssessPlanEndTime);
+                            }
+                        });
+                    })
+                    $.ajax({
+                        url: 'orderSearch.ashx',
+                        success: function (d) {
+                            var objs = JSON.parse(d);
+                            $.each(objs, function (i, obj) {
+                                if (obj.key == $("#searchContent").val()) {
+                                    $('#select').append('<option value="' + obj.key + '" selected>' + obj.key + '</option>');
+
+                                } else {
+                                    $('#select').append('<option value="' + obj.key + '">' + obj.key + '</option>');
+
+                                }
+                            })
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                form.render()
+                            })
+                        }
+                    });
+
+
+                    $('td[data-field="virtualPPT"]').click(function () {
+                          var virtualProgPers=   $(this).siblings('[data-field="virtualProgPers"]')[0].children[0].innerText
+                          var orderNumber = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                          var orderId = $(this).siblings('[data-field="Order_ID"]')[0].children[0].innerText
+                        $.ajax({
+                            url: '../../人员管理/session/Jurisdiction.ashx',
+                            success: function (d) {
+                                var obj = JSON.parse(d)
+                           
+                                if (obj.UserName == virtualProgPers) {
+                                  
+                                    layer.open({
+                                        type: 2,
+                                        area: ['650px', '500px'],
+                                        content: '虚拟方案文件弹窗.html',
+                                        success: function (layero, index) {
+                                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                                            iframeWin.method(orderId, orderNumber)
+                                        }
+                                    });
+                                } else {
+                                    layer.msg("仅责任人可看")
+                                }
+                            }
+
+                        })
+   
+                    })
+
+                     var states = $('td[data-field="Order_State"]');
+                    for (var i = 0; i < states.length; i++) {
+                        if (states[i].children[0].innerText == "-1") {
+                            states[i].children[0].innerText = "评估中"
+                        }
+                        else if (states[i].children[0].innerText == "0") {
+                            states[i].children[0].innerText = "不同意"
+                        }
+                        else if (states[i].children[0].innerText == "-2") {
+                            states[i].children[0].innerText = "撤销"
+                        }
+                        else if (states[i].children[0].innerText == "-3") {
+                            states[i].children[0].innerText = "未评估"
+                           
+                            var data_index = $(states[i]).parent().attr("data-index")
+                            $(".layui-table-fixed-r").find('tr[data-index=' + data_index + ']').find('button').removeClass('layui-btn-disabled').removeAttr('disabled')
+    
+
+                        }
+                        else if (states[i].children[0].innerText == "1") {
+                            states[i].children[0].innerText = "已评估"
+                        }
+                        else if (states[i].children[0].innerText == "2") {
+                            states[i].children[0].innerText = "生产中"
+                        }
+                        else if (states[i].children[0].innerText == "3") {
+                            states[i].children[0].innerText = "已下推"
+                        }
+                        else if (states[i].children[0].innerText == "4") {
+                            states[i].children[0].innerText = "停止/完成"
+                        }
+                        else if (states[i].children[0].innerText == "5") {
+                            states[i].children[0].innerText = "意向未提交"
+                        }
+                        else if (states[i].children[0].innerText == "6") {
+                            states[i].children[0].innerText = "关联未提交"
+                        }
+                        else if (states[i].children[0].innerText == "7") {
+                            states[i].children[0].innerText = "生产订单未提交"
+                        }
+
+                        else if (states[i].children[0].innerText == "8") {
+                            states[i].children[0].innerText = "生产关联订单未提交"
+                        } else {
+                            states[i].children[0].innerText = "其它"
+                        }
+                    }
+
+                    layui.form.render()
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+                    $('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '图纸.html',
+                            area: ['650px', '500px'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+                }
+            });
+
+        });
+    </script>
+    <!--<div class="layui-row">
+
+        <div class="layui-col-md2">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <select id="select" lay-search>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <button id="search" class="layui-btn">搜索</button>
+            <button id="reload" class="layui-btn ">刷新</button>
+        </div>
+
+    </div>-->
+    <table id="demo" lay-filter="test"></table>
+    <!--<script>
+       
+        $(function () {
+            layui.use("table", function () {
+                var table = layui.table;
+                $("#search").click(function () {
+                    $("#searchContent").val($("#select").val())
+                    tableReload.reload({
+                        url: 'search.ashx',
+                        where: {
+                            key:$("#select").val()
+                        }
+                    })
+            })
+                $("#reload").click(function () {
+                    table.reload('idTest', function(){
+                    })
+            })
+
+
+            })
+
+        })
+
+    </script>-->
+</body>
+</html>

@@ -201,7 +201,42 @@
 
                         })
                         break;
+                    case 'confirm':
 
+                        layer.confirm("是否将选中订单放入历史？", function (index) {
+
+
+                         
+                            if (checkStatus.data.length == 0) {
+                                layer.alert('请先勾选');
+                                layer.close(index)
+                                return;
+                            }
+                            let idList=''
+                            for (let i = 0; i < checkStatus.data.length; i++) {
+
+                                idList += checkStatus.data[i].Order_ID + ','
+                            }
+
+                            $.ajax({
+                                url: '意向订单已评估确认/意向订单已评估确认.ashx',
+                                data: { idList: idList},
+                                type: 'post',                            
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.msg("确认成功", { icon: 1, time: 1000 }, function () {
+                                            tableReload.reload({
+
+                                            })
+                                        })
+                                    } else {
+                                        layer.alert(d)
+                                    }
+
+                                }
+                            });
+                        })
+                        break;
                 };
             });
 
@@ -296,19 +331,20 @@
                 }
 
 
-            });
+            });//confirm
         })
     </script>
     <script type="text/html" id="toolbarDemo">
        
         <div class="layui-row">
-            <div class="layui-col-md4">
+            <div class="layui-col-md6">
                 <div class="layui-btn-container">
                     <button class="layui-btn layui-btn-sm" lay-event="create"><i class="layui-icon layui-icon-add-circle-fine"></i>创建</button>
                     <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="Push-down"><i class="layui-icon layui-icon-download-circle"></i>下推</button>
                     <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="Revoke"><i class="layui-icon "></i>撤销</button>
-                       <button class="layui-btn layui-btn-sm" lay-event="examine"><ii ></ii>审核</button>
-                     <button class="layui-btn layui-btn-sm" lay-event="examineResult"><ii ></ii>审核结果</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="examine"><ii></ii>审核</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="examineResult"><ii></ii>审核结果</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="confirm">确认</button>
                     <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</button>
 
                 </div>
@@ -375,6 +411,7 @@
                             return '<span style="color: #c00;">点击查看</span>'
                         } }
                     , { field: 'virtualReturnTime', title: '预计用时', width: 160 }
+                    , { field: 'IntentionAssessPlanEndTime', title: '评估预计完成时间', width: 160 }
                     , { field: 'remark', title: '备注', width: 160}
                       , { field: 'Order_State', title: '订单状态Fix', width: 90, fixed: 'right',hide:true }
                     , { field: 'operation', title: '操作',  toolbar: '#barDemo', width: 160, fixed: 'right'}
@@ -394,6 +431,7 @@
                     sort.push(...res.filter(item => item.Order_State == 3))
                     sort.push(...res.filter(item => item.Order_State == 2))
                     sort.push(...res.filter(item => item.Order_State == 4))
+                    sort = sort.filter(item => item.IntentionOverConfirm !== "已确认")
                     const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
                     return {
                         "code": 0, //解析接口状态

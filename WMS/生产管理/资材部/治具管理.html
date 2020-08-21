@@ -107,9 +107,9 @@
                     sort.push(...res.filter(item => item.jigPrepareState === "待备").sort((a,b)=>{
                         return a.order<b.order?-1:1
                     }))
-                    sort.push(...res.filter(item => item.jigPrepareState === "已备").sort((a,b)=>{
-                        return a.order<b.order?-1:1
-                    }))
+                    //sort.push(...res.filter(item => item.jigPrepareState === "已备").sort((a,b)=>{
+                    //    return a.order<b.order?-1:1
+                    //}))
                     const data = sort.slice(this.limit * (current_pages - 1), this.limit *
                         current_pages);
                     return {

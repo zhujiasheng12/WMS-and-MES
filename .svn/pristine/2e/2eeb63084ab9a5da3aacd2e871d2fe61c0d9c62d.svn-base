@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="../../Resources/js/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            reload = table.render({
+                elem: '#demo',
+                toolbar: '#toolbar',
+                url: '治具管理读数据.ashx' //数据接口
+                    ,
+                page: true //开启分页
+                    ,
+                cols: [
+                    [ //表头
+                        {
+                            field: 'order',
+                            title: '订单号',
+                            width: 120,
+                            fixed: 'left'
+                        }, {
+                            field: 'projectName',
+                            title: '项目名称',
+                            width: 120,
+                        }, {
+                            field: 'orderName',
+                            title: '产品名称',
+                            width: 120,
+                        }, {
+                            field: 'process',
+                            title: '工序号',
+                            width: 100
+                        }, {
+                            field: 'jigType',
+                            title: '治具种类',
+                            width: 100,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d.jigType + '</p>'
+                            }
+                        }, {
+                            field: 'jigSpecification',
+                            title: '治具规格',
+                            width: 150,
+                        }, {
+                            field: 'jigDemandNumber',
+                            title: '治具需求数量',
+                            width: 120
+                        }, {
+                            field: 'jigPrepareState',
+                            title: '治具准备状态',
+                            width: 120
+                        }, {
+                            field: 'jigPreparedNumber',
+                            title: '治具已准备量',
+                            width: 120,
+                        }, {
+                            field: 'jigAppendNumber',
+                            title: '治具追加量',
+                            width: 105,
+                        }, {
+                            field: 'Jig_Expected_Completion_Time',
+                            title: '预计完成日期',
+                            width: 190,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d
+                                    .Jig_Expected_Completion_Time + '</p>'
+                            }
+                        }, {
+                            field: 'time',
+                            title: '延期日期',
+                            width: 190,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d.time + '</p>'
+                            }
+                        }, {
+                            field: 'processId1',
+                            title: 'processId',
+                            width: 190,
+                            hide: true
+                        }, {
+                            field: 'processId',
+                            title: '操作',
+                            toolbar: '#barDemo',
+                            width: 80,
+                            fixed: 'right'
+                        }
+                    ]
+                ],
+                parseData: function (res) { //res 即为原始返回的数据
+                    res = res.data
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                    sort.push(...res.filter(item => item.jigPrepareState === "待备").sort((a,b)=>{
+                        return a.order<b.order?-1:1
+                    }))
+                    //sort.push(...res.filter(item => item.jigPrepareState === "已备").sort((a,b)=>{
+                    //    return a.order<b.order?-1:1
+                    //}))
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit *
+                        current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data //解析数据列表
+                    };
+                },
+                done: function (d) {
+                    $('td[data-field="jigType"]').click(function () {
+                        var orderNum = $(this).siblings('[data-field="order"]')[0].children[
+                            0].innerText
+                        var processId = $(this).siblings('[data-field="processId1"]')[0]
+                            .children[0].innerText
+                        var workNum = $(this).siblings('[data-field="process"]')[0]
+                            .children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '../工程部/资材毛坯治具图纸弹窗.html',
+                            area: ['50%', '90%'],
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderNum, processId, workNum,
+                                    "治具")
+
+                            }
+
+                        })
+                    })
+
+                    $('td[data-field="time"]').click(function () {
+                        var processId = $(this).siblings('[data-field="processId1"]')[0]
+                            .children[0].innerText
+                        var time = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '50%'],
+                            content: '治具延期弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                ,
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(processId, time);
+                            }
+                        });
+                    })
+
+                    $('td[data-field="Jig_Expected_Completion_Time"]').click(function () {
+                        var processId = $(this).siblings('[data-field="processId1"]')[0]
+                            .children[0].innerText
+                        var time = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '50%'],
+                            content: '治具预计完成时间弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                ,
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(processId, time);
+                            }
+                        });
+                    })
+                }
+
+            });
+
+
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'add') {
+                    layer.open({
+                        type: 2,
+                        area: ['50%', '50%'],
+                        content: '治具追加弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            ,
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#processId').val(data.processId);
+                            var iframeWin = window[layero.find('iframe')[0][
+                            'name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.jigAppendNumber);
+                        }
+                    });
+                } else if (obj.event === 'spareParts') {
+                    layer.open({
+                        type: 2,
+                        area: ['400px', '300px'],
+                        content: '治具准备.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            ,
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#processId').val(data.processId);
+                            var iframeWin = window[layero.find('iframe')[0][
+                            'name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.jigPreparedNumber);
+                        }
+                    });
+                }
+
+            });
+        });
+
+        /**/
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="spareParts">准备</a>
+        <!--<a class="layui-btn layui-btn-xs" lay-event="add">追加</a>-->
+        <!--<a class="layui-btn layui-btn-xs" lay-event="delay">延期</a>-->
+    </script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()">刷新</button>
+    </script>
+</body>
+
+</html>

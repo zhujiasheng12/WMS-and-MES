@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="/layui-v2.4.5/layui/layui.js"></script>
+    <script src="/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <script>
+
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer, $ = layui.$;
+            table.on('toolbar(test)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'create':
+
+                        layer.open({
+                            type: 2,
+                            title:'新建意向订单',
+                            area: ['500px', '550px'],
+                            content: '../新建意向订单.html'
+                        })
+                        break;
+                    case 'Revoke':
+                        if (checkStatus.data.length == 0) {
+                            layer.alert('请先勾选');
+                            layer.close(index)
+                            return;
+                        }
+                        layer.confirm("是否撤销选择项", function (index) {
+
+
+                            var formDate = new FormData();
+                        
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+
+                                formDate.append(i, checkStatus.data[i].Order_ID)
+                            }
+                            formDate.append('flag', '撤销')
+                            $.ajax({
+                                url: '../pushDown.ashx',
+                                data: formDate,
+                                type: 'post',
+                                contentType: false,
+                                processData: false,
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.msg("撤销成功", { icon: 1, time: 1000 }, function () {
+                                            tableReload.reload({
+
+                                            })
+                                        })
+                                    } else {
+                                        layer.alert(d)
+                                    }
+
+                                }
+                            });
+                        })
+                        break;
+                    case 'Push-down':
+                        if (checkStatus.data.length == 0) {
+                            layer.alert('请先勾选');
+                            layer.close(index)
+                            return;
+                        }
+                  
+
+                            var formDate = new FormData();
+                           
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+
+                                formDate.append(i, checkStatus.data[i].Order_ID)
+                            }
+                            formDate.append('flag', '下推')
+
+                            layer.open({
+                                type: 2,
+                                area: ['400px', '400px'],
+                                title:"下推",
+                                content: '../意向订单下推.html',
+                                success: function (layero, index) {
+                               
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.fun(formDate);
+                                }
+                            });
+                   
+                     
+                        break;
+                    case 'del':
+
+                       layer.confirm("是否删除选择项", function (index) {
+                            
+                          
+                            var formDate = new FormData();
+                            if (checkStatus.data.length == 0) {
+                                layer.alert('请先勾选');
+                                layer.close(index)
+                                return;
+                            }
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                               
+                                formDate.append(i,checkStatus.data[i].Order_ID)
+                            }
+                           
+                            $.ajax({
+                                url: '../orderDelete.ashx',
+                                data: formDate,
+                                type: 'post',
+                                contentType: false,
+                                processData: false,
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                            tableReload.reload({
+
+                                            })
+                                        })
+                                    } else {
+                                        layer.alert(d)
+                                    }
+
+                                }
+                            });
+                        })
+                       break;
+                    case 'examine':
+                     
+                        if (checkStatus.data.length === 0) {
+                            layer.alert("请勾选！")
+                            return
+                        }
+                        else if(checkStatus.data.length===1){
+                            layer.open({
+                                type: 2,
+                                title: '审核',
+                                area: ['500px', '400px'],
+                                content: '../审核弹窗.html',
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(checkStatus.data[0].Order_ID)
+                                }
+                            })
+
+                        }else{
+                            layer.open({
+                                type: 2,
+                                title: '批量审核',
+                                area: ['300px', '150px'],
+                                content: '../批量审核弹窗.html',
+                                end(){
+                                location.reload()
+                                },
+                                success: function (layero, index) {
+
+                                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                    iframeWin.method(checkStatus.data)
+                                }
+                            })
+                        }
+                        break;
+                    case 'examineResult':
+
+                        if (checkStatus.data.length != 1) {
+                            layer.alert("只能勾选一个！")
+                            return
+                        }
+                        layer.open({
+                            type: 2,
+                            title: '审核',
+                            area: ['500px', '400px'],
+                            content: '../审核结果弹窗.html',
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(checkStatus.data[0].Order_ID)
+                            }
+                        })
+
+
+                        break;
+                    case 'search':
+                          $('#flag').val($("#select").val())
+                        tableReload.reload({
+                            url: '../orderIntentionRead.ashx',
+                            where: {
+                                key: $("#select").val()
+
+                            }
+                        })
+                   
+                        break;
+                    case 'reload':
+                        $('#flag').val("")
+                        table.reload('idTest', function () {
+
+                        })
+                        break;
+                    case 'confirm':
+
+                        layer.confirm("是否将选中订单放入历史？", function (index) {
+
+
+                         
+                            if (checkStatus.data.length == 0) {
+                                layer.alert('请先勾选');
+                                layer.close(index)
+                                return;
+                            }
+                            let idList=''
+                            for (let i = 0; i < checkStatus.data.length; i++) {
+
+                                idList += checkStatus.data[i].Order_ID + ','
+                            }
+
+                            $.ajax({
+                                url: '意向订单已评估确认.ashx',
+                                data: { idList: idList},
+                                type: 'post',                            
+                                success: function (d) {
+                                    if (d == "ok") {
+                                        layer.msg("确认成功", { icon: 1, time: 1000 }, function () {
+                                            tableReload.reload({
+
+                                            })
+                                        })
+                                    } else {
+                                        layer.alert(d)
+                                    }
+
+                                }
+                            });
+                        })
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'del') {
+                    layer.confirm('是否删除', function (index) {
+                        $.ajax({
+                            url: '../orderDelete.ashx',
+                            data: { "id": data.Order_ID },
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
+                                        layer.close(index);
+                                        tableReload.reload({
+
+                                        })
+                                    })
+                                } else {
+                                    layer.alert(d)
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'edit') {
+
+
+                    layer.open({
+                        type: 2,
+                        title: '意向订单编辑',
+                        content: '../意向订单编辑.html',
+                        area: ['500px', '450px'],
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.method(data.Order_ID)
+                        }
+                    })
+                }//
+                else if (obj.event === 'Push-down') {
+
+                    $.ajax({
+                        url: '../pushDown.ashx',
+                        data: { "orderId": data.Order_ID },
+                        success: function (d) {
+                            if (d == "ok") {
+                                layer.msg("下推成功", { icon: 1, time: 1000 }, function () {
+                                    tableReload.reload({
+
+                                    })
+                                })
+                            } else {
+                                layer.alert(d)
+                            }
+
+                        }
+                    })
+                } else if (obj.event == 'submit') {
+                    layer.confirm("提交后不可修改,是否提交", function () {
+                        $.ajax({
+                            url: '../意向订单提交.ashx?orderId='+data.Order_ID,
+                            success: function (d) {
+                                if (d == "ok") {
+                                    layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                        tableReload.reload({
+
+                                        })
+                                    })
+                                } else if (d == "关联") {
+                                    $.ajax({
+                                        url: '../../工程部/start.ashx',
+                                        success: function (d) {
+                                            if (d == "ok") {
+                                                layer.msg("提交成功", { icon: 1, time: 1000 }, function () {
+                                                    tableReload.reload({
+
+                                                    })
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                                  else {
+                                layer.alert(d)
+                            }
+                            }
+                        })
+                    })
+                }
+
+
+            });//confirm
+        })
+    </script>
+    <script type="text/html" id="toolbarDemo">
+       
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-btn-container">
+                    <!--<button class="layui-btn layui-btn-sm" lay-event="create"><i class="layui-icon layui-icon-add-circle-fine"></i>创建</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="Push-down"><i class="layui-icon layui-icon-download-circle"></i>下推</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="Revoke"><i class="layui-icon "></i>撤销</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="examine"><ii></ii>审核</button>-->
+                    <button class="layui-btn layui-btn-sm" lay-event="examineResult"><ii></ii>审核结果</button>
+                    <!--<button class="layui-btn layui-btn-sm" lay-event="confirm">确认</button>-->
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-btn-container">
+                    <button style="margin-left:8px" id="search" class="layui-btn layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button id="reload" class="layui-btn layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+                </div>
+            </div>
+            <div class="layui-col-md2" style="float:right ">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <select id="select" lay-search>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </script>
+    <script type="text/html" id="barDemo">
+        <button  class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</button>
+        <!--<a class="layui-btn layui-btn-xs" lay-event="Push-down">下推</a>-->
+        <button  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="submit"><i class=" layui-icon layui-icon-upload-circle"></i>提交</button>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    </script>
+    <script>
+        layui.use(['table', 'form'], function () {
+            var table = layui.table, $ = layui.$, form = layui.form;
+
+            //第一个实例
+            tableReload = table.render({
+                elem: '#demo'
+                 ,page:true //开启分页
+                ,checkbox:true
+                , url: '../orderIntentionRead.ashx' //数据接口
+                , toolbar: '#toolbarDemo'
+                , id: 'idTest'
+                , cols: [[ //表头
+                     { field: 'checkbox', title: '', type: 'checkbox', width: 40, fixed: 'left' }
+                    ,{ field: 'number', title: '序号', type: 'numbers', width: 60, fixed: 'left' }
+                    , { field: 'Order_Number', title: '产品订单号', width: 105, fixed: 'left' }
+                           , { field: 'projectName', title: '项目名称', width: 100 }//
+                             , { field: 'clientName', title: '客户名称', width: 100 }//
+                               , { field: 'Priority', title: '优先级', width: 100 }//
+                    , { field: 'Order_Leader', title: '订单负责人', width: 105 }
+                    , { field: 'Product_Name', title: '产品名称', width: 90 }
+                    , { field: 'Product_Material', title: '产品材料', width: 90 }
+                    , {
+                        field: 'Product_Drawing', title: '产品图纸', width: 90, templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        }
+                    }
+                    , { field: 'Product_Output', title: '订单数量', width: 90 }
+                    , { field: 'Order_State', title: '订单状态', width: 90 }
+                        , { field: 'audit', title: '审核状态', width: 90 }
+                    , { field: 'virtualProgPers', title: '虚拟方案责任人', width: 135 }
+                    , { field: 'virtualFile', title: '虚拟加工方案文档', width:150,templet: function (d) {
+                            return '<span style="color: #c00;">点击查看</span>'
+                        } }
+                    , { field: 'virtualReturnTime', title: '预计用时', width: 160 }
+                    , { field: 'remark', title: '备注', width: 160}
+                      , { field: 'Order_State', title: '订单状态Fix', width: 90, fixed: 'right',hide:true }
+                    //, { field: 'operation', title: '操作',  toolbar: '#barDemo', width: 160, fixed: 'right'}
+                    , { field: 'Order_ID', title: 'id', hide: true }
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                     sort.push(...res.filter(item => item.IntentionOverConfirm == "已确认"))
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data//解析数据列表
+                    };
+                },
+                done: function (res) {//
+                      const limit =JSON.parse(sessionStorage.getItem('limit'))
+                    limit.forEach(item => {
+                        if(item == '市场_审核'){
+                        $('[lay-event="examine"]').attr('disabled','disabled').addClass('layui-btn-disabled')
+                }
+            })
+
+
+                          $.ajax({
+            url: '../orderSearch.ashx',
+            success: function (d) {
+                var objs = JSON.parse(d);
+                $.each(objs, function (i, obj) {
+                    if (obj.key == $('#flag').val() ){
+                        $('#select').append('<option value="' + obj.key + '" selected>' + obj.key + '</option>')
+                    } else {
+                        $('#select').append('<option value="' + obj.key + '">' + obj.key + '</option>')
+                    }
+                    
+                })
+                layui.use('form', function () {
+                    var form = layui.form;
+                    form.render()
+                })
+            }
+        })
+
+
+
+                          var states = $(".layui-table-main").find('td[data-field="Order_State"]');
+                          var fixStates = $(".layui-table-fixed-r").find('td[data-field="Order_State"]');
+                     for (var i = 0; i < states.length; i++) {
+                     
+                      
+
+
+                         if (states[i].children[0].innerText == "-2") {
+                            states[i].children[0].innerText = "撤销"
+                         }
+                         else if (states[i].children[0].innerText == "-3") {
+                             states[i].children[0].innerText = "未评估"
+                         }
+                       else if (states[i].children[0].innerText == "-1") {
+                            states[i].children[0].innerText = "评估未提交"
+                        }
+                      else  if (states[i].children[0].innerText == "0") {
+                            states[i].children[0].innerText = "不同意"
+                        }
+
+                      else if (states[i].children[0].innerText == "1") {
+                          states[i].children[0].innerText = "已评估"
+                         
+                       
+                        }
+                      else if (states[i].children[0].innerText == "2") {
+                            states[i].children[0].innerText="生产中"
+                        }
+                      else if (states[i].children[0].innerText == "3") {
+                            states[i].children[0].innerText="已下推"
+                        }
+                      else if (states[i].children[0].innerText == "4") {
+                            states[i].children[0].innerText="停止/完成"
+                        }
+                      else if (states[i].children[0].innerText == "5") {
+                            states[i].children[0].innerText="意向未提交"
+                        }
+                      else if (states[i].children[0].innerText == "6") {
+                            states[i].children[0].innerText="关联未提交"
+                        }
+                      else if (states[i].children[0].innerText == "7") {
+                            states[i].children[0].innerText = "生产订单未提交"
+                        }
+                 
+                      else if (states[i].children[0].innerText == "8") {
+                          states[i].children[0].innerText = "生产关联订单未提交"
+                      } else {
+                          states[i].children[0].innerText = "其它"
+                      }
+
+                    }
+                     for (var i = 0; i < fixStates.length; i++) {
+                         if (fixStates[i].children[0].innerText != "5" & fixStates[i].children[0].innerText != "6") {
+
+                             $(fixStates[i]).siblings('[data-field="operation"]').find('[lay-event="edit"]').addClass('layui-btn-disabled').attr('disabled', true);
+                             $(fixStates[i]).siblings('[data-field="operation"]').find('[lay-event="submit"]').addClass('layui-btn-disabled').attr('disabled', true);
+                         }
+                         if (fixStates[i].children[0].innerText == "1") {
+                         
+                             $(fixStates[i]).siblings('[data-field="operation"]').find('[lay-event="edit"]').removeClass('layui-btn-disabled').removeAttr('disabled');
+
+                         }
+                     }
+                    layui.form.render()
+                    $('td[data-field="Product_Drawing"]').css('cursor', 'pointer')
+                    $('td[data-field="Product_Drawing"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            content: '../图纸.html',
+                            title:"图纸",
+                            area: ['650px', '500px'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })//
+                      
+                     $('td[data-field="virtualFile"]').click(function () {
+                        var number = $(this).siblings('[data-field="Order_Number"]')[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            title:"虚拟加工方案文档",
+                            content: '../虚拟加工方案文档.html',
+                            area: ['650px', '500px'],
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(number)
+
+                            }
+                        })
+                    })
+
+                }
+            });
+
+        });
+    </script>
+  
+        <table id="demo" lay-filter="test"></table>
+    <script>
+  
+        $(function () {
+            layui.use("table", function () {
+                var table = layui.table;
+            //    $("#search").click(function () {
+            //        tableReload.reload({
+            //            url: 'search.ashx',
+            //            where: {
+            //                key:$("#select").val()
+            //            }
+            //        })
+            //})
+            //    $("#reload").click(function () {
+            //        table.reload('idTest', function(){
+            //        })
+            //})
+
+
+            })
+           
+        })
+
+    </script>
+    <input id="flag" hidden  />
+</body>
+</html>

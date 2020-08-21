@@ -48,19 +48,19 @@
                 var data = obj.data;
                 //console.log(obj)
                 if (obj.event === 'accept') {
-                    $.ajax({
-                        url: 'accept.ashx',
-                        data: { "orderId":data.Order_ID },
-                        success: function (d) {
-                            if (d == "ok") {
-                                layer.msg("已接受", { icon: 1, time: 1000 }, function () {
-                                    tableReload.reload({})
-                                })
-                            } else {
-                                layer.alert("已被接受");
-                            }
+                    layer.open({
+                        type: 2,
+                        area:['400px','400px'],
+                        content: '订单评估接受.html',
+                        end() {
+                            location.reload()
+                        },
+                        success: function (layero, index) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.Order_ID);
                         }
-                    })
+                    });  
+                  
                 } else if (obj.event === 'complete') {
 
                     layer.confirm('是否提交？', function (confirmIndex) {
@@ -169,7 +169,8 @@
                     , { field: 'virtualPPT', title: '虚拟加工方案', width:120, templet: function (d) {
                             return '<span style="color: #c00;">点击查看</span>'
                         } }
-                    , { field: 'virtualReturnTime', title: '预计用时', width:160}
+                    , { field: 'virtualReturnTime', title: '预计用时', width: 160 }
+                    , { field:'IntentionAssessPlanEndTime',title:'评估预计完成时间',width:160}
                     , { field: 'examineResult', title: '审核说明', width: 100 }
                     , { field: 'Remark', title: '备注', width: 160 }
                     , { field: 'operation', title: '操作', toolbar: '#barDemo', width: 120, fixed: 'right' }
@@ -178,7 +179,22 @@
                 ]],
                 done: function () {//
 
-
+                    $('[data-field="IntentionAssessPlanEndTime"]').click(function () {
+                        const Order_ID = $(this).siblings('[data-field="Order_ID"]').children().text()
+                        const IntentionAssessPlanEndTime = $(this).children().text() //
+                        layer.open({
+                            type: 2,
+                            area: ['400px', '400px'],
+                            content: '评估预计完成时间修改弹窗.html',
+                            end() {
+                                location.reload()
+                            },
+                            success: function (layero, index) {
+                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(Order_ID, IntentionAssessPlanEndTime);
+                            }
+                        });
+                    })
                     $.ajax({
                         url: 'orderSearch.ashx',
                         success: function (d) {

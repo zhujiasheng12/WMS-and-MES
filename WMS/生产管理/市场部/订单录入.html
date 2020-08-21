@@ -288,7 +288,7 @@
                     sort.push(...res.filter(item => item.Order_State == 0))
                     sort.push(...res.filter(item => item.Order_State == 3))
                     sort.push(...res.filter(item => item.Order_State == 2))
-                    sort.push(...res.filter(item => item.Order_State == 4))
+                    //sort.push(...res.filter(item => item.Order_State == 4))
                     const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
                     return {
                         "code": 0, //解析接口状态

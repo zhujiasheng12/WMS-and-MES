@@ -42,7 +42,23 @@
                     , { field: 'PassRate', title: '合格率', width:75, }
                     , { field: 'id', title: 'id', width: 135, hide: true }
                     , { field: 'do', title: '操作', toolbar: '#barDemo', width: 80, fixed: 'right'}
-                ]]
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    res = res.data
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                    sort.push(...res.filter(item => item.orderNumber > item.QualifiedProductNumber))
+
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data//解析数据列表
+                    };
+                }
             });
 
             //监听行工具事件

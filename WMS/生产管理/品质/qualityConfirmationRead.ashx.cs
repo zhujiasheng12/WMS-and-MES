@@ -92,8 +92,8 @@ namespace WebApplication2.生产管理.品质
                 System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 var page = int.Parse(context.Request["page"]);
                 var limit = int.Parse(context.Request["limit"]);
-                var layPage = qualityConfirms.Skip((page - 1) * limit).Take(limit);
-                var model = new { code = 0, msg = "", count = qualityConfirms.Count, data = layPage };
+                //var layPage = qualityConfirms.Skip((page - 1) * limit).Take(limit);
+                var model = new { code = 0, msg = "", count = qualityConfirms.Count, data = qualityConfirms };
                 var json = serializer.Serialize(model);
                 context.Response.Write(json);
             }

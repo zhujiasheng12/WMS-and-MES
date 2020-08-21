@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Resources/js/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="/Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Resources/js/layui-v2.5.4/layui/layui.js"></script>
+    <script src="/Resources/js/jquery-3.3.1.js"></script>
+    <script src="/Resources/js/qrcode.min.js"></script>
+    <script src="/Resources/js/jquery.wordexport.js"></script>
+    <script src="/Resources/js/fileSaver.js"></script>
+
+</head>
+
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <div id="word" hidden>
+        <div id="" style="text-align:center;width:100%;padding:100px 100px 0 100px">
+            <img src="/Resources/picture/jd.png"
+                style="width:50px;height:50px;display:inline;position:absolute;margin-left:-60px" />
+            <p style="margin-bottom:100px;display:inline;font-size:200%">苏州精雕精密机械工程有限公司</p>
+            <p>地址：高新区科技城五台山路与S230省道交叉口</p>
+            <p style="font-size:250%">生产物料流转单</p>
+            <p style="display:inline;float:left">制单：苏州精工WMS生产管理系统</p>
+            <p style="display:inline;float:right" id="date"></p>
+            <table class="table table-bordered" style="margin-bottom:0">
+
+                <thread>
+                    <tr>
+                        <th style="width:100px">产品名称</th>
+                        <th id="Product_Name" colspan="4"></th>
+                        <th rowspan="3" style="width:100px">
+                            <div id="qrcode" style=""> 产品二维码 </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>产品单号</th>
+                        <th id="Order_Number" colspan="4"></th>
+                    </tr>
+                    <tr>
+                        <th>订单数量 </th>
+                        <th id="Product_Output" colspan="4"></th>
+                    </tr>
+                    <tr>
+                        <th>项目名称</th>
+                        <th id="ProjectName" colspan="5"></th>
+                    </tr>
+                    <tr>
+                        <th>客户名称</th>
+                        <th id="ClientName" colspan="5"></th>
+
+                    </tr>
+                    <tr>
+                        <th>毛坯材料</th>
+                        <th id="Product_Material" colspan="1" style="width:500px"> </th>
+                        <th style="width:200px;display:none">
+                        <th style="display:none"></th>
+                        <th style="width:100px">毛坯规格</th>
+                        <th id="BlankSpecification" colspan="3"></th>
+                    </tr>
+                    <tr>
+                        <th>订单负责人</th>
+                        <th id="Order_Leader" colspan="1"></th>
+                        <th>工程负责人</th>
+                        <th id="craftPerson" colspan="3"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="6">工序信息</th>
+                    </tr>
+                </thread>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>工序</th>
+                        <th>设备类型</th>
+                        <th>治具类型</th>
+                        <th>有无特殊刀具</th>
+                        <th>装夹示意图</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody id="process">
+                    <!--    <tr><td>一序</td><td>JDVT600_A12S真空吸盘</td><td>真空吸盘</td><td>无</td><td><img  src="获取装夹示意图.ashx" /></td><td></td></tr>
+                 <tr><td>二序</td><td>JDLVM550T_A12S 小五轴</td><td>快换式斜口台钳L130(钳口深度3mm，可夹持宽度26-115mm)</td><td>有</td><td></td><td></td></tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 100,
+            height: 100
+        });
+
+
+        function print1() {
+            // window.print()
+
+            var printHtml = document.getElementById('word').innerHTML
+
+            var oldstr = document.body.innerHTML
+            window.document.body.innerHTML = printHtml
+            window.print()
+            document.body.innerHTML = oldstr
+            location.reload()
+            return false
+        }
+
+        function exportWord() {
+            $("#word").wordExport("苏州精工工单"); //fileName为导出的word文件的命名,content为要导出的html内容容器
+            //html2canvas(document.getElementById("body"), {
+            //    onrendered: function (canvas) {
+            //        //通过html2canvas将html渲染成canvas，然后获取图片数据
+            //        var imgData = canvas.toDataURL('image/jpeg');
+
+            //        //初始化pdf，设置相应格式
+            //        var doc = new jsPDF("p", "mm", "a4");
+
+            //        doc.setFillColor(0, 0, 0);
+
+            //        //这里设置的是a4纸张尺寸
+            //        doc.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+
+            //        //输出保存命名为content的pdf
+            //        doc.save('content.pdf');
+            //    }
+            //})
+        }
+    </script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            reload = table.render({
+                elem: '#demo',
+                toolbar: '#toolbar',
+                url: '../毛坯管理读数据.ashx' //数据接口
+                    ,
+                page: true //开启分页
+                    ,
+                cols: [
+                    [ //表头
+                        {
+                            field: 'order',
+                            title: '订单号',
+                            width: 120,
+                            fixed: 'left'
+                        }, {
+                            field: 'projectName',
+                            title: '项目名称',
+                            width: 120,
+                        }, {
+                            field: 'orderName',
+                            title: '产品名称',
+                            width: 120,
+                        }, {
+                            field: 'blankType',
+                            title: '毛坯种类',
+                            width: 90,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d.blankType + '</p>'
+                            }
+                        }, {
+                            field: 'blankSpecification',
+                            title: '毛坯规格',
+                            width: 150,
+                        }, {
+                            field: 'blankDemandNumber',
+                            title: '毛坯需求数量',
+                            width: 120
+                        }, {
+                            field: 'orderUsedNumber',
+                            title: '订单已使用量',
+                            width: 120
+                        }, {
+                            field: 'orderFinishedProductNumber',
+                            title: '订单成品量',
+                            width: 100,
+                        }, {
+                            field: 'orderWasteNumber',
+                            title: '订单废品量',
+                            width: 100,
+                        }, {
+                            field: 'orderGoodProductRate',
+                            title: '订单良品率',
+                            width: 100
+                        }, {
+                            field: 'blankSparePartsState',
+                            title: '毛坯备料状态',
+                            width: 135,
+                        }, {
+                            field: 'blankPreparedNumber',
+                            title: '毛坯已准备总量',
+                            width: 135,
+                        }, {
+                            field: 'blankBolusNumber',
+                            title: '毛坯追加量',
+                            width: 135,
+                        }, {
+                            field: 'Expected_Completion_Time',
+                            title: '预计完成日期',
+                            width: 180,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d.Expected_Completion_Time +
+                                    '</p>'
+                            }
+                        }, {
+                            field: 'time',
+                            title: '延期日期',
+                            width: 180,
+                            templet: function (d) {
+                                return '<p style="color:blue">' + d.time + '</p>'
+                            }
+                        }, {
+                            field: 'orderId',
+                            title: '操作',
+                            toolbar: '#barDemo',
+                            width: 180,
+                            fixed: 'right'
+                        }, {
+                            field: 'orderId1',
+                            title: 'orderId',
+                            hide: true
+                        }
+                    ]
+                ],
+                parseData: function (res) { //res 即为原始返回的数据
+                    res = res.data
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                    //sort.push(...res.filter(item => item.blankSparePartsState === "待备料").sort((a,b)=>{
+                    //    return a.order<b.order?-1:1
+                    //}))
+                    sort.push(...res.filter(item => item.blankSparePartsState === "已完成").sort((a,b)=>{
+                        return a.order<b.order?-1:1
+                    }))
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit *
+                        current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data //解析数据列表
+                    };
+                },
+                done: function (d) {
+                    $('td[data-field="blankType"]').click(function () {
+                        var orderNum = $(this).siblings('[data-field="order"]')[0].children[
+                            0].innerText
+
+
+                        layer.open({
+                            type: 2,
+                            content: '../资材毛坯图纸弹窗.html',
+                            area: ['50%', '90%'],
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderNum)
+
+                            }
+
+                        })
+                    })
+                    $('td[data-field="time"]').click(function () {
+                        var orderId = $(this).siblings('[data-field="orderId1"]')[0]
+                            .children[0].innerText
+                        var time = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '50%'],
+                            content: '../毛坯延期弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                ,
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderId, time);
+                            }
+                        });
+                    })
+
+                    $('td[data-field="Expected_Completion_Time"]').click(function () {
+                        var orderId = $(this).siblings('[data-field="orderId1"]')[0]
+                            .children[0].innerText
+                        var Expected_Completion_Time = $(this)[0].children[0].innerText
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '50%'],
+                            content: '../毛坯预计完成时间弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                ,
+                            success: function (layero, index) {
+
+                                var iframeWin = window[layero.find('iframe')[0][
+                                    'name'
+                                ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                iframeWin.method(orderId,
+                                    Expected_Completion_Time);
+                            }
+                        });
+                    })
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'add') {
+                    layer.open({
+                        type: 2,
+                        area: ['400px', '300px'],
+                        content: '../追加弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            ,
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#orderId').val(data.orderId);
+                            var iframeWin = window[layero.find('iframe')[0][
+                                'name'
+                            ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.blankBolusNumber);
+                        }
+                    });
+                } else if (obj.event === 'spareParts') {
+                    layer.open({
+                        type: 2,
+                        area: ['400px', '300px'],
+                        content: '../备料弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            ,
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.find('#orderId').val(data.orderId);
+                            var iframeWin = window[layero.find('iframe')[0][
+                                'name'
+                            ]]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.blankPreparedNumber);
+                        }
+                    });
+                } else if (obj.event === 'print') {
+                    var index = layer.load();
+                    var orderId = data.orderId;
+                    $.ajax({
+                        url: '../获取工单信息.ashx',
+                        type: 'post',
+                        data: {
+                            orderId: orderId
+                        },
+                        success: function (res) {
+                            var obj = JSON.parse(res);
+                            console.log(obj)
+                            $("#Product_Name").text(obj.Product_Name)
+
+                            $("#Order_Number").text(obj.Order_Number)
+                            $("#Product_Output").text(obj.Product_Output)
+                            $("#ProjectName").text(obj.ProjectName)
+                            $("#ClientName").text(obj.ClientName)
+                            $("#Order_Leader").text(obj.Order_Leader)
+                            $("#craftPerson").text(obj.craftPerson)
+                            $("#Product_Material").text(obj.Product_Material)
+                            $("#BlankSpecification").text(obj.BlankSpecification)
+
+                            var date = new Date();
+                            var time = '日期:' + date.getFullYear() + '/' + (date.getMonth() +
+                                1) + '/' + date.getDate()
+                            $("#date").text(time)
+                            $("#process").empty()
+                            for (var i = 0; i < obj.process.length; i++) {
+                                $("#process").append('<tr><td>' + obj.process[i]
+                                    .processNum + '序</td><td>' + obj.process[i]
+                                    .DeviceType + '</td><td>' + obj.process[i]
+                                    .JigSpecification + '</td><td>' + obj.process[i]
+                                    .tool +
+                                    '</td><td><img style="width:400px;height:400px" src="../获取装夹示意图.ashx?orderNum=' +
+                                    obj.Order_Number + '&processNum=' + obj.process[i]
+                                    .processNum + '" /></td><td></td></tr>')
+                            }
+                            layer.close(index)
+                            qrcode.makeCode(data.order);
+                            setTimeout('print1()', 100);
+                        }
+                    })
+
+                }
+                //else if (obj.event == 'delay') {
+                //    layer.open({
+                //        type: 2,
+                //        area: ['50%', '50%'],
+                //        content: '毛坯延期弹窗.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                //        , success: function (layero, index) {
+                //            var body = layer.getChildFrame('body', index);
+                //            body.find('#orderId').val(data.orderId);
+                //            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                //            iframeWin.method(data.blankBolusNumber);
+                //        }
+                //    });
+                //}
+            });
+
+        });
+
+        /**/
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="spareParts" style="color:white">备料</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="add" style="color:white">追加</a>
+        <a class="layui-btn layui-btn-xs " lay-event="print" style="color:white">打印</a>
+    </script>
+
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i
+                class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+    </script>
+</body>
+
+</html>

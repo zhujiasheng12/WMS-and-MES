@@ -239,9 +239,9 @@
                     sort.push(...res.filter(item => item.blankSparePartsState === "待备料").sort((a,b)=>{
                         return a.order<b.order?-1:1
                     }))
-                    sort.push(...res.filter(item => item.blankSparePartsState === "已完成").sort((a,b)=>{
-                        return a.order<b.order?-1:1
-                    }))
+                    //sort.push(...res.filter(item => item.blankSparePartsState === "已完成").sort((a,b)=>{
+                    //    return a.order<b.order?-1:1
+                    //}))
                     const data = sort.slice(this.limit * (current_pages - 1), this.limit *
                         current_pages);
                     return {

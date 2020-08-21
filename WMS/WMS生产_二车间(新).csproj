@@ -3651,6 +3651,9 @@
     <Compile Include="生产管理\资材部\备料提交.ashx.cs">
       <DependentUpon>备料提交.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx.cs">
+      <DependentUpon>查看特殊夹具需求.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\资材部\成品出库提交.ashx.cs">
       <DependentUpon>成品出库提交.ashx</DependentUpon>
     </Compile>
@@ -4399,6 +4402,7 @@
     <Content Include="生产管理\工程部\历史订单\读取工程已编程历史订单.ashx" />
     <Content Include="生产管理\生产部\历史订单\产能计数历史订单.ashx" />
     <Content Include="生产管理\生产部\历史订单\排产历史订单.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

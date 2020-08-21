@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../Resources/js/layui-v2.5.4/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Resources/js/layui-v2.5.4/layui/layui.js"></script>
+</head>
+<body>
+
+    <table id="demo" lay-filter="test"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+
+    </script>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn layui-btn-sm" onclick="location.reload()"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+    </script>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+
+            //第一个实例
+            reload = table.render({
+                elem: '#demo'
+                , toolbar: '#toolbar'
+                , url: 'qualityConfirmationRead.ashx' //数据接口
+               
+                , page: true //开启分页
+                , cols: [[ //表头
+                    //{ field: 'numbers', type: 'numbers', title: '序号', width: 80 }
+                    { field: 'order', title: '订单号', width: 160, fixed: 'left' }
+                    , { field: 'orderName', title: '订单名称', }
+                    , { field: 'projectName', title: '项目名称',}
+                    , { field: 'orderNumber', title: '订单数量', width: 90, }
+                    , { field: 'CurrFinishedProductNumber', title: '当前成品数', width: 105 }
+                    , { field: 'DetectionNumber', title: '检查数', width: 75 }
+                    , { field: 'PendingNumber', title: '待检数', width: 75, }
+                    , { field: 'QualifiedProductNumber', title: '合格品数', width: 90, }
+                    , { field: 'PefectiveProductNumber', title: '不良品数', width:90 }
+                    , { field: 'PassRate', title: '合格率', width:75, }
+                    , { field: 'id', title: 'id', width: 135, hide: true }
+                    , { field: 'do', title: '操作', toolbar: '#barDemo', width: 80, fixed: 'right'}
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    res=res.data
+                    let current_pages;
+                    if (this.page === true) current_pages = 1;
+                    else current_pages = this.page.curr;
+                    let sort = []
+                    sort.push(...res.filter(item => item.orderNumber <= item.QualifiedProductNumber))
+                
+                    const data = sort.slice(this.limit * (current_pages - 1), this.limit * current_pages);
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": 0, //解析提示文本
+                        "count": sort.length, //解析数据长度
+                        "data": data//解析数据列表
+                    };
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+
+                if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        area: ['500px', '400px'],
+                        content: '品质确认操作弹窗.html',
+                        success: function (layero, index) {
+
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            iframeWin.method(data.id, data.order)
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

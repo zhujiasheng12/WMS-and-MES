@@ -96,7 +96,7 @@
                     else current_pages = this.page.curr;
                     let sort = []
                     sort.push(...res.filter(item=>item.orderDemandNumber>item.warehousingNumber).sort((a,b)=>a.order<b.order?-1:1))
-                    sort.push(...res.filter(item=>item.orderDemandNumber<=item.warehousingNumber).sort((a,b)=>a.order<b.order?-1:1))
+                    //sort.push(...res.filter(item=>item.orderDemandNumber<=item.warehousingNumber).sort((a,b)=>a.order<b.order?-1:1))
                   const data = sort.slice(this.limit * (current_pages - 1), this.limit *
                       current_pages);
                     return {
