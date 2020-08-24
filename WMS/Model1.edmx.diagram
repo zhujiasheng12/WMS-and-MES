@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d7685f193ba4427c84add54b6d78b894" Name="Diagram1" ZoomLevel="10">
+      <Diagram DiagramId="d7685f193ba4427c84add54b6d78b894" Name="Diagram1" ZoomLevel="48">
         <EntityTypeShape EntityType="Model.JDJS_WMS_Blank_Additional_History_Table" Width="1.5" PointX="5.25" PointY="104.5" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Blank_Table" Width="1.5" PointX="7.5" PointY="82" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Chuck_Borrow_History" Width="1.5" PointX="0.75" PointY="2.5" />
@@ -150,6 +150,7 @@
         <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Detection_Measurement_Table" Width="1.5" PointX="5.25" PointY="125.375" />
         <AssociationConnector Association="Model.FK__JDJS_WMS___Order__Qualiy" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" Width="1.5" PointX="21.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Manage_Demand_Table" Width="1.5" PointX="21.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

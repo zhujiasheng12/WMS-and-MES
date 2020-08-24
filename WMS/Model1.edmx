@@ -387,6 +387,28 @@
           <Property Name="NewOldKnife" Type="varchar" MaxLength="50" />
           <Property Name="project" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Fixture_Manage_Demand_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="ProcessId" Type="int" />
+          <Property Name="OrderNum" Type="varchar(max)" />
+          <Property Name="ProcessNum" Type="int" />
+          <Property Name="FixtureOrderNum" Type="varchar(max)" />
+          <Property Name="FixtureSpecification" Type="varchar(max)" />
+          <Property Name="ProgramPersonName" Type="varchar(max)" />
+          <Property Name="DemandTime" Type="datetime" />
+          <Property Name="DesignPersonId" Type="int" />
+          <Property Name="DesignPersonName" Type="varchar(max)" />
+          <Property Name="Material" Type="varchar(max)" />
+          <Property Name="State" Type="varchar(max)" />
+          <Property Name="AuditRemark" Type="varchar(max)" />
+          <Property Name="PlanEndTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="Remark" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Fixture_Scrap_History">
           <Key>
             <PropertyRef Name="Id" />
@@ -1986,6 +2008,7 @@
           <EntitySet Name="JDJS_WMS_Finished_Product_OutPut_History_Manager" EntityType="Self.JDJS_WMS_Finished_Product_OutPut_History_Manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Fixture_Additional_History_Table" EntityType="Self.JDJS_WMS_Fixture_Additional_History_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Fixture_Borrow_History" EntityType="Self.JDJS_WMS_Fixture_Borrow_History" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Fixture_Manage_Demand_Table" EntityType="Self.JDJS_WMS_Fixture_Manage_Demand_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Fixture_Scrap_History" EntityType="Self.JDJS_WMS_Fixture_Scrap_History" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Fixture_Stock_Info" EntityType="Self.JDJS_WMS_Fixture_Stock_Info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Fixture_Storage_History" EntityType="Self.JDJS_WMS_Fixture_Storage_History" Schema="dbo" store:Type="Tables" />
@@ -2588,6 +2611,7 @@
             <End Role="JDJS_WMS_Quality_Detection_Measurement_Table" EntitySet="JDJS_WMS_Quality_Detection_Measurement_Table" />
           </AssociationSet>
           <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" />
+          <EntitySet Name="JDJS_WMS_Fixture_Manage_Demand_Table" EntityType="Model.JDJS_WMS_Fixture_Manage_Demand_Table" />
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -4653,6 +4677,28 @@
           <Property Name="InspectTime" Type="DateTime" Precision="3" />
           <Property Name="SavePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Fixture_Manage_Demand_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" />
+          <Property Name="ProcessId" Type="Int32" />
+          <Property Name="OrderNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProcessNum" Type="Int32" />
+          <Property Name="FixtureOrderNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FixtureSpecification" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramPersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DemandTime" Type="DateTime" Precision="3" />
+          <Property Name="DesignPersonId" Type="Int32" />
+          <Property Name="DesignPersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Material" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuditRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PlanEndTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5918,6 +5964,29 @@
                 <ScalarProperty Name="MeasureContent" ColumnName="MeasureContent" />
                 <ScalarProperty Name="WorkPieceName" ColumnName="WorkPieceName" />
                 <ScalarProperty Name="ApplyTime" ColumnName="ApplyTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Fixture_Manage_Demand_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Fixture_Manage_Demand_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Fixture_Manage_Demand_Table">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="PlanEndTime" ColumnName="PlanEndTime" />
+                <ScalarProperty Name="AuditRemark" ColumnName="AuditRemark" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Material" ColumnName="Material" />
+                <ScalarProperty Name="DesignPersonName" ColumnName="DesignPersonName" />
+                <ScalarProperty Name="DesignPersonId" ColumnName="DesignPersonId" />
+                <ScalarProperty Name="DemandTime" ColumnName="DemandTime" />
+                <ScalarProperty Name="ProgramPersonName" ColumnName="ProgramPersonName" />
+                <ScalarProperty Name="FixtureSpecification" ColumnName="FixtureSpecification" />
+                <ScalarProperty Name="FixtureOrderNum" ColumnName="FixtureOrderNum" />
+                <ScalarProperty Name="ProcessNum" ColumnName="ProcessNum" />
+                <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+                <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

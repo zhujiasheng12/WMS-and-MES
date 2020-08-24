@@ -2696,6 +2696,9 @@
     <Compile Include="JDJS_WMS_Fixture_Borrow_History.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JDJS_WMS_Fixture_Manage_Demand_Table.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="JDJS_WMS_Fixture_Scrap_History.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3654,6 +3657,9 @@
     <Compile Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx.cs">
       <DependentUpon>查看特殊夹具需求.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\读取特殊治具需求文件.ashx.cs">
+      <DependentUpon>读取特殊治具需求文件.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\资材部\成品出库提交.ashx.cs">
       <DependentUpon>成品出库提交.ashx</DependentUpon>
     </Compile>
@@ -4403,6 +4409,7 @@
     <Content Include="生产管理\生产部\历史订单\产能计数历史订单.ashx" />
     <Content Include="生产管理\生产部\历史订单\排产历史订单.ashx" />
     <Content Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\读取特殊治具需求文件.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
