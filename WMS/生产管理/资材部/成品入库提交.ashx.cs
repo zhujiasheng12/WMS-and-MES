@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
+using WebApplication2.生产管理.资材部.夹具管理.特殊治具管理Access数据库;
 
 namespace WebApplication2.生产管理.资材部
 {
@@ -54,6 +55,29 @@ namespace WebApplication2.生产管理.资材部
                         {
                             order.Intention = 4;
                             order.Order_Actual_End_Time = DateTime.Now;
+                            //检测是否为特殊治具订单，是的话将其填入临时治具库
+                            if (order.Order_Number.StartsWith("FX"))
+                            {
+                                string str = "";
+                                var info = entities.JDJS_WMS_Fixture_Manage_Demand_Table.Where(r => r.FixtureOrderNum == order.Order_Number).FirstOrDefault();
+                                if (info != null)
+                                {
+                                    str = info.FixtureSpecification;
+                                }
+                                //加入临时治具库
+                                using (FixtureModel model = new FixtureModel())
+                                {
+                                    JDJS_WMS_Fixture_Temporary_Table jdTem = new JDJS_WMS_Fixture_Temporary_Table()
+                                    { 
+                                        Name =order.Product_Name ,
+                                        Remark ="",
+                                        FixtureOrderNum =order.Order_Number ,
+                                        FixtureSpecification = str,
+                                    };
+                                    model.JDJS_WMS_Fixture_Temporary_Table.Add(jdTem);
+                                    model.SaveChanges();
+                                }
+                            }
                         }
                     }
                 }

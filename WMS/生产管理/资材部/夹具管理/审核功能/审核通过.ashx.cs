@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
 
 namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
 {
     /// <summary>
     /// 审核通过 的摘要说明
     /// </summary>
-    public class 审核通过 : IHttpHandler
+    public class 审核通过 : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
@@ -84,12 +86,24 @@ namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
                             model.JDJS_WMS_Order_Guide_Schedu_Table.Add(guide);
                             model.SaveChanges();
                             mytran.Commit();
+                            PathInfo pathInfo = new PathInfo();
+                            var folder = Path.Combine(pathInfo.upLoadPath(), demand.FixtureOrderNum, @"客供图纸");
+                            if (!Directory.Exists(folder))
+                            {
+                                Directory.CreateDirectory(folder);
+                            };
+                            string path = System.IO.Path.Combine(pathInfo.upLoadPath(), @"特殊治具管理", demand.FixtureOrderNum, @"设计文件");
+                            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                            foreach (var item in directoryInfo.GetFiles())
+                            {
+                                item.CopyTo(Path.Combine(folder, item.Name));
+                            } 
                             context.Response.Write("ok");
                             return;
                         }
                         catch (Exception ex)
                         {
-                            mytran.Rollback();
+                                
                             context.Response.Write(ex.Message);
                             return;
                         }

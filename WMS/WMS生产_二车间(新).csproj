@@ -3089,6 +3089,10 @@
     <Compile Include="Migrations\202008251024502_firstCreate.Designer.cs">
       <DependentUpon>202008251024502_firstCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202008260820084_second.cs" />
+    <Compile Include="Migrations\202008260820084_second.Designer.cs">
+      <DependentUpon>202008260820084_second.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
@@ -3699,6 +3703,7 @@
       <DependentUpon>查看特殊夹具需求.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\FixtureModel.cs" />
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\JDJS_WMS_Fixture_Temporary_Table.cs" />
     <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\JDJS_WMS_Fixture_Type_Table.cs" />
     <Compile Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\上传设计文件.ashx.cs">
       <DependentUpon>上传设计文件.ashx</DependentUpon>
@@ -4483,6 +4488,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202008251024502_firstCreate.resx">
       <DependentUpon>202008251024502_firstCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008260820084_second.resx">
+      <DependentUpon>202008260820084_second.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

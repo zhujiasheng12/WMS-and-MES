@@ -1,0 +1,114 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.SessionState;
+
+namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
+{
+    /// <summary>
+    /// 审核通过 的摘要说明
+    /// </summary>
+    public class 审核通过 : IHttpHandler, IRequiresSessionState
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            try
+            {
+                int fxDemandId = int.Parse(context.Request["fxDemandId"]);
+                string remark = context.Request["remark"];
+                string productName = context.Request["productName"];//产品名称
+                string projectName = context.Request["projectName"];//项目名称
+                string clientName = context.Request["clientName"];//客户名称
+                DateTime time = DateTime.Parse(context.Request["planEndTime"]);//计划完成时间
+                string leader = context.Request["clientName"];//订单责任人
+                int output = int.Parse(context.Request["output"]);//产量
+
+                int personId = int.Parse(context.Session["id"].ToString());
+                string personName = context.Session["UserName"].ToString();
+                using (JDJS_WMS_DB_USEREntities model = new JDJS_WMS_DB_USEREntities())
+                {
+                    var demand = model.JDJS_WMS_Fixture_Manage_Demand_Table.Where(r => r.ID == fxDemandId).FirstOrDefault();
+                    if (demand == null)
+                    {
+                        context.Response.Write("该治具需求不存在");
+                        return;
+                    }
+
+                    if (demand.State != "待审核")
+                    {
+                        context.Response.Write("该治具设计需求暂不支持审核");
+                        return;
+                    }
+                    using (System.Data.Entity.DbContextTransaction mytran = model.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            demand.State = "审核通过";
+                            string str = demand.AuditRemark == null ? "" : demand.AuditRemark;
+                            demand.AuditRemark = str + DateTime.Now.ToString() + "</br>" + remark + "</br>";
+                            demand.EndTime = DateTime.Now;
+                            //新建生产订单
+                            JDJS_WMS_Order_Entry_Table jd = new JDJS_WMS_Order_Entry_Table()
+                            {
+                                Order_Leader = leader,
+                                Order_Number = demand.FixtureOrderNum,
+                                Product_Name = productName,
+                                Product_Material = demand.Material,
+                                Product_Output = output,
+                                Order_Plan_Start_Time = DateTime.Now,
+                                Order_Plan_End_Time = time,
+                                Order_State = "执行",
+                                ProofingORProduct = -1,
+                                Priority = 1,
+                                ProjectName = projectName,
+                                AuditResult = "审核通过",
+
+                                AuditAdvice = DateTime.Now.ToString() + "：" + "审核通过" + "\n",
+                                CreatePersonID = personId,
+                                craftPerson = personName,
+                                craftPersonId = personId,
+                                CtratPersonID = personId,
+                                CreateTime = DateTime.Now,
+                                Intention = 3,
+                                Remark = remark
+                            };
+                            model.JDJS_WMS_Order_Entry_Table.Add(jd);
+                            model.SaveChanges();
+                            var orderId = jd.Order_ID;
+                            JDJS_WMS_Order_Guide_Schedu_Table guide = new JDJS_WMS_Order_Guide_Schedu_Table()
+                            {
+                                OrderID = orderId,
+                                ClientName = clientName,
+                            };
+                            model.JDJS_WMS_Order_Guide_Schedu_Table.Add(guide);
+                            model.SaveChanges();
+                            mytran.Commit();
+                            context.Response.Write("ok");
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                                
+                            context.Response.Write(ex.Message);
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write(ex.Message);
+            }
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

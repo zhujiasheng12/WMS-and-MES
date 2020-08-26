@@ -40,6 +40,10 @@ namespace WebApplication2.生产管理.工程部.历史订单
                             }
                             bool isOut = true;
                             var processes = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == item.Order_ID && r.sign != 0);
+                            if (processes.Count() < 1)
+                            {
+                                isOut = false;
+                            }
                             foreach (var process in processes)
                             {
                                 if (process.program_audit_sign != 1)
