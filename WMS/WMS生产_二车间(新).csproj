@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="JetEntityFrameworkProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=756cf6beb8fe7b41, processorArchitecture=x86">
+      <HintPath>..\packages\JetEntityFrameworkProvider.6.1.4\lib\JetEntityFrameworkProvider.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MyXls.SL2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -3082,6 +3085,11 @@
     <Compile Include="Kanban\资材\特殊治具请求.ashx.cs">
       <DependentUpon>特殊治具请求.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202008251024502_firstCreate.cs" />
+    <Compile Include="Migrations\202008251024502_firstCreate.Designer.cs">
+      <DependentUpon>202008251024502_firstCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3654,8 +3662,52 @@
     <Compile Include="生产管理\资材部\备料提交.ashx.cs">
       <DependentUpon>备料提交.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\修改设计材料与备注信息.ashx.cs">
+      <DependentUpon>修改设计材料与备注信息.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\填写治具设计需求设计计划完成时间.ashx.cs">
+      <DependentUpon>填写治具设计需求设计计划完成时间.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\安排治具设计人员.ashx.cs">
+      <DependentUpon>安排治具设计人员.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核不通过.ashx.cs">
+      <DependentUpon>审核不通过.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核不通过确认.ashx.cs">
+      <DependentUpon>审核不通过确认.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\上传审核文件.ashx.cs">
+      <DependentUpon>上传审核文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\删除审核文件.ashx.cs">
+      <DependentUpon>删除审核文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\查看审核文件.ashx.cs">
+      <DependentUpon>查看审核文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\审核通过.ashx.cs">
+      <DependentUpon>审核通过.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\审核功能\提交审核.ashx.cs">
+      <DependentUpon>提交审核.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\接收治具设计需求.ashx.cs">
+      <DependentUpon>接收治具设计需求.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx.cs">
       <DependentUpon>查看特殊夹具需求.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\FixtureModel.cs" />
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\JDJS_WMS_Fixture_Type_Table.cs" />
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\上传设计文件.ashx.cs">
+      <DependentUpon>上传设计文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\删除设计文件.ashx.cs">
+      <DependentUpon>删除设计文件.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\查看设计文件.ashx.cs">
+      <DependentUpon>查看设计文件.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\资材部\夹具管理\读取特殊治具需求文件.ashx.cs">
       <DependentUpon>读取特殊治具需求文件.ashx</DependentUpon>
@@ -4410,11 +4462,29 @@
     <Content Include="生产管理\生产部\历史订单\排产历史订单.ashx" />
     <Content Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx" />
     <Content Include="生产管理\资材部\夹具管理\读取特殊治具需求文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\安排治具设计人员.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\接收治具设计需求.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\填写治具设计需求设计计划完成时间.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\修改设计材料与备注信息.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\上传设计文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\查看设计文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\特殊治具设计文件管理\删除设计文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\提交审核.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核不通过.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核不通过确认.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核通过.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\上传审核文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\查看审核文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\删除审核文件.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202008251024502_firstCreate.resx">
+      <DependentUpon>202008251024502_firstCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
