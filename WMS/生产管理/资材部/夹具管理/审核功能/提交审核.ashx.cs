@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using System.Web.SessionState;
 namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
 {
     /// <summary>
     /// 提交审核 的摘要说明
     /// </summary>
-    public class 提交审核 : IHttpHandler
+    public class 提交审核 : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)

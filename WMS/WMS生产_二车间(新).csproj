@@ -3696,11 +3696,15 @@
     <Compile Include="生产管理\资材部\夹具管理\审核功能\提交审核.ashx.cs">
       <DependentUpon>提交审核.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\录入系统治具库\Fixture_SurfMill.cs" />
     <Compile Include="生产管理\资材部\夹具管理\接收治具设计需求.ashx.cs">
       <DependentUpon>接收治具设计需求.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\资材部\夹具管理\查看特殊夹具需求.ashx.cs">
       <DependentUpon>查看特殊夹具需求.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\资材部\夹具管理\根据订单与工序号获取已设计完成特殊治具文件.ashx.cs">
+      <DependentUpon>根据订单与工序号获取已设计完成特殊治具文件.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\FixtureModel.cs" />
     <Compile Include="生产管理\资材部\夹具管理\特殊治具管理Access数据库\JDJS_WMS_Fixture_Temporary_Table.cs" />
@@ -4481,6 +4485,7 @@
     <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\上传审核文件.ashx" />
     <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\查看审核文件.ashx" />
     <Content Include="生产管理\资材部\夹具管理\审核功能\审核文件管理\删除审核文件.ashx" />
+    <Content Include="生产管理\资材部\夹具管理\根据订单与工序号获取已设计完成特殊治具文件.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -22,9 +22,6 @@ namespace WebApplication2.Model.生产管理.工程部
                 var rows = entities.JDJS_WMS_Order_Process_Info_Table.Where(r=>r.OrderID==id&r.sign!=0);
                 if (rows.Count() > 0)
                 {
-
-
-
                     foreach (var item in rows)
                     {
                         var processId = item.ID;

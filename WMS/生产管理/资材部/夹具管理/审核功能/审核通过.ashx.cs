@@ -23,7 +23,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
                 string projectName = context.Request["projectName"];//项目名称
                 string clientName = context.Request["clientName"];//客户名称
                 DateTime time = DateTime.Parse(context.Request["planEndTime"]);//计划完成时间
-                string leader = context.Request["clientName"];//订单责任人
+                string leader = context.Request["leader"];//订单责任人
                 int output = int.Parse(context.Request["output"]);//产量
 
                 int personId = int.Parse(context.Session["id"].ToString());
@@ -96,7 +96,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
                             DirectoryInfo directoryInfo = new DirectoryInfo(path);
                             foreach (var item in directoryInfo.GetFiles())
                             {
-                                item.CopyTo(Path.Combine(folder, item.Name));
+                                item.CopyTo(Path.Combine(folder, item.Name),true);
                             } 
                             context.Response.Write("ok");
                             return;
