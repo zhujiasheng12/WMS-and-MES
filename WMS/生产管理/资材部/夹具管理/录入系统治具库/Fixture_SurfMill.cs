@@ -8,7 +8,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
 {
     public class Fixture_SurfMill
     {
-        public static bool AddChildJIG(string name, string desc, string fileName, string sum, string curnum, ref string strErr)
+        public static bool AddChildJIG(string name, string desc, string fileName, string sum, string curnum, ref string strErr,string venderName= "JD", string serialCode = "")
         {
             try
             {
@@ -19,8 +19,8 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                 XmlNode xn = xml.SelectSingleNode("Inf-file");
                 XmlElement element = xml.CreateElement("Inffile_Data_Feature");
                 element.SetAttribute("Inffile_Data_Feature_Name", name);
-                element.SetAttribute("Inffile_Data_Feature_VenderName", "JD");
-                element.SetAttribute("Inffile_Data_Feature_SerialCode", "");
+                element.SetAttribute("Inffile_Data_Feature_VenderName",venderName);
+                element.SetAttribute("Inffile_Data_Feature_SerialCode", serialCode);
                 element.SetAttribute("Inffile_Data_Feature_Describe", desc + @"。 " + "当前库存数:" + curnum + @" " + "库存总数:" + sum);
                 element.SetAttribute("Inffile_Data_FileName", fileName);
 
@@ -39,7 +39,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
             }
         }
 
-        public static bool AlterChildJIG(string name, string desc, string fileName, string sum, string curnum, ref string strErr)
+        public static bool AlterChildJIG(string name, string desc, string fileName, string sum, string curnum, ref string strErr, string venderName = "JD", string serialCode = "")
         {
             try
             {
@@ -58,6 +58,8 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                         describ = desc + @"。 " + "当前库存数:" + curnum + @" " + "库存总数:" + sum;
                         xe.Attributes["Inffile_Data_Feature_Describe"].Value = describ;
                         xe.Attributes["Inffile_Data_FileName"].Value = fileName;
+                        xe.Attributes["Inffile_Data_Feature_VenderName"].Value= venderName;
+                        xe.Attributes["Inffile_Data_Feature_SerialCode"].Value =serialCode;
                         break;
                     }
                 }

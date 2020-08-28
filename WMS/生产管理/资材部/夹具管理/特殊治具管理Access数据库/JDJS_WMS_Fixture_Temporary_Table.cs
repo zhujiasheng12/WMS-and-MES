@@ -14,5 +14,6 @@ namespace WebApplication2.生产管理.资材部.夹具管理.特殊治具管理
         public string FixtureOrderNum { get; set; }
         public string FixtureSpecification { get; set; }
         public string Remark { get; set; }
+        public DateTime? InTime { get; set; }
     }
 }

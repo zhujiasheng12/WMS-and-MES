@@ -91,5 +91,12 @@ namespace WebApplication2
             XmlNode root = doc.SelectSingleNode("/root/Fixtrue_SurfMillPath");
             return root.InnerText;
         }
+        public string GetFixtrue_SurfMillFilePath()//获取送检完成消息机器人url
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);
+            XmlNode root = doc.SelectSingleNode("/root/Fixtrue_SurfMillFilePath");
+            return root.InnerText;
+        }
     }
 }

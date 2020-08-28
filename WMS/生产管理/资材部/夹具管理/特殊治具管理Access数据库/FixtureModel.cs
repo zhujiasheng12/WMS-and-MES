@@ -21,6 +21,7 @@
         //的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=390109。
         public virtual DbSet<JDJS_WMS_Fixture_Type_Table> JDJS_WMS_Fixture_Type_Table { get; set; }
         public virtual DbSet<JDJS_WMS_Fixture_Temporary_Table> JDJS_WMS_Fixture_Temporary_Table { get; set; }
+        public virtual DbSet<JDJS_WMS_Fixture_System_Table> JDJS_WMS_Fixture_System_Table { get; set; }
     }
     //Add-Migration ......  
     //Update-Database

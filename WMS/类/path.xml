@@ -10,4 +10,5 @@
   <QualituInspectAuditRobot>https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=6e21300e-8a65-4efb-86c9-f4eb5e6ad4c5</QualituInspectAuditRobot>
   <QualituInspectOverRobot>https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=6e21300e-8a65-4efb-86c9-f4eb5e6ad4c5</QualituInspectOverRobot>
   <Fixtrue_SurfMillPath>C:\Users\82144\Desktop\LibIndex.cfg</Fixtrue_SurfMillPath>
+  <Fixtrue_SurfMillFilePath>C:\Users\82144\Desktop\</Fixtrue_SurfMillFilePath>
 </root>

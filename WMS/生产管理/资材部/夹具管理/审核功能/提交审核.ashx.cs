@@ -35,6 +35,11 @@ namespace WebApplication2.生产管理.资材部.夹具管理.审核功能
                         context.Response.Write("该治具设计需求暂不支持提交审核");
                         return;
                     }
+                    if (demand.Material == null)
+                    {
+                        context.Response.Write("请填写治具材料等相关信息！");
+                        return;
+                    }
                     using (System.Data.Entity.DbContextTransaction mytran = model.Database.BeginTransaction())
                     {
                         try

@@ -17,5 +17,6 @@ namespace WebApplication2
         public int ID { get; set; }
         public string Status { get; set; }
         public string explain { get; set; }
+        public Nullable<int> SystemId { get; set; }
     }
 }

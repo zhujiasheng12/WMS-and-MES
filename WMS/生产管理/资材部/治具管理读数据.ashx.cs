@@ -44,6 +44,7 @@ namespace WebApplication2.生产管理.资材部
                                 if (fixTable != null)
                                 {
                                     fixName = fixTable.Status + "(" + fixTable.explain + ")";
+                                    fixture.Jia_System_Id = fixTable.SystemId == null ? 0 : Convert.ToInt32(fixTable.SystemId);
                                 }
                                 fixture.jigType = fixName;
                                 fixture.jigSpecification = item.JigSpecification;
@@ -163,5 +164,6 @@ namespace WebApplication2.生产管理.资材部
         public string processId1;
         public string time;
         public string Jig_Expected_Completion_Time;
+        public int Jia_System_Id;
     }
 }

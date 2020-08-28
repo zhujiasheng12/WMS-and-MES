@@ -73,6 +73,7 @@ namespace WebApplication2.生产管理.资材部
                                         Remark ="",
                                         FixtureOrderNum =order.Order_Number ,
                                         FixtureSpecification = str,
+                                        InTime =DateTime .Now
                                     };
                                     model.JDJS_WMS_Fixture_Temporary_Table.Add(jdTem);
                                     model.SaveChanges();
