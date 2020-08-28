@@ -105,7 +105,10 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                         break;
                     }
                 }
-                root.RemoveChild(child);
+                if (child != null)
+                {
+                    root.RemoveChild(child);
+                }
 
 
 

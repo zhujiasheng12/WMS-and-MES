@@ -19,6 +19,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
             {
                 int id =int.Parse( context.Request["id"]);
                 string fxNum = "";
+                List<File> file = new List<File>();
                 using (FixtureModel wms = new FixtureModel())
                 {
                     var fx = wms.JDJS_WMS_Fixture_System_Table.Where(r => r.Id == id).FirstOrDefault();
@@ -27,26 +28,29 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                         fxNum = fx.FixtureOrderNum;
                     }
                 }
-                PathInfo info = new PathInfo();
-                string path = System.IO.Path.Combine(info.upLoadPath(), @"特殊治具管理", fxNum, @"设计文件");
-                DirectoryInfo root = new DirectoryInfo(path);
-                if (!root.Exists)
+                if (fxNum != "")
                 {
-                    root.Create();
-                }
-                FileInfo[] files = root.GetFiles();
-                List<File> file = new List<File>();
-
-
-                foreach (var item in files)
-                {
-                    file.Add(new File
+                    PathInfo info = new PathInfo();
+                    string path = System.IO.Path.Combine(info.upLoadPath(), @"特殊治具管理", fxNum, @"设计文件");
+                    DirectoryInfo root = new DirectoryInfo(path);
+                    if (root.Exists)
                     {
-                        fileName = item.Name,
-                        filePath = item.FullName,
-                        fileSize = (item.Length / 1024).ToString() + "  kB",
-                        fileTime = item.CreationTime.ToString()
-                    });
+                        FileInfo[] files = root.GetFiles();
+
+
+
+                        foreach (var item in files)
+                        {
+                            file.Add(new File
+                            {
+                                fileName = item.Name,
+                                filePath = item.FullName,
+                                fileSize = (item.Length / 1024).ToString() + "  kB",
+                                fileTime = item.CreationTime.ToString()
+                            });
+                        }
+                    }
+                    
                 }
                 System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 var model = new { msg = "", code = 0, count = file.Count, data = file };

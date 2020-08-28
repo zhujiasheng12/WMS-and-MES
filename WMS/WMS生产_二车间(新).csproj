@@ -3101,6 +3101,10 @@
     <Compile Include="Migrations\202008280147286_fourth.Designer.cs">
       <DependentUpon>202008280147286_fourth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202008280639297_five.cs" />
+    <Compile Include="Migrations\202008280639297_five.Designer.cs">
+      <DependentUpon>202008280639297_five.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
@@ -4555,6 +4559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202008280147286_fourth.resx">
       <DependentUpon>202008280147286_fourth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008280639297_five.resx">
+      <DependentUpon>202008280639297_five.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

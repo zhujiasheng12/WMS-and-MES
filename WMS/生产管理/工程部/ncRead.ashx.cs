@@ -67,9 +67,11 @@ namespace WebApplication2.Model.生产管理.工程部
                         //}
                         int fixID = Convert.ToInt32(item.JigType);
                         string fixName = "";
+                        int jiaSystemId = 0;
                         var fixTable = entities.JDJS_WMS_Device_Status_Table.Where(r => r.ID == fixID).FirstOrDefault();
                         if (fixTable != null)
                         {
+                            jiaSystemId = fixTable.SystemId == null ? 0 : Convert.ToInt32(fixTable.SystemId);
                             fixName = fixTable.Status + "(" + fixTable.explain + ")";
                         }
                         var orderNumber = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == id).First().Order_Number;
@@ -81,25 +83,26 @@ namespace WebApplication2.Model.生产管理.工程部
 
                         ncs.Add(new Nc
                         {
-                            workNumber =(item.ProcessID)==null ? "" : item.ProcessID.ToString (),
+                            workNumber = (item.ProcessID) == null ? "" : item.ProcessID.ToString(),
                             programName = item.programName == null ? "" : item.programName.ToString(),
                             toolChartName = item.toolChartName == null ? "" : item.toolChartName.ToString(),
                             programTime = item.ProcessTime == null ? "" : item.ProcessTime.ToString(),
                             deviceType = deviceType,
-                            fixName=fixName ,
-                            BlankSpecification =item.BlankSpecification==null? "": item.BlankSpecification.Replace("#1#", ""),
-                            BlankNumber =item.BlankNumber==null? "": item.BlankNumber.ToString(),
+                            fixName = fixName,
+                            BlankSpecification = item.BlankSpecification == null ? "" : item.BlankSpecification.Replace("#1#", ""),
+                            BlankNumber = item.BlankNumber == null ? "" : item.BlankNumber.ToString(),
                             fixtureType = fixName,
-                            JigSpecification =item.JigSpecification==null? "": item.JigSpecification.Replace ("#1#",""),
+                            JigSpecification = item.JigSpecification == null ? "" : item.JigSpecification.Replace("#1#", ""),
                             id = item.ID.ToString(),
-                            flag = flag.ToString () ,
+                            Jia_System_Id = jiaSystemId,
+                            flag = flag.ToString(),
                             BlankType = BlankType,
                             JigNumber = JigNumber.ToString(),
-                            coefficient = item.Modulus==null?"":item.Modulus.ToString(),
+                            coefficient = item.Modulus == null ? "" : item.Modulus.ToString(),
                             toolPrepare = item.toolPreparation == null ? "" : item.toolPreparation.ToString(),
-                            nonCuttingTime=item.NonCuttingTime.ToString()
+                            nonCuttingTime = item.NonCuttingTime.ToString()
 
-                        }); ;
+                        }) ; ;
                     };
                     var model = new { code = 0, msg = "", count = ncs.Count, data = ncs };
                     var json = serializer.Serialize(model);
@@ -137,6 +140,7 @@ namespace WebApplication2.Model.生产管理.工程部
         public string toolChartName;
         public string id;
         public string JigNumber;
+        public int Jia_System_Id;
         public string flag;
         public string fixtureType;
         public string coefficient;//

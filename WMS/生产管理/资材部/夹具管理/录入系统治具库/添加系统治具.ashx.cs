@@ -18,6 +18,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
             try
             {
                 int typeId = int.Parse(context.Request["typeId"]);//治具种类id
+                int temFixId= int.Parse(context.Request["temFixId"]);//临时治具ID
                 string fixOrderNum = context.Request["fixOrderNum"];//治具订单编号
                 string name = context.Request["name"];//治具名称//唯一
                 string venderName = context.Request["venderName"];//厂家名称，默认给"JD"
@@ -50,6 +51,11 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                     {
                         try
                         {
+                            var temfx = model.JDJS_WMS_Fixture_Temporary_Table.Where(r => r.Id == temFixId).FirstOrDefault();
+                            if (temfx != null)
+                            {
+                                model.JDJS_WMS_Fixture_Temporary_Table.Remove(temfx);
+                            }
                             JDJS_WMS_Fixture_System_Table jd = new JDJS_WMS_Fixture_System_Table()
                             {
                                 AlterTime = DateTime.Now,

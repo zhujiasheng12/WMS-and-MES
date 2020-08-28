@@ -18,6 +18,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
             try
             {
                 int id = int.Parse(context.Request["id"]);
+                List<File> file = new List<File>();
                 string fxNum = "";
                 using (FixtureModel wms = new FixtureModel())
                 {
@@ -27,26 +28,26 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                         fxNum = fx.FileName;
                     }
                 }
-                PathInfo info = new PathInfo();
-                string path = System.IO.Path.Combine(info.GetFixtrue_SurfMillFilePath(), fxNum);
-
-                List<FileInfo> files = new List<FileInfo>();
-                if (System.IO.File.Exists(path))
+                if (fxNum != "")
                 {
-                    files.Add(new FileInfo(path));
-                }
-                List<File> file = new List<File>();
+                    PathInfo info = new PathInfo();
+                    string path = System.IO.Path.Combine(info.GetFixtrue_SurfMillFilePath(), fxNum);
 
-
-                foreach (var item in files)
-                {
-                    file.Add(new File
+                    List<FileInfo> files = new List<FileInfo>();
+                    if (System.IO.File.Exists(path))
                     {
-                        fileName = item.Name,
-                        filePath = item.FullName,
-                        fileSize = (item.Length / 1024).ToString() + "  kB",
-                        fileTime = item.CreationTime.ToString()
-                    });
+                        files.Add(new FileInfo(path));
+                    }
+                    foreach (var item in files)
+                    {
+                        file.Add(new File
+                        {
+                            fileName = item.Name,
+                            filePath = item.FullName,
+                            fileSize = (item.Length / 1024).ToString() + "  kB",
+                            fileTime = item.CreationTime.ToString()
+                        });
+                    }
                 }
                 System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 var model = new { msg = "", code = 0, count = file.Count, data = file };

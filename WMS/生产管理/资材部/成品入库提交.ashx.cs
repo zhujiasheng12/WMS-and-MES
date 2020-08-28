@@ -47,7 +47,7 @@ namespace WebApplication2.生产管理.资材部
                         Time =DateTime .Now 
                     };
                     entities.JDJS_WMS_Finished_Defective_Product_In_History_Manager.Add(jd);
-
+                    entities.SaveChanges();
                     var order = entities.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).FirstOrDefault();
                     if (order != null)
                     {
@@ -68,12 +68,13 @@ namespace WebApplication2.生产管理.资材部
                                 using (FixtureModel model = new FixtureModel())
                                 {
                                     JDJS_WMS_Fixture_Temporary_Table jdTem = new JDJS_WMS_Fixture_Temporary_Table()
-                                    { 
-                                        Name =order.Product_Name ,
-                                        Remark ="",
-                                        FixtureOrderNum =order.Order_Number ,
+                                    {
+                                        Name = order.Product_Name,
+                                        Remark = "",
+                                        FixtureOrderNum = order.Order_Number,
                                         FixtureSpecification = str,
-                                        InTime =DateTime .Now
+                                        InTime = DateTime.Now,
+                                        StockNum = row.FirstOrDefault().warehousingNumber
                                     };
                                     model.JDJS_WMS_Fixture_Temporary_Table.Add(jdTem);
                                     model.SaveChanges();

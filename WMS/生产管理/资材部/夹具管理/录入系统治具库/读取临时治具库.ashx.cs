@@ -30,6 +30,7 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
                             InTime =item.InTime ,
                             Name =item.Name ,
                             Remark =item.Remark==null?"":item.Remark,
+                            StockNum=item.StockNum ==null?0:Convert.ToInt32 (item.StockNum)
                         };
                         infos.Add(info);
                     }
@@ -61,5 +62,6 @@ namespace WebApplication2.生产管理.资材部.夹具管理.录入系统治具
         public string FixtureSpecification { get; set; }
         public string Remark { get; set; }
         public DateTime? InTime { get; set; }
+        public int StockNum { get; set; }
     }
 }
