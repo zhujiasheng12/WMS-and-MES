@@ -7,6 +7,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
 {
     public class Order_Trace_Info
     {
+        public int OrderId { get; set; }
         public string Name { get; set; }
         public List<Order_Trace_Content_Info> ContentList { get; set; }
         public bool IsOver { get; set; }
@@ -16,6 +17,15 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
     {
         public string Content { get; set; }
         public string Person { get; set; }
+        public string PlanEndTime { get; set; }
+        public string EndTime { get; set; }
+        public bool IsOver { get; set; }
+        public List<Order_Trace_Process_Info> ProcessList { get; set; }
+    }
+    public struct Order_Trace_Process_Info
+    {
+        public int ProcessId { get; set; }
+        public string ProcessNum { get; set; }
         public string PlanEndTime { get; set; }
         public string EndTime { get; set; }
         public bool IsOver { get; set; }
@@ -33,6 +43,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 var order = wms.JDJS_WMS_Order_Entry_Table.Where(r => r.Order_ID == orderId).FirstOrDefault();
                 #region 市场下单
                 Order_Trace_Info order_Trace_Info = new Order_Trace_Info();
+                order_Trace_Info.OrderId = order.Order_ID;
                 order_Trace_Info.ContentList = new List<Order_Trace_Content_Info>();
                 order_Trace_Info.Name = "市场下单";
                 Order_Trace_Content_Info info = new Order_Trace_Content_Info();
@@ -179,7 +190,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 }
                 infos.Add(order_Trace_Info_Process);
                 #endregion  
-                #region 生产准备  机台，毛坯，夹具，刀具
+                #region 生产准备  机台，毛坯，夹具，刀具，NC
                 Order_Trace_Info order_Trace_Prod = new Order_Trace_Info();
                 order_Trace_Prod.ContentList = new List<Order_Trace_Content_Info>();
                 order_Trace_Prod.Name = "生产准备";
@@ -256,6 +267,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 #endregion
                 #region 夹具准备
                 Order_Trace_Content_Info jia = new Order_Trace_Content_Info();
+                jia.ProcessList = new List<Order_Trace_Process_Info>();
                 jia.Content = "夹具准备";
                 jia.EndTime = "-";
                 jia.IsOver = true;
@@ -275,6 +287,16 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 var processes = wms.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == order.Order_ID && r.sign != 0);
                 foreach (var item in processes)
                 {
+                    Order_Trace_Process_Info processJia = new Order_Trace_Process_Info();
+                    processJia.ProcessId = item.ID;
+                    processJia.ProcessNum = item.ProcessID.ToString();
+                    processJia.IsOver = true;
+                    processJia.EndTime = "-";
+                    processJia.PlanEndTime = "-";
+                    if (item.Jig_Expected_Completion_Time != null)
+                    {
+                        processJia.PlanEndTime = item.Jig_Expected_Completion_Time.ToString();
+                    }
                     var fixtureInfo = wms.JDJS_WMS_Order_Fixture_Manager_Table.Where(r => r.ProcessID == item.ID);
                     if (fixtureInfo.Count() > 0)
                     {
@@ -298,16 +320,14 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                         {
                             DeviceNum = Convert.ToInt32(fixtureInfo.First().FixtureNumber);
                         }
-                        var over = wms.JDJS_WMS_Fixture_Additional_History_Table.Where(r => r.ProcessID == item.ID);
-                        foreach (var real in over)
-                        {
-                            preparenum += Convert.ToInt32(real.AddNum);
-                        }
+                        preparenum = Convert.ToInt32(fixtureInfo.First ().FixtureFinishPerpareNumber);
                         if (DeviceNum > preparenum)
                         {
                             jia.IsOver = false;
+                            processJia.IsOver = false;
                         }
-
+                        
+                        jia.ProcessList.Add(processJia);
 
                     }
                 }
@@ -324,6 +344,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 #endregion
                 #region 刀具准备
                 Order_Trace_Content_Info tool = new Order_Trace_Content_Info();
+                tool.ProcessList = new List<Order_Trace_Process_Info>();
                 tool.Content = "刀具准备";
                 tool.EndTime = "-";
                 tool.IsOver = true;
@@ -340,10 +361,16 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                 List<int> cncIds = new List<int>();
                 foreach (var item in processes)
                 {
+                    Order_Trace_Process_Info processTool = new Order_Trace_Process_Info();
+                    processTool.ProcessId = item.ID;
+                    processTool.ProcessNum = item.ProcessID.ToString ();
+                    processTool.IsOver = true;
+                    processTool.PlanEndTime = tool.PlanEndTime;
+                    processTool.EndTime = "-";
                     if (item.toolPreparation != 1)
                     {
+                        processTool.IsOver = false;
                         tool.IsOver = false;
-                        break;
                     }
                     var cnces = wms.JDJS_WMS_Order_Process_Scheduling_Table.Where(r => r.ProcessID == item.ID && (r.isFlag == 1 || r.isFlag == 2));
                     foreach (var real in cnces)
@@ -353,6 +380,7 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                             cncIds.Add(Convert.ToInt32(real.CncID));
                         }
                     }
+                    tool.ProcessList.Add(processTool);
                 }
                 foreach (var cnc in cncIds)
                 {
@@ -464,6 +492,15 @@ namespace WebApplication2.生产管理.生产部.订单跟踪.Model
                     tool.IsOver = false;
                 }
                 order_Trace_Prod.ContentList.Add(tool);
+                #endregion
+                #region NC准备
+                Order_Trace_Content_Info NC = new Order_Trace_Content_Info();
+                NC.Content = "NC准备";
+                NC.IsOver = info_Pram.IsOver;
+                NC.EndTime = info_Pram.EndTime;
+                NC.PlanEndTime = info_Pram.PlanEndTime;
+                NC.Person = info_Pram.Person;
+                order_Trace_Prod.ContentList.Add(NC);
                 #endregion
 
                 foreach (var item in order_Trace_Prod.ContentList)

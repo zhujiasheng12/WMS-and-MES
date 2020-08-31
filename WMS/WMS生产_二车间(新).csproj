@@ -3592,6 +3592,16 @@
     <Compile Include="生产管理\生产部\历史订单\排产历史订单.ashx.cs">
       <DependentUpon>排产历史订单.ashx</DependentUpon>
     </Compile>
+    <Compile Include="生产管理\生产部\异常报备Method\AbnormalFactory.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\AbnormalType.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\IProductAbnormalSubmit.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\ProductAbnormalSubmitByTool.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\ProductAbnormalSubmitByBlank.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\ProductAbnormalSubmitByFixture.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\ProductAbnormalSubmitByNc.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\异常报备.ashx.cs">
+      <DependentUpon>异常报备.ashx</DependentUpon>
+    </Compile>
     <Compile Include="生产管理\生产部\换产\排序修改提交.ashx.cs">
       <DependentUpon>排序修改提交.ashx</DependentUpon>
     </Compile>
@@ -4543,6 +4553,7 @@
     <Content Include="生产管理\资材部\夹具管理\录入系统治具库\添加系统治具.ashx" />
     <Content Include="生产管理\资材部\夹具管理\录入系统治具库\删除系统治具.ashx" />
     <Content Include="生产管理\资材部\夹具管理\录入系统治具库\修改系统治具.ashx" />
+    <Content Include="生产管理\生产部\异常报备Method\异常报备.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -4596,6 +4607,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
