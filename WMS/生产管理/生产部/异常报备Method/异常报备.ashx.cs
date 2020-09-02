@@ -15,7 +15,7 @@ namespace WebApplication2.生产管理.生产部.异常报备Method
         {
             try
             {
-                int id = int.Parse(context.Request["id"]);
+                int id = int.Parse(context.Request["id"]);//订单id或者工序id
                 string type = context.Request["type"];//NC,毛坯，治具，刀具
                 AbnormalType abnormalType=AbnormalType.Other;
                 string str = "请输入正确的报备类型！";

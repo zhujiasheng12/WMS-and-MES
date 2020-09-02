@@ -61,7 +61,7 @@ namespace WebApplication2.Model.生产管理.工程部
                             context.Response.Write("该订单下工序已存在");
                             return;
                         }
-                        foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderNumberId ))
+                        foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderNumberId&&r.sign !=0 ))
                         {
                             item.sign = -1;
                             item.program_audit_sign = -1;

@@ -758,6 +758,23 @@
           <Property Name="Num" Type="int" />
           <Property Name="PrepareTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Working_Abnormal_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="ProcessId" Type="int" />
+          <Property Name="Type" Type="varchar(max)" />
+          <Property Name="Remark" Type="varchar(max)" />
+          <Property Name="AbnormalPersonId" Type="int" />
+          <Property Name="AbnormalPersonName" Type="varchar(max)" />
+          <Property Name="AuditState" Type="varchar(max)" />
+          <Property Name="AuditRemark" Type="varchar(max)" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="AlterTime" Type="datetime" />
+          <Property Name="AuditTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Quality_Apply_Measure_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -2035,6 +2052,7 @@
           <EntitySet Name="JDJS_WMS_Order_Queue_Table" EntityType="Self.JDJS_WMS_Order_Queue_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Schedule_Table" EntityType="Self.JDJS_WMS_Order_Schedule_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Tool_Prepare_History_table" EntityType="Self.JDJS_WMS_Order_Tool_Prepare_History_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Order_Working_Abnormal_Table" EntityType="Self.JDJS_WMS_Order_Working_Abnormal_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Self.JDJS_WMS_Quality_Apply_Measure_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_History_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_History_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Quality_Confirmation_Table" EntityType="Self.JDJS_WMS_Quality_Confirmation_Table" Schema="dbo" store:Type="Tables" />
@@ -2613,6 +2631,7 @@
           </AssociationSet>
           <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" />
           <EntitySet Name="JDJS_WMS_Fixture_Manage_Demand_Table" EntityType="Model.JDJS_WMS_Fixture_Manage_Demand_Table" />
+          <EntitySet Name="JDJS_WMS_Order_Working_Abnormal_Table" EntityType="Model.JDJS_WMS_Order_Working_Abnormal_Table" />
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -4701,6 +4720,23 @@
           <Property Name="EndTime" Type="DateTime" Precision="3" />
           <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Working_Abnormal_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" />
+          <Property Name="ProcessId" Type="Int32" />
+          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AbnormalPersonId" Type="Int32" />
+          <Property Name="AbnormalPersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuditState" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuditRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="AlterTime" Type="DateTime" Precision="3" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5988,6 +6024,24 @@
                 <ScalarProperty Name="FixtureOrderNum" ColumnName="FixtureOrderNum" />
                 <ScalarProperty Name="ProcessNum" ColumnName="ProcessNum" />
                 <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+                <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Order_Working_Abnormal_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Working_Abnormal_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Order_Working_Abnormal_Table">
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AlterTime" ColumnName="AlterTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="AuditRemark" ColumnName="AuditRemark" />
+                <ScalarProperty Name="AuditState" ColumnName="AuditState" />
+                <ScalarProperty Name="AbnormalPersonName" ColumnName="AbnormalPersonName" />
+                <ScalarProperty Name="AbnormalPersonId" ColumnName="AbnormalPersonId" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

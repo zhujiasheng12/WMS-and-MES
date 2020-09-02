@@ -2777,6 +2777,9 @@
     <Compile Include="JDJS_WMS_Order_Tool_Prepare_History_table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JDJS_WMS_Order_Working_Abnormal_Table.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="JDJS_WMS_Quality_Apply_Measure_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3601,6 +3604,13 @@
     <Compile Include="生产管理\生产部\异常报备Method\ProductAbnormalSubmitByNc.cs" />
     <Compile Include="生产管理\生产部\异常报备Method\异常报备.ashx.cs">
       <DependentUpon>异常报备.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\异常报备Method\添加异常报备.ashx.cs">
+      <DependentUpon>添加异常报备.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\生产部\异常报备Method\读取订单工序\model\OrderInfoManage.cs" />
+    <Compile Include="生产管理\生产部\异常报备Method\读取订单工序\读取订单.ashx.cs">
+      <DependentUpon>读取订单.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\生产部\换产\排序修改提交.ashx.cs">
       <DependentUpon>排序修改提交.ashx</DependentUpon>
@@ -4554,6 +4564,8 @@
     <Content Include="生产管理\资材部\夹具管理\录入系统治具库\删除系统治具.ashx" />
     <Content Include="生产管理\资材部\夹具管理\录入系统治具库\修改系统治具.ashx" />
     <Content Include="生产管理\生产部\异常报备Method\异常报备.ashx" />
+    <Content Include="生产管理\生产部\异常报备Method\添加异常报备.ashx" />
+    <Content Include="生产管理\生产部\异常报备Method\读取订单工序\读取订单.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

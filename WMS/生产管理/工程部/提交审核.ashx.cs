@@ -24,7 +24,7 @@ namespace WebApplication2.生产管理.工程部
                         return;
 
                     }
-                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId))
+                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId&&r.sign !=0))
                 {
                     item.sign = -2;
 

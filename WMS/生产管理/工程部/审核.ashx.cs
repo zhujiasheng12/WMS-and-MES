@@ -73,7 +73,7 @@ namespace WebApplication2.生产管理.工程部
                                     context.Response.Write("该订单暂无待审核工序");
                                     return;
                                 }
-                                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId))
+                                foreach (var item in entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.OrderID == orderId&&r.sign ==-2))
                                 {
                                     item.sign = auditResult;
                                     if (auditResult == 1)

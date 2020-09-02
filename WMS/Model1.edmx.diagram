@@ -151,6 +151,7 @@
         <AssociationConnector Association="Model.FK__JDJS_WMS___Order__Qualiy" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" Width="1.5" PointX="21.375" PointY="6.75" />
         <EntityTypeShape EntityType="Model.JDJS_WMS_Fixture_Manage_Demand_Table" Width="1.5" PointX="21.375" PointY="12.75" />
+        <EntityTypeShape EntityType="Model.JDJS_WMS_Order_Working_Abnormal_Table" Width="1.5" PointX="21.375" PointY="17.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
