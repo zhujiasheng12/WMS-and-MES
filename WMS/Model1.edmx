@@ -615,6 +615,20 @@
           <Property Name="IntentionAssessPlanEndTime" Type="datetime" />
           <Property Name="IntentionOverConfirm" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Files_Manage_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="ProcessId" Type="int" />
+          <Property Name="FileType" Type="varchar(max)" />
+          <Property Name="PersonId" Type="int" />
+          <Property Name="PersonName" Type="varchar(max)" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="VersonNum" Type="int" />
+          <Property Name="UpdateOrCover" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="JDJS_WMS_Order_Fixture_Manager_Table">
           <Key>
             <PropertyRef Name="ID" />
@@ -2041,6 +2055,7 @@
           <EntitySet Name="JDJS_WMS_Order_Blank_Table" EntityType="Self.JDJS_WMS_Order_Blank_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_DelayTime_Table" EntityType="Self.JDJS_WMS_Order_DelayTime_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Entry_Table" EntityType="Self.JDJS_WMS_Order_Entry_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JDJS_WMS_Order_Files_Manage_Table" EntityType="Self.JDJS_WMS_Order_Files_Manage_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Fixture_Manager_Table" EntityType="Self.JDJS_WMS_Order_Fixture_Manager_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Guide_Schedu_Table" EntityType="Self.JDJS_WMS_Order_Guide_Schedu_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JDJS_WMS_Order_Intention_History_Table" EntityType="Self.JDJS_WMS_Order_Intention_History_Table" Schema="dbo" store:Type="Tables" />
@@ -2632,6 +2647,7 @@
           <EntitySet Name="JDJS_WMS_Quality_Apply_Measure_Table" EntityType="Model.JDJS_WMS_Quality_Apply_Measure_Table" />
           <EntitySet Name="JDJS_WMS_Fixture_Manage_Demand_Table" EntityType="Model.JDJS_WMS_Fixture_Manage_Demand_Table" />
           <EntitySet Name="JDJS_WMS_Order_Working_Abnormal_Table" EntityType="Model.JDJS_WMS_Order_Working_Abnormal_Table" />
+          <EntitySet Name="JDJS_WMS_Order_Files_Manage_Table" EntityType="Model.JDJS_WMS_Order_Files_Manage_Table" />
         </EntityContainer>
         <EntityType Name="JDJS_WMS_Blank_Additional_History_Table">
           <Key>
@@ -4737,6 +4753,20 @@
           <Property Name="AlterTime" Type="DateTime" Precision="3" />
           <Property Name="AuditTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="JDJS_WMS_Order_Files_Manage_Table">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" />
+          <Property Name="ProcessId" Type="Int32" />
+          <Property Name="FileType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PersonId" Type="Int32" />
+          <Property Name="PersonName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="VersonNum" Type="Int32" />
+          <Property Name="UpdateOrCover" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6042,6 +6072,21 @@
                 <ScalarProperty Name="AbnormalPersonId" ColumnName="AbnormalPersonId" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JDJS_WMS_Order_Files_Manage_Table">
+            <EntityTypeMapping TypeName="Model.JDJS_WMS_Order_Files_Manage_Table">
+              <MappingFragment StoreEntitySet="JDJS_WMS_Order_Files_Manage_Table">
+                <ScalarProperty Name="UpdateOrCover" ColumnName="UpdateOrCover" />
+                <ScalarProperty Name="VersonNum" ColumnName="VersonNum" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
                 <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

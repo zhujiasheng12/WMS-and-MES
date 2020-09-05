@@ -5,18 +5,28 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
+using WebApplication2.生产管理.工程部.文件管理;
 
 namespace WebApplication2.生产管理.工程部
 {
     /// <summary>
     /// upload 的摘要说明
     /// </summary>
-    public class uploadToolChartFile : IHttpHandler
+    public class uploadToolChartFile : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
         {
             var file = context.Request.Files;
+            var fileType = context.Request["fileType"];//"更新";"覆盖"
+            bool isUpdate = true;
+            if (fileType == "覆盖")
+            {
+                isUpdate = false;
+            }
+            int personId = int.Parse(context.Session["id"].ToString());
+            string personName = context.Session["UserName"].ToString();
             string paths = "";
             string err = "";
             var processId = int.Parse(context.Request.Form[1]);
@@ -37,32 +47,34 @@ namespace WebApplication2.生产管理.工程部
                         PathInfo pathInfo = new PathInfo();
                         paths = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", fileName);
                         var directoryPath= Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表");
-                        DirectoryInfo directory = new DirectoryInfo(directoryPath);
-                        FileInfo[] files = directory.GetFiles();
-                        foreach (var item in files)
+
+                        if (System.IO.File.Exists(paths))
                         {
-                            item.Delete();
+                            if (!isUpdate)
+                            {
+                                System.IO.File.Delete(paths);
+                            }
+                            else
+                            {
+                                int i = 1;
+                                string oldPath = Path.Combine(pathInfo.upLoadPath (), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                                while (System.IO.File.Exists(oldPath))
+                                {
+                                    i++;
+                                    oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                                }
+                                System.IO.File.Move(paths, oldPath);
+
+                            }
                         }
+
 
                         file[0].SaveAs(paths);
                         row.toolChartName = fileName;
                         entities.SaveChanges();
 
-
-
-                        string FilePath = paths;
-                        string path = Path.GetFileNameWithoutExtension(FilePath);
-                        int ProcessID = 0;
-                        string[] str = path.Split('-');
-                        string OrderNum = str[1];
-                        string Process = str[2].Substring(1);
-                        List<int> ToolNum = new List<int>();
-                        List<ToolInfo> toolInfos = new List<ToolInfo>();
-                        string fileSuffix = System.IO.Path.GetExtension(FilePath);
-
-                      
-
-                        
+                        string stre = "";
+                        FileManage.UpdateFileToDB(Convert.ToInt32(row.OrderID), row.ID, personId, personName, FileType.路径工艺单, isUpdate, ref stre);
                         entities.SaveChanges();
                         mytran.Commit();
                     }

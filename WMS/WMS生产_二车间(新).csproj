@@ -2744,6 +2744,9 @@
     <Compile Include="JDJS_WMS_Order_Entry_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JDJS_WMS_Order_Files_Manage_Table.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="JDJS_WMS_Order_Fixture_Manager_Table.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3456,6 +3459,10 @@
     </Compile>
     <Compile Include="生产管理\工程部\提交审核.ashx.cs">
       <DependentUpon>提交审核.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="生产管理\工程部\文件管理\FileManage.cs" />
+    <Compile Include="生产管理\工程部\文件管理\统一员工时间段内任务量.ashx.cs">
+      <DependentUpon>统一员工时间段内任务量.ashx</DependentUpon>
     </Compile>
     <Compile Include="生产管理\工程部\新建工序读数据.ashx.cs">
       <DependentUpon>新建工序读数据.ashx</DependentUpon>
@@ -4566,6 +4573,7 @@
     <Content Include="生产管理\生产部\异常报备Method\异常报备.ashx" />
     <Content Include="生产管理\生产部\异常报备Method\添加异常报备.ashx" />
     <Content Include="生产管理\生产部\异常报备Method\读取订单工序\读取订单.ashx" />
+    <Content Include="生产管理\工程部\文件管理\统一员工时间段内任务量.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

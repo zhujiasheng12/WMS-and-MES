@@ -5,18 +5,29 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
+using WebApplication2.生产管理.工程部.文件管理;
 
 namespace WebApplication2.Model.生产管理.工程部
 {
     /// <summary>
     /// editFileT 的摘要说明
     /// </summary>
-    public class editFileT : IHttpHandler
+    public class editFileT : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
         {
              var file = context.Request.Files;
+            var fileType = context.Request["fileType"];//"更新";"覆盖"
+            bool isUpdate = true;
+            if (fileType == "覆盖")
+            {
+                isUpdate = false;
+            }
+            int personId = int.Parse(context.Session["id"].ToString());
+            string personName = context.Session["UserName"].ToString();
+
             var processId = int.Parse(context.Request.Form["processId"]);
             var time = int.Parse(context.Request.Form["number"]);//探测点个数
             var nonCuttingTime =Convert .ToDouble ( context.Request.Form["nonCuttingTime"]);//辅助时间
@@ -40,9 +51,30 @@ namespace WebApplication2.Model.生产管理.工程部
                         var fileName = "T-" + orderNumber + "-P" + row.ProcessID + exten;
                         PathInfo pathInfo = new PathInfo();
                         paths = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", fileName);
-                        file[0].SaveAs(paths);
-                        
-                    
+
+                    if (System.IO.File.Exists(paths))
+                    {
+                        if (!isUpdate)
+                        {
+                            System.IO.File.Delete(paths);
+                        }
+                        else
+                        {
+                            int i = 1;
+                            string oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                            while (System.IO.File.Exists(oldPath))
+                            {
+                                i++;
+                                oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                            }
+                            System.IO.File.Move(paths, oldPath);
+
+                        }
+                    }
+                    file[0].SaveAs(paths);
+                    string stre = "";
+                    FileManage.UpdateFileToDB(Convert.ToInt32(row.OrderID), row.ID, personId, personName, FileType.路径工艺单, isUpdate, ref stre);
+
                 }
             }
             if (WebApplication2.Function.ParsingTExcel(paths, processId, time,nonCuttingTime ,timeProportionalityCoefficient,  ref err))

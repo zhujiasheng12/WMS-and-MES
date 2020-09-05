@@ -3,19 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
+using WebApplication2.生产管理.工程部.文件管理;
 
 namespace WebApplication2.Model.生产管理.工程部
 {
     /// <summary>
     /// editFileP 的摘要说明
     /// </summary>
-    public class editFileP : IHttpHandler
+    public class editFileP : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
         {
             var file = context.Request.Files;
             var processId = int.Parse(context.Request.Form["processId"]);
+            var fileType = context.Request["fileType"];//"更新";"覆盖"
+            bool isUpdate = true;
+            if (fileType == "覆盖")
+            {
+                isUpdate = false;
+            }
+            int personId = int.Parse(context.Session["id"].ToString());
+            string personName = context.Session["UserName"].ToString();
             using (JDJS_WMS_DB_USEREntities entities=new JDJS_WMS_DB_USEREntities())
             {
                 var row = entities.JDJS_WMS_Order_Process_Info_Table.Where(r => r.ID == processId).First();
@@ -39,26 +49,33 @@ namespace WebApplication2.Model.生产管理.工程部
                     directoryT.Create();
                 }
                 var path = Path.Combine(pathInfo.upLoadPath(), orderNumber,"加工文件", fileName);
-               
-                if (oldFileName != null)
+
+                if (System.IO.File.Exists(path))
                 {
-                    var oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", oldFileName);
-                    int i = 1;
-                    while (File.Exists(oldPath + "-" + i.ToString()))
+                    if (!isUpdate)
                     {
-                        i++;
+                        System.IO.File.Delete(path);
                     }
-                    if (File.Exists(oldPath)) {
-                        File.Copy(oldPath, oldPath + "-" + i.ToString());
-                        File.Delete(oldPath);
+                    else
+                    {
+                        int i = 1;
+                        string oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", Path.GetFileNameWithoutExtension(row.programName) +"-" +i.ToString() + Path.GetExtension(file[0].FileName));
+                        while (System.IO.File.Exists(oldPath))
+                        {
+                            i++;
+                            oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", Path.GetFileNameWithoutExtension(row.programName) + "-" + i.ToString() + Path.GetExtension(file[0].FileName));
+                        }
+                        System.IO.File.Move(path, oldPath);
+
                     }
-                  
                 }
-    
+
                 file[0].SaveAs(path);
+                string str = "";
+                FileManage.UpdateFileToDB(Convert.ToInt32(row.OrderID), row.ID, personId, personName, FileType.加工文件, isUpdate, ref str);
                 row.programName = fileName;
                 entities.SaveChanges();
-                context.Response.Write("ok");
+                context.Response.Write(str);
             }
         }
 

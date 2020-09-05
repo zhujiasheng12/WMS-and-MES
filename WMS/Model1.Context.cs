@@ -116,5 +116,6 @@ namespace WebApplication2
         public virtual DbSet<JDJS_WMS_Quality_Apply_Measure_Table> JDJS_WMS_Quality_Apply_Measure_Table { get; set; }
         public virtual DbSet<JDJS_WMS_Fixture_Manage_Demand_Table> JDJS_WMS_Fixture_Manage_Demand_Table { get; set; }
         public virtual DbSet<JDJS_WMS_Order_Working_Abnormal_Table> JDJS_WMS_Order_Working_Abnormal_Table { get; set; }
+        public virtual DbSet<JDJS_WMS_Order_Files_Manage_Table> JDJS_WMS_Order_Files_Manage_Table { get; set; }
     }
 }

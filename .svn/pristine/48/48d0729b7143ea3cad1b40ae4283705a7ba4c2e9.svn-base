@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebApplication2.生产管理.工程部.文件管理
+{
+    public class FileManage
+    {
+        /// <summary>
+        /// 更新文件
+        /// </summary>
+        /// <param name="orderId">订单Id</param>
+        /// <param name="processId">工序Id</param>
+        /// <param name="personId">员工id</param>
+        /// <param name="personName">员工姓名</param>
+        /// <param name="fileType">文件类型</param>
+        /// <param name="isUpdate">是否更新</param>
+        /// <param name="errMsg">错误信息</param>
+        /// <returns></returns>
+        public static bool UpdateFileToDB(int orderId, int processId, int personId, string personName, FileType fileType, bool isUpdate, ref string errMsg)
+        {
+            try
+            {
+                string fileTypeStr = fileType.ToString();
+                using (JDJS_WMS_DB_USEREntities model = new JDJS_WMS_DB_USEREntities())
+                {
+                    int max = 0;
+                    if (model.JDJS_WMS_Order_Files_Manage_Table.Where(r => r.OrderId == orderId && r.ProcessId == processId && r.FileType == fileTypeStr).Count() > 0)
+                    {
+                        max = int.Parse(model.JDJS_WMS_Order_Files_Manage_Table.Where(r => r.OrderId == orderId && r.ProcessId == processId && r.FileType == fileTypeStr).Max<JDJS_WMS_Order_Files_Manage_Table>(r => r.VersonNum).ToString());
+                    }
+                    int verson = max;
+                    string str = "覆盖";
+                    if (isUpdate)
+                    {
+                        verson++;
+                        str = "更新";
+                    }
+                    JDJS_WMS_Order_Files_Manage_Table jdf = new JDJS_WMS_Order_Files_Manage_Table()
+                    {
+                        OrderId = orderId,
+                        CreateTime = DateTime.Now,
+                        FileType = fileTypeStr,
+                        PersonId = personId,
+                        PersonName = personName,
+                        ProcessId = processId,
+                        VersonNum = verson,
+                        UpdateOrCover =str
+                    };
+                    using (System.Data.Entity.DbContextTransaction mytran = model.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            model.JDJS_WMS_Order_Files_Manage_Table.Add(jdf);
+                            model.SaveChanges();
+                            mytran.Commit();
+                            errMsg = "ok";
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            mytran.Rollback();
+                            errMsg = ex.Message;
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message;
+                return false;
+            }
+        }
+    }
+
+    public enum FileType
+    {
+        其它文件,
+        加工文件,
+        路径工艺单
+    }
+}

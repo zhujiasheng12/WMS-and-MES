@@ -4,14 +4,16 @@ using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using System.Web.SessionState;
 using System.Web;
+using WebApplication2.生产管理.工程部.文件管理;
 
 namespace WebApplication2.生产管理
 {
     /// <summary>
     /// 工艺编程上传 的摘要说明
     /// </summary>
-    public class 工艺编程上传 : IHttpHandler
+    public class 工艺编程上传 : IHttpHandler, IRequiresSessionState
     {
 
         public void ProcessRequest(HttpContext context)
@@ -22,7 +24,15 @@ namespace WebApplication2.生产管理
             var toolChartFile = files["toolChartFile"];
             var ClampingFile = files["Clamping"];
             var processId = int.Parse(context.Request.Form["processId"]);
-       
+            var fileType = context.Request["fileType"];//"更新";"覆盖"
+            bool isUpdate = true;
+
+            if (fileType == "覆盖")
+            {
+                isUpdate = false;
+            }
+            int personId = int.Parse(context.Session["id"].ToString());
+            string personName = context.Session["UserName"].ToString();
 
             using (JDJS_WMS_DB_USEREntities entities = new JDJS_WMS_DB_USEREntities())
             {
@@ -67,22 +77,29 @@ namespace WebApplication2.生产管理
                         }
                         var path = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", fileName);
 
-                        if (oldFileName != null)
+                        if (System.IO.File.Exists(path))
                         {
-                            var oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", oldFileName);
-                            int i = 1;
-                            while (File.Exists(oldPath + "-" + i.ToString()))
+                            if (!isUpdate)
                             {
-                                i++;
+                                System.IO.File.Delete(path);
                             }
-                            if (File.Exists(oldPath)) {
-                                File.Copy(oldPath, oldPath + "-" + i.ToString());
-                                File.Delete(oldPath);
+                            else
+                            {
+                                int i = 1;
+                                string oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + Path.GetExtension(exten));
+                                while (System.IO.File.Exists(oldPath))
+                                {
+                                    i++;
+                                    oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "加工文件", orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + Path.GetExtension(exten));
+                                }
+                                System.IO.File.Move(path, oldPath);
+
                             }
-                            
                         }
 
                         ncFile.SaveAs(path);
+                        string str = "";
+                        FileManage.UpdateFileToDB(Convert.ToInt32(row.OrderID), row.ID, personId, personName, FileType.加工文件, isUpdate, ref str);
                         row.programName = fileName;
                         entities.SaveChanges();
 
@@ -139,8 +156,28 @@ namespace WebApplication2.生产管理
                     var fileName = "T-" + orderNumber + "-P" + row.ProcessID + exten;
                     PathInfo pathInfo = new PathInfo();
                     paths = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", fileName);
-                    toolChartFile.SaveAs(paths);
+                    if (System.IO.File.Exists(paths))
+                    {
+                        if (!isUpdate)
+                        {
+                            System.IO.File.Delete(paths);
+                        }
+                        else
+                        {
+                            int i = 1;
+                            string oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                            while (System.IO.File.Exists(oldPath))
+                            {
+                                i++;
+                                oldPath = Path.Combine(pathInfo.upLoadPath(), orderNumber, "刀具表", "T-" + orderNumber + "-P" + row.ProcessID + "-" + i.ToString() + exten);
+                            }
+                            System.IO.File.Move(paths, oldPath);
 
+                        }
+                    }
+                    toolChartFile.SaveAs(paths);
+                    string stre = "";
+                    FileManage.UpdateFileToDB(Convert.ToInt32(row.OrderID), row.ID, personId, personName, FileType.路径工艺单, isUpdate, ref stre);
 
                 }
             }
